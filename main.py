@@ -38,7 +38,7 @@ search = driver.find_element(By.NAME, "search")
 search.send_keys(input("Quel est le titre du film que vous recherchez ?\n"))
 search.submit()
 
-liste_films = driver.find_elements(By.CLASS_NAME, "flag")
+liste_films = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
 for i in liste_films:
     print(i.text)
 
