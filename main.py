@@ -23,13 +23,12 @@ driver.implicitly_wait(10)
 print("Init OK !\n")
 
 
-print("Connecting...")
+print("Getting wawacity link...")
 driver.get("https://www.justgeek.fr/wawacity-91967/")
-print("Connected !\n")
 
 link = driver.find_element(By.XPATH, "//strong/a[contains(@href, \'https://www.wawacity.\')]")
 link = link.text
-print(f"Link : {link}")
+print(f"Link found : {link}\n")
 
 print(f"Connecting to {link}...")
 driver.get(f"https://{link}")
@@ -39,10 +38,12 @@ search = driver.find_element(By.NAME, "search")
 search.send_keys(input("Quel est le titre du film que vous recherchez ?\n"))
 search.submit()
 
-liste_films = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
-for i in liste_films:
-    print(i.text)
-
+liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
+index_resultat = dict()
+for i in liste_resultats:
+    title = i.text[:i.text.index(" [")]
+    print(title)
+    index_resultat[title] = i
 
 driver.close()
 driver.quit()
