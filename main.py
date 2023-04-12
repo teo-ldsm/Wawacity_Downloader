@@ -1,5 +1,5 @@
 from plex_refresh import refresh
-from config_loader import load
+import config_loader
 import platform
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -11,6 +11,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 user_os = platform.system()
 
+# TODO Faire un système pour skipper la config manuelle
 
 print("Initialising...")
 options = Options()
@@ -41,7 +42,6 @@ search.submit()
 liste_films = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
 for i in liste_films:
     print(i.text)
-
 
 
 driver.close()

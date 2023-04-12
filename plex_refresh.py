@@ -11,3 +11,8 @@ def refresh(config):
     print(rep.reason)
 
     return rep.status
+
+
+if __name__ == '__main__':
+    config = load()
+    refresh(config)
