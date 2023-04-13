@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e113878d-822d-41ce-b1fa-ca59d95c45c3" name="Changes" comment="v0.0.1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/config_loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +69,7 @@
       <recent name="C:\Users\Teo\Documents\Merdier 31\Utilitaires NAS" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.config_loader">
+  <component name="RunManager" selected="Python.main">
     <configuration name="_virtualenv" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Utilitaires NAS" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -156,8 +156,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.config_loader" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.config_loader" />
         <item itemvalue="Python._virtualenv" />
         <item itemvalue="Python.plex_refresh" />
       </list>
@@ -207,7 +207,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681327254068</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="v0.0.1">
+      <created>1681378592761</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1681378592761</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

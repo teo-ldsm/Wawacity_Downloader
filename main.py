@@ -38,12 +38,48 @@ search = driver.find_element(By.NAME, "search")
 search.send_keys(input("Quel est le titre du film que vous recherchez ?\n"))
 search.submit()
 
-liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
-index_resultat = dict()
-for i in liste_resultats:
-    title = i.text[:i.text.index(" [")]
-    print(title)
-    index_resultat[title] = i
+
+def récup_result()
+    liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
+    liens_resultats = dict()
+    for i in liste_resultats:
+        title = i.text[:i.text.index(" [")]
+        liens_resultats[title] = i.get_attribute("href")
+
+
+    print("Voici les resultats\n")
+    index_liens = []
+    n = 1
+    for i in liens_resultats:
+        print(f"{n} : {i}")
+        index_liens.append(i)
+        n += 1
+
+    choix_valide = False
+    rep = None
+    while not choix_valide:
+        try:
+            rep = eval(input("Entrez le numéro correspondant a votre résultat. Si il ne s'y trouve pas, entrez \'0\'\n"))
+            if not isinstance(rep, int):
+                raise TypeError("La variable rep doit être de type int")
+            choix_valide = True
+
+        except:
+            print(f"Réponse invalide, entrez un chiffre entre 1 et {len(index_liens)}")
+            choix_valide = False
+
+        else:
+            if 0 <= rep <= len(index_liens):
+                choix_valide = True
+            else:
+                print(f"Réponse invalide, entrez un chiffre entre 1 et {len(index_liens)}")
+                choix_valide = False
+
+if rep == 0:
+    # TODO relancer la recherche en page 2
+
+
+
 
 driver.close()
 driver.quit()
