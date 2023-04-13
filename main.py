@@ -39,15 +39,14 @@ search.send_keys(input("Quel est le titre du film que vous recherchez ?\n"))
 search.submit()
 
 
-def récup_result()
+def recup_results():
     liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
     liens_resultats = dict()
     for i in liste_resultats:
         title = i.text[:i.text.index(" [")]
         liens_resultats[title] = i.get_attribute("href")
 
-
-    print("Voici les resultats\n")
+    print("\nVoici les résultats\n")
     index_liens = []
     n = 1
     for i in liens_resultats:
@@ -59,7 +58,7 @@ def récup_result()
     rep = None
     while not choix_valide:
         try:
-            rep = eval(input("Entrez le numéro correspondant a votre résultat. Si il ne s'y trouve pas, entrez \'0\'\n"))
+            rep = eval(input("\nEntrez le numéro correspondant a votre résultat. Si il ne s'y trouve pas, entrez 0\n"))
             if not isinstance(rep, int):
                 raise TypeError("La variable rep doit être de type int")
             choix_valide = True
@@ -72,11 +71,26 @@ def récup_result()
             if 0 <= rep <= len(index_liens):
                 choix_valide = True
             else:
-                print(f"Réponse invalide, entrez un chiffre entre 1 et {len(index_liens)}")
+                print(f"Réponse invalide, entrez un chiffre entre 0 et {len(index_liens)}")
                 choix_valide = False
 
-if rep == 0:
-    # TODO relancer la recherche en page 2
+    if rep == 0:
+        bnt_next = driver.find_element(By.XPATH, "//div[@class=\'text-center\']/ul[@class=\'pagination\']/li[15]/a")
+        next_page = bnt_next.get_attribute("href")
+        driver.get(next_page)
+        print("\n\nRecherche des résultats sur la page suivante : \n")
+        lien = recup_results()
+
+    else:
+        lien = liens_resultats[index_liens[rep - 1]]
+
+    return lien
+
+
+lien = recup_results()
+
+print(lien)
+
 
 
 
