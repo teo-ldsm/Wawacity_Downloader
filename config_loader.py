@@ -83,7 +83,7 @@ def build_config() -> None:
 def fill_config(path=False, quality=False, site=False, plex=False) -> None:
     config = load()
     file = open("config.txt", "r", encoding="UTF-8")
-    args = {"PATH": path, "QUALITY": quality, "SITE": site}
+    args = {"PATH": path, "QUALITY": quality, "SITE": site, "SERVER_IP": plex, "PORT": plex, "TOKEN": plex}
     for i in args:
         if args[i]:
             if i in config:
