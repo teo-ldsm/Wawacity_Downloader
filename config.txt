@@ -8,7 +8,7 @@
 # SITE=
 
 
-# Si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement
+# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement
 SERVER_IP=pc-nas
 PORT=32400
 TOKEN=xGorvyzycZQ2UUNRcPAw

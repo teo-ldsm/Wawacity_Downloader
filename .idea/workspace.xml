@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e113878d-822d-41ce-b1fa-ca59d95c45c3" name="Changes" comment="v0.0.2 (Ajout &quot;aucun résultat dispo&quot;)">
+    <list default="true" id="e113878d-822d-41ce-b1fa-ca59d95c45c3" name="Changes" comment="v0.0.2 (Ajout liste qualités)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.txt" beforeDir="false" afterPath="$PROJECT_DIR$/config.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/config_loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -218,7 +220,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681465450892</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="v0.0.2 (Ajout liste qualités)">
+      <created>1681479449617</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1681479449617</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -254,6 +263,7 @@
     <MESSAGE value="test" />
     <MESSAGE value="v0.0.1" />
     <MESSAGE value="v0.0.2 (Ajout &quot;aucun résultat dispo&quot;)" />
-    <option name="LAST_COMMIT_MESSAGE" value="v0.0.2 (Ajout &quot;aucun résultat dispo&quot;)" />
+    <MESSAGE value="v0.0.2 (Ajout liste qualités)" />
+    <option name="LAST_COMMIT_MESSAGE" value="v0.0.2 (Ajout liste qualités)" />
   </component>
 </project>

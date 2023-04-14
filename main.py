@@ -95,27 +95,60 @@ def recup_results():
     return lien
 
 
-lien_film = recup_results()
+lien_page_film = recup_results()
 
-driver.get(lien_film)
+driver.get(lien_page_film)
 
 liste_qualites = driver.find_elements(By.XPATH, "//ul[@class=\'wa-post-list-ofLinks row readable-post-list\']/li/a")
 
+
 liens_qualites = dict()
 for i in liste_qualites:
-    title = i.text[:i.text.index(" [")]     # TODO
-    liens_qualites[title] = i.get_attribute("href")
+    liens_qualites[i.text] = i.get_attribute("href")
+
+liens_qualites[driver.find_element(By.XPATH, "//*[@id=\'detail-page\']/div[2]/div[1]/i[2]").text] = None
+
+# TODO créer un truc qui skip ce bloc si la qualité est définie dans config.txt
 
 print("\nVoici les qualités disponible pour votre film\n")
-index_liens = []
+
+index_qualites = []
 n = 1
-for i in liens_resultats:
+for i in liens_qualites:
     print(f"{n} : {i}")
-    index_liens.append(i)
+    index_qualites.append(i)
     n += 1
 
 
+choix_valide = False
+rep = None
+while not choix_valide:
+    try:
+        rep = eval(input("\nEntrez le numéro correspondant a votre résultat.\n"))
+        if not isinstance(rep, int):
+            raise TypeError("La variable rep doit être de type int")
+        choix_valide = True
 
+    except:
+        print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_qualites)}{Style.RESET_ALL}")
+        choix_valide = False
+
+    else:
+        if 1 <= rep <= len(index_qualites):
+            choix_valide = True
+        else:
+            print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 0 et {len(index_qualites)}{Style.RESET_ALL}")
+            choix_valide = False
+
+lien_page_film = liens_qualites[index_qualites[rep - 1]]
+
+
+if lien_page_film is not None:
+    driver.get(lien_page_film)
+
+# TODO Faire un truc pour skipper ce bloc si la site de dl est précisé dans config.txt
+
+# TODO Faire un truc pour récupérer le lien de chaque site de dl
 
 
 driver.close()

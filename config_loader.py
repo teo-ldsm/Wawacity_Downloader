@@ -71,7 +71,8 @@ def build_config() -> None:
                             # PATH= \n\
                             # QUALITY= \n\
                             # SITE= \n\n\
-                            # Si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement \n\
+                            # Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser \
+                                                                                    après chaque téléchargement \n\
                             # SERVER_IP= \n\
                             # PORT=32400 \n\
                             # TOKEN= ")
