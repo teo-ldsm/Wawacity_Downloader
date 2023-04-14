@@ -28,12 +28,12 @@ print("Init OK !\n")
 print("Getting wawacity link...")
 driver.get("https://www.justgeek.fr/wawacity-91967/")
 
-link = driver.find_element(By.XPATH, "//strong/a[contains(@href, \'https://www.wawacity.\')]")
-link = link.text
-print(f"{Fore.GREEN}Link found : {link}{Style.RESET_ALL}\n")
+lien_wawacity = driver.find_element(By.XPATH, "//strong/a[contains(@href, \'https://www.wawacity.\')]")
+lien_wawacity = lien_wawacity.text
+print(f"{Fore.GREEN}Link found : {lien_wawacity}{Style.RESET_ALL}\n")
 
-print(f"Connecting to {link}...")
-driver.get(f"https://{link}")
+print(f"Connecting to {lien_wawacity}...")
+driver.get(f"https://{lien_wawacity}")
 print(f"{Fore.GREEN}Connected !{Style.RESET_ALL}\n")
 
 search = driver.find_element(By.NAME, "search")
@@ -95,9 +95,24 @@ def recup_results():
     return lien
 
 
-lien = recup_results()
+lien_film = recup_results()
 
-print(lien)
+driver.get(lien_film)
+
+liste_qualites = driver.find_elements(By.XPATH, "//ul[@class=\'wa-post-list-ofLinks row readable-post-list\']/li/a")
+
+liens_qualites = dict()
+for i in liste_qualites:
+    title = i.text[:i.text.index(" [")]     # TODO
+    liens_qualites[title] = i.get_attribute("href")
+
+print("\nVoici les qualités disponible pour votre film\n")
+index_liens = []
+n = 1
+for i in liens_resultats:
+    print(f"{n} : {i}")
+    index_liens.append(i)
+    n += 1
 
 
 
