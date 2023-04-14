@@ -1,6 +1,8 @@
 from plex_refresh import refresh
 import config_loader
+import time
 import platform
+from colorama import Fore, Style
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -28,11 +30,11 @@ driver.get("https://www.justgeek.fr/wawacity-91967/")
 
 link = driver.find_element(By.XPATH, "//strong/a[contains(@href, \'https://www.wawacity.\')]")
 link = link.text
-print(f"Link found : {link}\n")
+print(f"{Fore.GREEN}Link found : {link}{Style.RESET_ALL}\n")
 
 print(f"Connecting to {link}...")
 driver.get(f"https://{link}")
-print(f"Connected !\n")
+print(f"{Fore.GREEN}Connected !{Style.RESET_ALL}\n")
 
 search = driver.find_element(By.NAME, "search")
 search.send_keys(input("Quel est le titre du film que vous recherchez ?\n"))
@@ -54,24 +56,30 @@ def recup_results():
         index_liens.append(i)
         n += 1
 
+    if len(liste_resultats) == 0:
+        print(f"\n{Fore.RED}Aucun résultat trouvé. {Style.RESET_ALL}\n")
+        time.sleep(5)
+        exit()
+
     choix_valide = False
     rep = None
     while not choix_valide:
         try:
-            rep = eval(input("\nEntrez le numéro correspondant a votre résultat. Si il ne s'y trouve pas, entrez 0\n"))
+            rep = eval(input("\nEntrez le numéro correspondant a votre résultat. "
+                             "Si il ne s'y trouve pas, entrez 0\n"))
             if not isinstance(rep, int):
                 raise TypeError("La variable rep doit être de type int")
             choix_valide = True
 
         except:
-            print(f"Réponse invalide, entrez un chiffre entre 1 et {len(index_liens)}")
+            print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_liens)}{Style.RESET_ALL}")
             choix_valide = False
 
         else:
             if 0 <= rep <= len(index_liens):
                 choix_valide = True
             else:
-                print(f"Réponse invalide, entrez un chiffre entre 0 et {len(index_liens)}")
+                print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 0 et {len(index_liens)}{Style.RESET_ALL}")
                 choix_valide = False
 
     if rep == 0:
