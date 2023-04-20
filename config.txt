@@ -1,0 +1,14 @@
+# Les lignes qui commencent par "#" ne sont pas prises en compte
+# Les champs suivants seront remplis automatiquement si non précisé :
+# - PATH : Les medias seront téléchargés dans ce dossier
+# - QUALITY : Qualité par défaut pour télécharger les médias
+# - SITE : Site par défaut ou télécharger les médias
+#PATH=
+#QUALITY=
+#SITE=
+
+
+# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement
+SERVER_IP=pc-nas
+PORT=32400
+TOKEN=xGorvyzycZQ2UUNRcPAw

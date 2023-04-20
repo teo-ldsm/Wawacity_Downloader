@@ -1,0 +1,704 @@
+Index: CaptchaSkipper/app/src/main/res/values-night/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/values-night/strings.xml b/CaptchaSkipper/app/src/main/res/values-night/strings.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/values-night/strings.xml	
+@@ -0,0 +1,4 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <string name="start">Démmarer</string>
++</resources>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"e113878d-822d-41ce-b1fa-ca59d95c45c3\" name=\"Changes\" comment=\"Test captcha\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ChangesViewManager\" show_ignored=\"true\" />\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Python Script\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n    <option name=\"UPDATE_TYPE\" value=\"REBASE\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">\r\n    <option name=\"selectedUrlAndAccountId\">\r\n      <UrlAndAccount>\r\n        <option name=\"accountId\" value=\"029a3627-242f-4acb-a807-df0d1b216c68\" />\r\n        <option name=\"url\" value=\"https://github.com/teo-ldsm/utilitaires_NAS.git\" />\r\n      </UrlAndAccount>\r\n    </option>\r\n  </component>\r\n  <component name=\"HighlightingSettingsPerFile\">\r\n    <setting file=\"file://$PROJECT_DIR$/plex_refresh.py\" root0=\"FORCE_HIGHLIGHTING\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2OAKzzGYiRi4mN0oPsGQhzpwRoQ\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"master\",\r\n    \"ignore.virus.scanning.warn.message\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/Teo/Documents/Merdier 31/Utilitaires NAS\",\r\n    \"settings.editor.selected.configurable\": \"preferences.toDoOptions\"\r\n  },\r\n  \"keyToStringList\": {\r\n    \"com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File\": [\r\n      \"JavaScript\"\r\n    ]\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Teo\\Documents\\Merdier 31\\Utilitaires NAS\\venv\\Lib\\site-packages\" />\r\n      <recent name=\"C:\\Users\\Teo\\Documents\\Merdier 31\\Utilitaires NAS\\venv\\Lib\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Teo\\Documents\\Merdier 31\\Utilitaires NAS\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Python.test_captcha\">\r\n    <configuration name=\"Graphe\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"Utilitaires NAS\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$USER_HOME$/Downloads\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$USER_HOME$/Downloads/Graphe.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"_virtualenv\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"Utilitaires NAS\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/venv/Lib/site-packages\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/venv/Lib/site-packages/_virtualenv.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"config_loader\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"Utilitaires NAS\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/config_loader.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"main\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"Utilitaires NAS\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/main.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"test_captcha\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"Utilitaires NAS\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/test_captcha.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Python.test_captcha\" />\r\n        <item itemvalue=\"Python.main\" />\r\n        <item itemvalue=\"Python.Graphe\" />\r\n        <item itemvalue=\"Python.config_loader\" />\r\n        <item itemvalue=\"Python._virtualenv\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"e113878d-822d-41ce-b1fa-ca59d95c45c3\" name=\"Changes\" comment=\"\" />\r\n      <created>1680998212481</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1680998212481</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"test\">\r\n      <created>1681237750307</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681237750307</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"test\">\r\n      <created>1681242614550</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681242614550</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"test\">\r\n      <created>1681246998202</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681246998202</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"test\">\r\n      <created>1681247923433</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681247923433</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"v0.0.1\">\r\n      <created>1681327254068</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681327254068</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"v0.0.1\">\r\n      <created>1681378592761</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681378592761</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"Test captcha\">\r\n      <created>1681668552194</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1681668552194</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"8\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"CUSTOM_BOOLEAN_PROPERTIES\">\r\n                <map>\r\n                  <entry key=\"Show.Git.Branches\" value=\"true\" />\r\n                </map>\r\n              </option>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"origin/master\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Python venv\" />\r\n    <MESSAGE value=\"test\" />\r\n    <MESSAGE value=\"v0.0.1\" />\r\n    <MESSAGE value=\"Test captcha\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Test captcha\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -4,7 +4,36 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="e113878d-822d-41ce-b1fa-ca59d95c45c3" name="Changes" comment="Test captcha" />
++    <list default="true" id="e113878d-822d-41ce-b1fa-ca59d95c45c3" name="Changes" comment="v0.5.0 (Gestion des erreurs)">
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/FirstFragment.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/SecondFragment.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/WebViewer.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/layout/activity_web_viewer.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/layout/content_web_viewer.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/layout/fragment_first.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/layout/fragment_second.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/navigation/nav_graph.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/values-land/dimens.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/values-night/strings.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/values-v23/themes.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/values-w1240dp/dimens.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/values-w600dp/dimens.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/values/dimens.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/.gradle/8.0/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/.gradle/8.0/checksums/checksums.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/.gradle/8.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/.gradle/8.0/executionHistory/executionHistory.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/.gradle/8.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/.gradle/8.0/fileHashes/fileHashes.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/.gradle/8.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/.gradle/8.0/fileHashes/fileHashes.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/app/build.gradle" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/AndroidManifest.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/MainActivity.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/layout/activity_main.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/CaptchaSkipper/app/src/main/res/values/strings.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/config.txt" beforeDir="false" afterPath="$PROJECT_DIR$/config.txt" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -20,7 +49,6 @@
+   </component>
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+-    <option name="UPDATE_TYPE" value="REBASE" />
+   </component>
+   <component name="GitHubPullRequestSearchHistory">{
+   &quot;lastFilter&quot;: {
+@@ -53,8 +81,8 @@
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+     "git-widget-placeholder": "master",
+     "ignore.virus.scanning.warn.message": "true",
+-    "last_opened_file_path": "C:/Users/Teo/Documents/Merdier 31/Utilitaires NAS",
+-    "settings.editor.selected.configurable": "preferences.toDoOptions"
++    "last_opened_file_path": "E:/Teo/Python/utilitaires_NAS",
++    "settings.editor.selected.configurable": "preferences.keymap"
+   },
+   "keyToStringList": {
+     "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+@@ -71,7 +99,7 @@
+       <recent name="C:\Users\Teo\Documents\Merdier 31\Utilitaires NAS" />
+     </key>
+   </component>
+-  <component name="RunManager" selected="Python.test_captcha">
++  <component name="RunManager" selected="Python.config_loader">
+     <configuration name="Graphe" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+       <module name="Utilitaires NAS" />
+       <option name="INTERPRETER_OPTIONS" value="" />
+@@ -93,19 +121,16 @@
+       <option name="INPUT_FILE" value="" />
+       <method v="2" />
+     </configuration>
+-    <configuration name="_virtualenv" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
++    <configuration name="config_loader" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+       <module name="Utilitaires NAS" />
+       <option name="INTERPRETER_OPTIONS" value="" />
+       <option name="PARENT_ENVS" value="true" />
+-      <envs>
+-        <env name="PYTHONUNBUFFERED" value="1" />
+-      </envs>
+       <option name="SDK_HOME" value="" />
+-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/venv/Lib/site-packages" />
+-      <option name="IS_MODULE_SDK" value="false" />
++      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
++      <option name="IS_MODULE_SDK" value="true" />
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Lib/site-packages/_virtualenv.py" />
++      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/config_loader.py" />
+       <option name="PARAMETERS" value="" />
+       <option name="SHOW_COMMAND_LINE" value="false" />
+       <option name="EMULATE_TERMINAL" value="false" />
+@@ -114,7 +139,7 @@
+       <option name="INPUT_FILE" value="" />
+       <method v="2" />
+     </configuration>
+-    <configuration name="config_loader" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
++    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+       <module name="Utilitaires NAS" />
+       <option name="INTERPRETER_OPTIONS" value="" />
+       <option name="PARENT_ENVS" value="true" />
+@@ -126,7 +151,7 @@
+       <option name="IS_MODULE_SDK" value="true" />
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/config_loader.py" />
++      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+       <option name="PARAMETERS" value="" />
+       <option name="SHOW_COMMAND_LINE" value="false" />
+       <option name="EMULATE_TERMINAL" value="false" />
+@@ -135,7 +160,7 @@
+       <option name="INPUT_FILE" value="" />
+       <method v="2" />
+     </configuration>
+-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
++    <configuration name="plex_refresh" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+       <module name="Utilitaires NAS" />
+       <option name="INTERPRETER_OPTIONS" value="" />
+       <option name="PARENT_ENVS" value="true" />
+@@ -147,7 +172,7 @@
+       <option name="IS_MODULE_SDK" value="true" />
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
++      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/plex_refresh.py" />
+       <option name="PARAMETERS" value="" />
+       <option name="SHOW_COMMAND_LINE" value="false" />
+       <option name="EMULATE_TERMINAL" value="false" />
+@@ -160,6 +185,9 @@
+       <module name="Utilitaires NAS" />
+       <option name="INTERPRETER_OPTIONS" value="" />
+       <option name="PARENT_ENVS" value="true" />
++      <envs>
++        <env name="PYTHONUNBUFFERED" value="1" />
++      </envs>
+       <option name="SDK_HOME" value="" />
+       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+       <option name="IS_MODULE_SDK" value="true" />
+@@ -176,11 +204,11 @@
+     </configuration>
+     <recent_temporary>
+       <list>
++        <item itemvalue="Python.config_loader" />
++        <item itemvalue="Python.plex_refresh" />
+         <item itemvalue="Python.test_captcha" />
+         <item itemvalue="Python.main" />
+         <item itemvalue="Python.Graphe" />
+-        <item itemvalue="Python.config_loader" />
+-        <item itemvalue="Python._virtualenv" />
+       </list>
+     </recent_temporary>
+   </component>
+@@ -242,7 +270,21 @@
+       <option name="project" value="LOCAL" />
+       <updated>1681668552194</updated>
+     </task>
+-    <option name="localTasksCounter" value="8" />
++    <task id="LOCAL-00008" summary="v1.0 (Fonctionnel)">
++      <created>1682015311218</created>
++      <option name="number" value="00008" />
++      <option name="presentableId" value="LOCAL-00008" />
++      <option name="project" value="LOCAL" />
++      <updated>1682015311218</updated>
++    </task>
++    <task id="LOCAL-00009" summary="v0.5.0 (Gestion des erreurs)">
++      <created>1682015599206</created>
++      <option name="number" value="00009" />
++      <option name="presentableId" value="LOCAL-00009" />
++      <option name="project" value="LOCAL" />
++      <updated>1682015599206</updated>
++    </task>
++    <option name="localTasksCounter" value="10" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+@@ -278,6 +320,9 @@
+     <MESSAGE value="test" />
+     <MESSAGE value="v0.0.1" />
+     <MESSAGE value="Test captcha" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Test captcha" />
++    <MESSAGE value="v1.0 (Fonctionnel)" />
++    <MESSAGE value="v0.5.0 (Semble fonctionnel/Non testé)" />
++    <MESSAGE value="v0.5.0 (Gestion des erreurs)" />
++    <option name="LAST_COMMIT_MESSAGE" value="v0.5.0 (Gestion des erreurs)" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/res/values-land/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/values-land/dimens.xml b/CaptchaSkipper/app/src/main/res/values-land/dimens.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/values-land/dimens.xml	
+@@ -0,0 +1,3 @@
++<resources>
++      <dimen name="fab_margin">48dp</dimen>
++   </resources>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.9 (Utilitaires NAS)\" project-jdk-type=\"Python SDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	
++++ b/.idea/misc.xml	
+@@ -1,4 +1,4 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (Utilitaires NAS)" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (utilitaires_NAS) (2)" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
+Index: config.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Les lignes qui commencent par \"#\" ne sont pas prises en compte\r\n# Les champs suivants seront remplis automatiquement si non précisé :\r\n# - PATH : Les medias seront téléchargés dans ce dossier\r\n# - QUALITY : Qualité par défaut pour télécharger les médias\r\n# - SITE : Site par défaut ou télécharger les médias\r\n# PATH=\r\n# QUALITY=\r\n# SITE=\r\n\r\n\r\n# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement\r\nSERVER_IP=pc-nas\r\nPORT=32400\r\nTOKEN=xGorvyzycZQ2UUNRcPAw
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/config.txt b/config.txt
+--- a/config.txt	
++++ b/config.txt	
+@@ -3,9 +3,9 @@
+ # - PATH : Les medias seront téléchargés dans ce dossier
+ # - QUALITY : Qualité par défaut pour télécharger les médias
+ # - SITE : Site par défaut ou télécharger les médias
+-# PATH=
+-# QUALITY=
+-# SITE=
++#PATH=
++#QUALITY=
++#SITE=
+ 
+ 
+ # Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement
+Index: CaptchaSkipper/app/src/main/res/values-v23/themes.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/values-v23/themes.xml b/CaptchaSkipper/app/src/main/res/values-v23/themes.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/values-v23/themes.xml	
+@@ -0,0 +1,8 @@
++<resources xmlns:tools="http://schemas.android.com/tools">
++  <style name="Theme.CaptchaSkipper" parent="Base.Theme.CaptchaSkipper">
++    <!-- Transparent system bars for edge-to-edge. -->
++    <item name="android:navigationBarColor">@android:color/transparent</item>
++    <item name="android:statusBarColor">@android:color/transparent</item>
++    <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
++  </style>
++</resources>
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/res/navigation/nav_graph.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/navigation/nav_graph.xml b/CaptchaSkipper/app/src/main/res/navigation/nav_graph.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/navigation/nav_graph.xml	
+@@ -0,0 +1,28 @@
++<?xml version="1.0" encoding="utf-8"?>
++<navigation xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/nav_graph"
++    app:startDestination="@id/FirstFragment">
++
++    <fragment
++        android:id="@+id/FirstFragment"
++        android:name="com.teo.captchaskipper.FirstFragment"
++        android:label="@string/first_fragment_label"
++        tools:layout="@layout/fragment_first" >
++
++        <action
++            android:id="@+id/action_FirstFragment_to_SecondFragment"
++            app:destination="@id/SecondFragment" />
++    </fragment>
++    <fragment
++        android:id="@+id/SecondFragment"
++        android:name="com.teo.captchaskipper.SecondFragment"
++        android:label="@string/second_fragment_label"
++        tools:layout="@layout/fragment_second" >
++
++        <action
++            android:id="@+id/action_SecondFragment_to_FirstFragment"
++            app:destination="@id/FirstFragment" />
++    </fragment>
++</navigation>
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/res/values/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/values/dimens.xml b/CaptchaSkipper/app/src/main/res/values/dimens.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/values/dimens.xml	
+@@ -0,0 +1,3 @@
++<resources>
++      <dimen name="fab_margin">16dp</dimen>
++   </resources>
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/WebViewer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/WebViewer.java b/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/WebViewer.java
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/WebViewer.java	
+@@ -0,0 +1,48 @@
++package com.teo.captchaskipper;
++
++import android.os.Bundle;
++import com.google.android.material.snackbar.Snackbar;
++import androidx.appcompat.app.AppCompatActivity;
++import android.view.View;
++import androidx.core.view.WindowCompat;
++import androidx.navigation.NavController;
++import androidx.navigation.Navigation;
++import androidx.navigation.ui.AppBarConfiguration;
++import androidx.navigation.ui.NavigationUI;
++import com.teo.captchaskipper.databinding.ActivityWebViewerBinding;
++
++public class WebViewer extends AppCompatActivity {
++
++    private AppBarConfiguration appBarConfiguration;
++private ActivityWebViewerBinding binding;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++
++     binding = ActivityWebViewerBinding.inflate(getLayoutInflater());
++     setContentView(binding.getRoot());
++
++        setSupportActionBar(binding.toolbar);
++
++        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_web_viewer);
++        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
++        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
++
++        binding.fab.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
++                        .setAnchorView(R.id.fab)
++                        .setAction("Action", null).show();
++            }
++        });
++    }
++
++    @Override
++    public boolean onSupportNavigateUp() {
++        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_web_viewer);
++        return NavigationUI.navigateUp(navController, appBarConfiguration)
++                || super.onSupportNavigateUp();
++    }
++}
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/res/layout/fragment_first.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/layout/fragment_first.xml b/CaptchaSkipper/app/src/main/res/layout/fragment_first.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/layout/fragment_first.xml	
+@@ -0,0 +1,34 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.core.widget.NestedScrollView
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".FirstFragment">
++    <androidx.constraintlayout.widget.ConstraintLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:padding="16dp">
++    <Button
++        android:id="@+id/button_first"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="@string/next"
++        app:layout_constraintBottom_toTopOf="@id/textview_first"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++
++    <TextView
++        android:id="@+id/textview_first"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="16dp"
++        android:text="@string/lorem_ipsum"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@id/button_first" />
++    </androidx.constraintlayout.widget.ConstraintLayout>
++</androidx.core.widget.NestedScrollView>
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/res/layout/activity_web_viewer.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/layout/activity_web_viewer.xml b/CaptchaSkipper/app/src/main/res/layout/activity_web_viewer.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/layout/activity_web_viewer.xml	
+@@ -0,0 +1,35 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.coordinatorlayout.widget.CoordinatorLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:fitsSystemWindows="true"
++    tools:context=".WebViewer">
++
++    <com.google.android.material.appbar.AppBarLayout
++        android:layout_height="wrap_content"
++        android:layout_width="match_parent"
++        android:fitsSystemWindows="true"
++        >
++
++        <com.google.android.material.appbar.MaterialToolbar
++            android:id="@+id/toolbar"
++            android:layout_width = "match_parent"
++            android:layout_height = "?attr/actionBarSize" />
++
++  </com.google.android.material.appbar.AppBarLayout>
++
++  <include layout="@layout/content_web_viewer"/>
++
++  <com.google.android.material.floatingactionbutton.FloatingActionButton
++  android:id="@+id/fab"
++  android:layout_width="wrap_content"
++  android:layout_height="wrap_content"
++  android:layout_gravity="bottom|end"
++  android:layout_marginEnd="@dimen/fab_margin"
++  android:layout_marginBottom="16dp"
++  app:srcCompat="@android:drawable/ic_dialog_email" />
++
++  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/SecondFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/SecondFragment.java b/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/SecondFragment.java
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/SecondFragment.java	
+@@ -0,0 +1,46 @@
++package com.teo.captchaskipper;
++
++import android.os.Bundle;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++import androidx.annotation.NonNull;
++import androidx.fragment.app.Fragment;
++import androidx.navigation.fragment.NavHostFragment;
++import com.teo.captchaskipper.databinding.FragmentSecondBinding;
++
++public class SecondFragment extends Fragment {
++
++private FragmentSecondBinding binding;
++
++    @Override
++    public View onCreateView(
++            LayoutInflater inflater, ViewGroup container,
++            Bundle savedInstanceState
++    ) {
++
++      binding = FragmentSecondBinding.inflate(inflater, container, false);
++      return binding.getRoot();
++
++    }
++
++    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
++        super.onViewCreated(view, savedInstanceState);
++
++        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                NavHostFragment.findNavController(SecondFragment.this)
++                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
++            }
++        });
++    }
++
++@Override
++    public void onDestroyView() {
++        super.onDestroyView();
++        binding = null;
++    }
++
++}
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/res/layout/fragment_second.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/layout/fragment_second.xml b/CaptchaSkipper/app/src/main/res/layout/fragment_second.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/layout/fragment_second.xml	
+@@ -0,0 +1,34 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.core.widget.NestedScrollView
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".SecondFragment">
++    <androidx.constraintlayout.widget.ConstraintLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:padding="16dp">
++    <Button
++        android:id="@+id/button_second"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="@string/previous"
++        app:layout_constraintBottom_toTopOf="@id/textview_second"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++
++    <TextView
++        android:id="@+id/textview_second"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="16dp"
++        android:text="@string/lorem_ipsum"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@id/button_second" />
++    </androidx.constraintlayout.widget.ConstraintLayout>
++</androidx.core.widget.NestedScrollView>
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/res/layout/content_web_viewer.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/layout/content_web_viewer.xml b/CaptchaSkipper/app/src/main/res/layout/content_web_viewer.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/layout/content_web_viewer.xml	
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    app:layout_behavior="@string/appbar_scrolling_view_behavior">
++
++    <fragment
++        android:id="@+id/nav_host_fragment_content_web_viewer"
++        android:name="androidx.navigation.fragment.NavHostFragment"
++        android:layout_width="0dp"
++        android:layout_height="0dp"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintTop_toTopOf="parent"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:defaultNavHost="true"
++        app:navGraph="@navigation/nav_graph" />
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/FirstFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/FirstFragment.java b/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/FirstFragment.java
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/FirstFragment.java	
+@@ -0,0 +1,46 @@
++package com.teo.captchaskipper;
++
++import android.os.Bundle;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++import androidx.annotation.NonNull;
++import androidx.fragment.app.Fragment;
++import androidx.navigation.fragment.NavHostFragment;
++import com.teo.captchaskipper.databinding.FragmentFirstBinding;
++
++public class FirstFragment extends Fragment {
++
++private FragmentFirstBinding binding;
++
++    @Override
++    public View onCreateView(
++            LayoutInflater inflater, ViewGroup container,
++            Bundle savedInstanceState
++    ) {
++
++      binding = FragmentFirstBinding.inflate(inflater, container, false);
++      return binding.getRoot();
++
++    }
++
++    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
++        super.onViewCreated(view, savedInstanceState);
++
++        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                NavHostFragment.findNavController(FirstFragment.this)
++                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
++            }
++        });
++    }
++
++@Override
++    public void onDestroyView() {
++        super.onDestroyView();
++        binding = null;
++    }
++
++}
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/res/values-w1240dp/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/values-w1240dp/dimens.xml b/CaptchaSkipper/app/src/main/res/values-w1240dp/dimens.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/values-w1240dp/dimens.xml	
+@@ -0,0 +1,3 @@
++<resources>
++      <dimen name="fab_margin">200dp</dimen>
++   </resources>
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/res/values-w600dp/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/values-w600dp/dimens.xml b/CaptchaSkipper/app/src/main/res/values-w600dp/dimens.xml
+new file mode 100644
+--- /dev/null	
++++ b/CaptchaSkipper/app/src/main/res/values-w600dp/dimens.xml	
+@@ -0,0 +1,3 @@
++<resources>
++      <dimen name="fab_margin">48dp</dimen>
++   </resources>
+\ No newline at end of file
