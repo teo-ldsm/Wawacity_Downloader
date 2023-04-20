@@ -15,4 +15,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/start_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="93dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="157dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
