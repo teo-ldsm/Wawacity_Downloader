@@ -1,0 +1,324 @@
+Index: CaptchaSkipper/app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n        xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <application\r\n            android:allowBackup=\"true\"\r\n            android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n            android:fullBackupContent=\"@xml/backup_rules\"\r\n            android:icon=\"@mipmap/ic_launcher\"\r\n            android:label=\"@string/app_name\"\r\n            android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n            android:supportsRtl=\"true\"\r\n            android:theme=\"@style/Theme.CaptchaSkipper\"\r\n            tools:targetApi=\"31\">\r\n        <activity\r\n                android:name=\".MainActivity\"\r\n                android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n    </application>\r\n\r\n</manifest>
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/AndroidManifest.xml b/CaptchaSkipper/app/src/main/AndroidManifest.xml
+--- a/CaptchaSkipper/app/src/main/AndroidManifest.xml	
++++ b/CaptchaSkipper/app/src/main/AndroidManifest.xml	
+@@ -1,20 +1,25 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-        xmlns:tools="http://schemas.android.com/tools">
++    xmlns:tools="http://schemas.android.com/tools" >
+ 
+     <application
+-            android:allowBackup="true"
+-            android:dataExtractionRules="@xml/data_extraction_rules"
+-            android:fullBackupContent="@xml/backup_rules"
+-            android:icon="@mipmap/ic_launcher"
+-            android:label="@string/app_name"
+-            android:roundIcon="@mipmap/ic_launcher_round"
+-            android:supportsRtl="true"
+-            android:theme="@style/Theme.CaptchaSkipper"
+-            tools:targetApi="31">
++        android:allowBackup="true"
++        android:dataExtractionRules="@xml/data_extraction_rules"
++        android:fullBackupContent="@xml/backup_rules"
++        android:icon="@mipmap/ic_launcher"
++        android:label="@string/app_name"
++        android:roundIcon="@mipmap/ic_launcher_round"
++        android:supportsRtl="true"
++        android:theme="@style/Theme.CaptchaSkipper"
++        tools:targetApi="31" >
+         <activity
+-                android:name=".MainActivity"
+-                android:exported="true">
++            android:name=".WebViewer"
++            android:exported="false"
++            android:label="@string/title_activity_web_viewer"
++            android:theme="@style/Theme.CaptchaSkipper" />
++        <activity
++            android:name=".MainActivity"
++            android:exported="true" >
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+ 
+Index: CaptchaSkipper/app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">Captcha Skipper</string>\r\n</resources>
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/values/strings.xml b/CaptchaSkipper/app/src/main/res/values/strings.xml
+--- a/CaptchaSkipper/app/src/main/res/values/strings.xml	
++++ b/CaptchaSkipper/app/src/main/res/values/strings.xml	
+@@ -1,3 +1,46 @@
+ <resources>
+     <string name="app_name">Captcha Skipper</string>
++    <string name="start">Démmarer</string>
++    <!-- Strings used for fragments for navigation -->
++    <string name="first_fragment_label">First Fragment</string>
++    <string name="second_fragment_label">Second Fragment</string>
++    <string name="next">Next</string>
++    <string name="previous">Previous</string>
++
++    <string name="lorem_ipsum">
++        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
++        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
++        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
++        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
++        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
++        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
++        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
++        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
++        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
++        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
++        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
++        bibendum, vel congue leo egestas.\n\n
++        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
++        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
++        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
++        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
++        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
++        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
++        est.\n\n
++        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
++        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
++        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
++        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
++        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
++        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
++        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
++        convallis.\n\n
++        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
++        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
++        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
++        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
++        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
++        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
++        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
++    </string>
+ </resources>
+\ No newline at end of file
+Index: CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.teo.captchaskipper;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.os.Bundle;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n    }\r\n}
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/MainActivity.java b/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/MainActivity.java
+--- a/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/MainActivity.java	
++++ b/CaptchaSkipper/app/src/main/java/com/teo/captchaskipper/MainActivity.java	
+@@ -2,13 +2,28 @@
+ 
+ import androidx.appcompat.app.AppCompatActivity;
+ 
++import android.content.Intent;
+ import android.os.Bundle;
++import android.view.View;
++import android.widget.Button;
+ 
+ public class MainActivity extends AppCompatActivity {
+ 
++    private Button start;
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_main);
++
++        this.start = (Button) findViewById(R.id.start_button);
++
++        start.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                Intent otherActivity = new Intent(getApplicationContext(), WebViewer.class);
++                startActivity(otherActivity);
++                finish();
++            }
++        });
+     }
+ }
+\ No newline at end of file
+Index: CaptchaSkipper/app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id 'com.android.application'\r\n}\r\n\r\nandroid {\r\n    namespace 'com.teo.captchaskipper'\r\n    compileSdk 33\r\n\r\n    defaultConfig {\r\n        applicationId \"com.teo.captchaskipper\"\r\n        minSdk 26\r\n        targetSdk 33\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation 'androidx.appcompat:appcompat:1.6.1'\r\n    implementation 'com.google.android.material:material:1.8.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'\r\n    testImplementation 'junit:junit:4.13.2'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.5'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'\r\n}
+===================================================================
+diff --git a/CaptchaSkipper/app/build.gradle b/CaptchaSkipper/app/build.gradle
+--- a/CaptchaSkipper/app/build.gradle	
++++ b/CaptchaSkipper/app/build.gradle	
+@@ -26,6 +26,9 @@
+         sourceCompatibility JavaVersion.VERSION_1_8
+         targetCompatibility JavaVersion.VERSION_1_8
+     }
++    buildFeatures {
++        viewBinding true
++    }
+ }
+ 
+ dependencies {
+@@ -33,6 +36,8 @@
+     implementation 'androidx.appcompat:appcompat:1.6.1'
+     implementation 'com.google.android.material:material:1.8.0'
+     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
++    implementation 'androidx.navigation:navigation-fragment:2.5.2'
++    implementation 'androidx.navigation:navigation-ui:2.5.2'
+     testImplementation 'junit:junit:4.13.2'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+Index: CaptchaSkipper/app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n        xmlns:tools=\"http://schemas.android.com/tools\"\r\n        xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        tools:context=\".MainActivity\">\r\n\r\n    <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Hello World!\"\r\n            app:layout_constraintBottom_toBottomOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+===================================================================
+diff --git a/CaptchaSkipper/app/src/main/res/layout/activity_main.xml b/CaptchaSkipper/app/src/main/res/layout/activity_main.xml
+--- a/CaptchaSkipper/app/src/main/res/layout/activity_main.xml	
++++ b/CaptchaSkipper/app/src/main/res/layout/activity_main.xml	
+@@ -6,13 +6,17 @@
+         android:layout_height="match_parent"
+         tools:context=".MainActivity">
+ 
+-    <TextView
++    <Button
++            android:text="@string/start"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+-            android:text="Hello World!"
++            android:id="@+id/start_button"
++            android:visibility="visible"
+             app:layout_constraintBottom_toBottomOf="parent"
++            android:layout_marginBottom="161dp"
+             app:layout_constraintStart_toStartOf="parent"
+-            app:layout_constraintEnd_toEndOf="parent"
+-            app:layout_constraintTop_toTopOf="parent" />
++            android:layout_marginStart="160dp"
++            android:layout_marginEnd="148dp"
++            app:layout_constraintEnd_toEndOf="parent" />
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: CaptchaSkipper/.idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AndroidLayouts\">\r\n    <shared>\r\n      <config />\r\n    </shared>\r\n  </component>\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"NONE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"e41aafa5-f8c1-4dab-93e9-ab601c6da4ba\" name=\"Changes\" comment=\"v0.0.0 (Ajout Captcha Skipper)\">\r\n      <change afterPath=\"$PROJECT_DIR$/.gitignore\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/gradle.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/vcs.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/.gitignore\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/build.gradle\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/proguard-rules.pro\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/androidTest/java/com/teo/captchaskipper/ExampleInstrumentedTest.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/AndroidManifest.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/java/com/teo/captchaskipper/MainActivity.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/drawable-v24/ic_launcher_foreground.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.webp\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.webp\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.webp\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/values-night/themes.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/values/colors.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/values/strings.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/values/themes.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/xml/backup_rules.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/xml/data_extraction_rules.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/test/java/com/teo/captchaskipper/ExampleUnitTest.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/build.gradle\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/gradle.properties\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/gradlew\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/gradlew.bat\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/settings.gradle\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/8.0/checksums/checksums.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gradle/8.0/checksums/checksums.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/8.0/checksums/md5-checksums.bin\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/8.0/checksums/sha1-checksums.bin\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/8.0/dependencies-accessors/dependencies-accessors.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gradle/8.0/dependencies-accessors/dependencies-accessors.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/misc.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExecutionTargetManager\" SELECTED_TARGET=\"device_and_snapshot_combo_box_target[C:\\Users\\Gilles\\.android\\avd\\Pixel_3a_API_33_x86_64.avd]\" />\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$/..\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2OblRpzbEYWPP54NnQydsu2tWEz\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.cidr.known.project.marker\": \"true\",\r\n    \"cidr.known.project.marker\": \"true\",\r\n    \"project.structure.last.edited\": \"Dependencies\",\r\n    \"project.structure.proportion\": \"0.17\",\r\n    \"project.structure.side.proportion\": \"0.2\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"app\" type=\"AndroidRunConfigurationType\" factoryName=\"Android App\">\r\n      <module name=\"Captcha_Skipper.app.main\" />\r\n      <option name=\"DEPLOY\" value=\"true\" />\r\n      <option name=\"DEPLOY_APK_FROM_BUNDLE\" value=\"false\" />\r\n      <option name=\"DEPLOY_AS_INSTANT\" value=\"false\" />\r\n      <option name=\"ARTIFACT_NAME\" value=\"\" />\r\n      <option name=\"PM_INSTALL_OPTIONS\" value=\"\" />\r\n      <option name=\"ALL_USERS\" value=\"false\" />\r\n      <option name=\"ALWAYS_INSTALL_WITH_PM\" value=\"false\" />\r\n      <option name=\"CLEAR_APP_STORAGE\" value=\"false\" />\r\n      <option name=\"DYNAMIC_FEATURES_DISABLED_LIST\" value=\"\" />\r\n      <option name=\"ACTIVITY_EXTRA_FLAGS\" value=\"\" />\r\n      <option name=\"MODE\" value=\"default_activity\" />\r\n      <option name=\"CLEAR_LOGCAT\" value=\"false\" />\r\n      <option name=\"SHOW_LOGCAT_AUTOMATICALLY\" value=\"false\" />\r\n      <option name=\"INSPECTION_WITHOUT_ACTIVITY_RESTART\" value=\"false\" />\r\n      <option name=\"TARGET_SELECTION_MODE\" value=\"DEVICE_AND_SNAPSHOT_COMBO_BOX\" />\r\n      <option name=\"SELECTED_CLOUD_MATRIX_CONFIGURATION_ID\" value=\"-1\" />\r\n      <option name=\"SELECTED_CLOUD_MATRIX_PROJECT_ID\" value=\"\" />\r\n      <option name=\"DEBUGGER_TYPE\" value=\"Auto\" />\r\n      <Auto>\r\n        <option name=\"USE_JAVA_AWARE_DEBUGGER\" value=\"false\" />\r\n        <option name=\"SHOW_STATIC_VARS\" value=\"true\" />\r\n        <option name=\"WORKING_DIR\" value=\"\" />\r\n        <option name=\"TARGET_LOGGING_CHANNELS\" value=\"lldb process:gdb-remote packets\" />\r\n        <option name=\"SHOW_OPTIMIZED_WARNING\" value=\"true\" />\r\n      </Auto>\r\n      <Hybrid>\r\n        <option name=\"USE_JAVA_AWARE_DEBUGGER\" value=\"false\" />\r\n        <option name=\"SHOW_STATIC_VARS\" value=\"true\" />\r\n        <option name=\"WORKING_DIR\" value=\"\" />\r\n        <option name=\"TARGET_LOGGING_CHANNELS\" value=\"lldb process:gdb-remote packets\" />\r\n        <option name=\"SHOW_OPTIMIZED_WARNING\" value=\"true\" />\r\n      </Hybrid>\r\n      <Java />\r\n      <Native>\r\n        <option name=\"USE_JAVA_AWARE_DEBUGGER\" value=\"false\" />\r\n        <option name=\"SHOW_STATIC_VARS\" value=\"true\" />\r\n        <option name=\"WORKING_DIR\" value=\"\" />\r\n        <option name=\"TARGET_LOGGING_CHANNELS\" value=\"lldb process:gdb-remote packets\" />\r\n        <option name=\"SHOW_OPTIMIZED_WARNING\" value=\"true\" />\r\n      </Native>\r\n      <Profilers>\r\n        <option name=\"ADVANCED_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"STARTUP_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"STARTUP_CPU_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"STARTUP_CPU_PROFILING_CONFIGURATION_NAME\" value=\"Java/Kotlin Method Sample (legacy)\" />\r\n        <option name=\"STARTUP_NATIVE_MEMORY_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"NATIVE_MEMORY_SAMPLE_RATE_BYTES\" value=\"2048\" />\r\n      </Profilers>\r\n      <option name=\"DEEP_LINK\" value=\"\" />\r\n      <option name=\"ACTIVITY_CLASS\" value=\"\" />\r\n      <option name=\"SEARCH_ACTIVITY_IN_GLOBAL_SCOPE\" value=\"false\" />\r\n      <option name=\"SKIP_ACTIVITY_VALIDATION\" value=\"false\" />\r\n      <method v=\"2\">\r\n        <option name=\"Android.Gradle.BeforeRunTask\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"e41aafa5-f8c1-4dab-93e9-ab601c6da4ba\" name=\"Changes\" comment=\"\" />\r\n      <created>1681837167501</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1681837167501</updated>\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"v0.0.0 (Ajout Captcha Skipper)\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"v0.0.0 (Ajout Captcha Skipper)\" />\r\n  </component>\r\n</project>
+===================================================================
+diff --git a/CaptchaSkipper/.idea/workspace.xml b/CaptchaSkipper/.idea/workspace.xml
+--- a/CaptchaSkipper/.idea/workspace.xml	
++++ b/CaptchaSkipper/.idea/workspace.xml	
+@@ -10,56 +10,31 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="e41aafa5-f8c1-4dab-93e9-ab601c6da4ba" name="Changes" comment="v0.0.0 (Ajout Captcha Skipper)">
+-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/.gitignore" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/proguard-rules.pro" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/teo/captchaskipper/ExampleInstrumentedTest.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/teo/captchaskipper/MainActivity.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.webp" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.webp" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.webp" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/values-night/themes.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/xml/backup_rules.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/xml/data_extraction_rules.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/app/src/test/java/com/teo/captchaskipper/ExampleUnitTest.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/teo/captchaskipper/FirstFragment.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/teo/captchaskipper/SecondFragment.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/teo/captchaskipper/WebViewer.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_web_viewer.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/content_web_viewer.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_first.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_second.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/navigation/nav_graph.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/values-land/dimens.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/values-night/strings.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/values-v23/themes.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/values-w1240dp/dimens.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/values-w600dp/dimens.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.gradle/8.0/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/checksums/checksums.lock" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.gradle/8.0/checksums/md5-checksums.bin" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.gradle/8.0/checksums/sha1-checksums.bin" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.gradle/8.0/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.lock" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" beforeDir="false" />
+       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/teo/captchaskipper/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/teo/captchaskipper/MainActivity.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -71,6 +46,13 @@
+     <projectState path="$PROJECT_DIR$">
+       <ProjectState />
+     </projectState>
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="valueResourceFile" />
++      </list>
++    </option>
+   </component>
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+@@ -95,6 +77,11 @@
+     "project.structure.side.proportion": "0.2"
+   }
+ }]]></component>
++  <component name="RecentsManager">
++    <key name="android.template.-1856913080">
++      <recent name="com.teo.captchaskipper" />
++    </key>
++  </component>
+   <component name="RunManager">
+     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
+       <module name="Captcha_Skipper.app.main" />
+@@ -164,6 +151,14 @@
+       <option name="presentableId" value="Default" />
+       <updated>1681837167501</updated>
+     </task>
++    <task id="LOCAL-00001" summary="v0.0.0 (Ajout Captcha Skipper)">
++      <created>1681837475925</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1681837475925</updated>
++    </task>
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
