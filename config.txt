@@ -3,9 +3,15 @@
 # - PATH : Les medias seront téléchargés dans ce dossier
 # - QUALITY : Qualité par défaut pour télécharger les médias
 # - SITE : Site par défaut ou télécharger les médias
+<<<<<<< HEAD
 #PATH=
 #QUALITY=
 #SITE=
+=======
+# PATH=
+# QUALITY=
+# SITE=
+>>>>>>> cf445a41180e79d5fc205f64522df26571827895
 
 
 # Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement
