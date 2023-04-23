@@ -20,8 +20,8 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-url = "Si ce message s'affiche je bande"
-
+# url = "https://dl-protect.link/80722917?fn=VGhvciA6IExlIE1vbmRlIGRlcyB0w6luw6hicmVzIFtIRExJR0hUIDEwODBwXSAtIE1VTFRJIChUUlVFRlJFTkNIKQ%3D%3D&rl=a2"
+url = "bichoour"
 
 @app.route('/get_url')
 def get_url():
