@@ -1,20 +1,14 @@
-# Les lignes qui commencent par "#" ne sont pas prises en compte
-# Les champs suivants seront remplis automatiquement si non précisé :
-# - PATH : Les medias seront téléchargés dans ce dossier
-# - QUALITY : Qualité par défaut pour télécharger les médias
-# - SITE : Site par défaut ou télécharger les médias
-<<<<<<< HEAD
-#PATH=
+# Les lignes qui commencent par "#" ne sont pas prises en compte 
+# Veuillez ne pas laisser de champs vide sans un "#" en début de ligne 
+# Les champs seront remplis automatiquement si non précisé ici 
+# - PATH : Les medias seront téléchargés dans ce dossier 
+# - QUALITY : Qualité par défaut pour télécharger les médias 
+# - SITE : Site par défaut ou télécharger les médias 
+PATH=
 #QUALITY=
 #SITE=
-=======
-# PATH=
-# QUALITY=
-# SITE=
->>>>>>> cf445a41180e79d5fc205f64522df26571827895
 
-
-# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement
+# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement 
 SERVER_IP=pc-nas
 PORT=32400
 TOKEN=xGorvyzycZQ2UUNRcPAw

@@ -1,5 +1,7 @@
 from plex_refresh import refresh
 import config_loader
+import threading
+from flask import Flask, request
 import time
 import platform
 from colorama import Fore, Style
@@ -9,6 +11,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+
+# TODO Faire un try pour vérifier si tt les bibliothèques ont la
 
 
 user_os = platform.system()
@@ -22,7 +26,7 @@ options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 driver.implicitly_wait(10)
-print("Init OK !\n")
+print(f"{Fore.GREEN}Init OK !{Style.RESET_ALL}\n")
 
 
 print("Getting wawacity link...")
@@ -137,7 +141,7 @@ while not choix_valide:
         if 1 <= rep <= len(index_qualites):
             choix_valide = True
         else:
-            print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 0 et {len(index_qualites)}{Style.RESET_ALL}")
+            print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_qualites)}{Style.RESET_ALL}")
             choix_valide = False
 
 lien_page_film = liens_qualites[index_qualites[rep - 1]]
@@ -146,9 +150,100 @@ lien_page_film = liens_qualites[index_qualites[rep - 1]]
 if lien_page_film is not None:
     driver.get(lien_page_film)
 
-# TODO Faire un truc pour skipper ce bloc si la site de dl est précisé dans config.txt
 
-# TODO Faire un truc pour récupérer le lien de chaque site de dl
+liste_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[2]")
+liste_liens_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[1]/a")
+
+liens_sites = {liste_sites[i].text: liste_liens_sites[i].get_attribute("href") for i in range(len(liste_sites)) \
+               if liste_sites[i].text in ("1fichier", "Uptobox")}
+
+
+print("Voici les sites de téléchargements disponibles")
+n = 1
+index_sites = []
+for i in liens_sites:
+    print(f"{n} : {i}")
+    index_sites.append(i)
+    n += 1
+
+choix_valide = False
+rep = None
+while not choix_valide:
+    try:
+        rep = eval(input("\nEntrez le numéro correspondant au site que vous souhaitez utiliser.\n"))
+        if not isinstance(rep, int):
+            raise TypeError("La variable rep doit être de type int")
+        choix_valide = True
+
+    except:
+        print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_sites)}{Style.RESET_ALL}")
+        choix_valide = False
+
+    else:
+        if 1 <= rep <= len(index_sites):
+            choix_valide = True
+        else:
+            print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_sites)}{Style.RESET_ALL}")
+            choix_valide = False
+
+
+dl_site = index_sites[rep - 1]
+lien_page_captcha = liens_sites[dl_site]
+
+
+print(f"\n\n{Fore.LIGHTBLUE_EX}##################\n"
+      f"L\'accès au téléchargement nécessite la validation d'un captcha.\n"
+      f"Ouvrez l'application Captcha Skipper sur votre téléphone pour continuer.{Style.RESET_ALL}\n"
+      f"##################\n")
+
+new_url = ""
+
+app = Flask(__name__)
+
+
+@app.route('/get_url')
+def get_url():
+    print(f"{Fore.GREEN}Le lien a été transmis à l'application mobile{Style.RESET_ALL}")
+    return lien_page_captcha
+
+
+@app.route('/upload_url', methods=['POST'])
+def upload_url():
+    global new_url
+    new_url = request.form.get('url')
+
+    print(f"{Fore.GREEN}New URL received: {new_url}{Style.RESET_ALL}")
+    # Arrête le serveur Flask
+    shutdown_server()
+
+    return 'OK'
+
+
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+
+
+app.run(host="0.0.0.0", port=5000)
+
+
+print(f"{Fore.GREEN}Le captcha a été passé avec succès !{Style.RESET_ALL}\n\n"
+      f"Connecting to {new_url}")
+
+driver.get(new_url)
+
+if dl_site == "1fichier":
+
+    btn = driver.find_element(By.ID, "dlb")
+    btn.submit()
+
+    btn = driver.find_element(By.CLASS_NAME, "ok btn-general btn-orange") # TODO Il trouve pas ici et il renvoie une erreur
+    lien_film = btn.get_attribute("href")
+
+
+print(lien_film)
 
 
 driver.close()
