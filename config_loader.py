@@ -63,7 +63,8 @@ def build_config() -> None:
                "# Les champs seront remplis automatiquement si non précisé ici \n"
                "# - PATH : Les medias seront téléchargés dans ce dossier \n"
                "# - QUALITY : Qualité par défaut pour télécharger les médias \n"
-               "# - SITE : Site par défaut ou télécharger les médias \n"
+               "# - SITE : Site par défaut ou télécharger les médias. Doit être défini par \'1fichier\' "
+               "ou \'Uptobox\'. Les autres sites ne sont pas encore pris en charges\n"
                "#PATH=\n"
                "#QUALITY=\n"
                "#SITE=\n\n"
@@ -77,7 +78,7 @@ def build_config() -> None:
 
     print("config.txt à été reconstruit avec succès !\n")
 
-    rep = demande("Voulez vous ouvrir le bloc-note pour remplir les valeurs du fichier maintenant ?")
+    rep = demande("Voulez vous remplir les valeurs du fichier maintenant ?")
 
     if rep in ("OUI", "O"):
         fill_config(tous=True)
