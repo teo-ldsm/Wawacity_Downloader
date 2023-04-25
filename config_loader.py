@@ -125,7 +125,7 @@ def demande(msg: str = ""):
     choix_valide = False
     rep = None
     while not choix_valide:
-        rep = input(f"{msg} (Oui/Non)").upper()
+        rep = input(f"{msg} (Oui/Non)\n").upper()
         if rep in ("OUI", "NON", "N", "O"):
             choix_valide = True
         else:
