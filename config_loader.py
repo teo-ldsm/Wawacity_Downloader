@@ -1,3 +1,6 @@
+from colorama import Fore, Style
+
+
 def load() -> dict:
     print("Récupération des données de \'config.txt\'...\n")
     try:
@@ -129,6 +132,6 @@ def demande(msg: str = ""):
         if rep in ("OUI", "NON", "N", "O"):
             choix_valide = True
         else:
-            print("Réponse invalide. Répondez par oui ou non")
+            print(f"{Fore.RED}Réponse invalide. Répondez par oui ou non{Style.RESET_ALL}")
 
     return rep
