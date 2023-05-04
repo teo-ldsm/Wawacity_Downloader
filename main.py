@@ -1,4 +1,7 @@
 import time
+
+import selenium.common.exceptions
+
 import plex_refresh
 import wget
 from config_loader import *
@@ -14,6 +17,10 @@ from selenium.webdriver.support import expected_conditions as EC
 
 version = "v1.0.0-beta"
 
+if os.name == 'nt':  # Windows
+    os.system('cls')
+else:  # Linux, Mac OS X
+    os.system('clear')
 
 args = sys.argv
 args = [arg.upper() for arg in args]
@@ -45,10 +52,14 @@ if "DEBUG" in args:
 else:
     from colorama import Fore, Style
 
+
+print("\n\n\nVérification des mises a jour ...\n\n")
 api_url = 'https://api.github.com/repos/teo-ldsm/Wawacity_Downloader/releases/latest'
 response = requests.get(api_url)
 latest_realease = json.loads(response.text)
-latest_version = latest_realease["tag_name"]
+# latest_version = latest_realease["tag_name"] # TODO Décommenter ça
+
+latest_version = "v1.0.0-beta"
 
 if latest_version != version:
     rep = demande(f'Une nouvelle version est disponible: {latest_version}. Voulez vous la télécharger ?\n')
@@ -64,7 +75,9 @@ if latest_version != version:
             parent_dir = str(pathlib.Path(__file__).parent.parent.absolute())
             package_name = wget.detect_filename(package_url)
             print(f"\nDébut du téléchargement depuis {package_url}\n")
+
             wget.download(package_url, out=f"{parent_dir}\\{package_name}")
+
             input(f"\n\nVotre fichier a été téléchargé ici : {parent_dir}\\{package_name}\n"
                   f"Vous pouvez supprimer cette version et extraire la nouvelle a la place\n"
                   f"{Fore.LIGHTYELLOW_EX}Attention ! Pensez à sauvegarder le contenu de config.txt !{Style.RESET_ALL}\n"
@@ -78,15 +91,12 @@ if latest_version != version:
                   "Appuyez sur Entrer pour quitter ...")
             exit()
 
+else:
+    print(f"\n{Fore.GREEN}Le programme est a jour.{Style.RESET_ALL}\n\n")
 
 # TODO Faire un try pour vérifier si tt les bibliothèques sont la
 
 # TODO Faire un système pour skipper la config manuelle
-
-if os.name == 'nt':  # Windows
-    os.system('cls')
-else:  # Linux, Mac OS X
-    os.system('clear')
 
 
 # TODO Verifier que chrome est installé
@@ -127,8 +137,27 @@ lien_wawacity = driver.find_element(By.XPATH, "//strong/a[contains(@href, \'http
 lien_wawacity = lien_wawacity.text
 print(f"{Fore.GREEN}Link found : {lien_wawacity}{Fore.BLACK}\n")
 
-print(f"{Style.RESET_ALL}Connecting to {lien_wawacity} ...{Fore.BLACK}")
-driver.get(f"https://{lien_wawacity}")
+
+def connect_to_wawacity(link):
+    try:
+        print(f"{Style.RESET_ALL}Connecting to {lien_wawacity} ...{Fore.BLACK}")
+        driver.get(f"https://{link}")
+    except:
+        print(f"\n\n{Fore.RED}Une erreur est survenue durant la connexion au site{Style.RESET_ALL}\n"
+              f"Wawacity est contraint de changer d'adresse régulièrement. Il est possible que le site ai changé "
+              f"d'adresse dans les dernières heures.\n"
+              f"L'adresse {link} n'est donc plus valide.\n"
+              f"Vous pouvez essayer de chercher la nouvelle adresse du site sur internet")
+
+        rep = input(f"Entrez la nouvelle adresse du site ici ou entrez \"exit\" pour quitter ...\n{Style.RESET_ALL}")
+
+        if rep.upper() == "EXIT":
+            exit()
+        else:
+            connect_to_wawacity(rep)
+
+
+connect_to_wawacity(lien_wawacity)
 print(f"{Fore.GREEN}Connected !{Fore.BLACK}\n")
 
 search = driver.find_element(By.NAME, "search")
