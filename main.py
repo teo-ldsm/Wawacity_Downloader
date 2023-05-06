@@ -82,14 +82,14 @@ if latest_version != version:
                   f"Vous pouvez supprimer cette version et extraire la nouvelle a la place\n"
                   f"{Fore.LIGHTYELLOW_EX}Attention ! Pensez à sauvegarder le contenu de config.txt !{Style.RESET_ALL}\n"
                   f"Appuyez sur Entrer pour quitter ...")
-            exit()
+            exit(0)
 
         else:
             input("Une erreur est survenue durant la recherche de mise à jour\n"
                   "Vous pouvez télécharger manuellement la mise a jour ici : "
                   "\"https://github.com/teo-ldsm/Wawacity_Downloader/releases/\"\n"
                   "Appuyez sur Entrer pour quitter ...")
-            exit()
+            exit(1)
 
 else:
     print(f"\n{Fore.GREEN}Le programme est a jour.{Style.RESET_ALL}\n\n")
@@ -147,12 +147,12 @@ def connect_to_wawacity(link):
               f"Wawacity est contraint de changer d'adresse régulièrement. Il est possible que le site ai changé "
               f"d'adresse dans les dernières heures.\n"
               f"L'adresse {link} n'est donc plus valide.\n"
-              f"Vous pouvez essayer de chercher la nouvelle adresse du site sur internet")
+              f"Vous pouvez essayer de chercher manuellement la nouvelle adresse du site sur internet")
 
         rep = input(f"Entrez la nouvelle adresse du site ici ou entrez \"exit\" pour quitter ...\n{Style.RESET_ALL}")
 
         if rep.upper() == "EXIT":
-            exit()
+            exit(0)
         else:
             connect_to_wawacity(rep)
 
@@ -166,14 +166,14 @@ print(Fore.BLACK)
 search.submit()
 
 
-def recup_results():
+def recup_results(num_page):
     liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
     liens_resultats = dict()
     for i in liste_resultats:
         title = i.text[:i.text.index(" [")]
         liens_resultats[title] = i.get_attribute("href")
 
-    print(f"{Style.RESET_ALL}\nVoici les résultats\n{Fore.BLACK}")
+    print(f"{Fore.GREEN}\nVoici les résultats\n{Fore.BLACK}")
     index_liens = []
     n = 1
     for i in liens_resultats:
@@ -185,7 +185,7 @@ def recup_results():
         input(f"\n{Fore.RED}Aucun résultat trouvé. {Fore.BLACK}\n"
               f"{Style.RESET_ALL}Appuyez sur Entrer pour quitter...")
         print(Fore.BLACK)
-        exit()
+        exit(1)
 
     choix_valide = False
     rep = None
@@ -210,11 +210,19 @@ def recup_results():
                 choix_valide = False
 
     if rep == 0:
-        bnt_next = driver.find_element(By.XPATH, "//div[@class=\'text-center\']/ul[@class=\'pagination\']/li[15]/a")
-        next_page = bnt_next.get_attribute("href")
-        driver.get(next_page)
-        print(f"{Style.RESET_ALL}\n\nRecherche des résultats sur la page suivante : \n{Fore.BLACK}")
-        lien = recup_results()
+        try:
+            if num_page == 1:
+                next_page = driver.current_url + f"&page={num_page+1}"
+            else:
+                next_page = driver.current_url.replace(f"page={num_page}", f"page={num_page+1}")
+            driver.get(next_page)
+        except:
+            input(f"{Fore.LIGHTYELLOW_EX}Vous avez atteint la dernière page.{Style.RESET_ALL}\n"
+                  f"Essayez de relancer la recherche avec une orthographe différente.\n"
+                  f"Appuyez sur Entrer pour quitter ...{Fore.BLACK}")
+        else:
+            print(f"{Style.RESET_ALL}\n\nRecherche des résultats sur la page {num_page+1} : \n{Fore.BLACK}")
+            lien = recup_results(num_page+1)
 
     else:
         lien = liens_resultats[index_liens[rep - 1]]
@@ -222,7 +230,7 @@ def recup_results():
     return lien
 
 
-lien_page_film = recup_results()
+lien_page_film = recup_results(1)
 
 driver.get(lien_page_film)
 
@@ -282,10 +290,7 @@ liens_sites = {liste_sites[i].text: liste_liens_sites[i].get_attribute("href") f
                if liste_sites[i].text in ("1fichier", "Uptobox")}
 
 
-print(f"{Style.RESET_ALL}Voici les sites de téléchargements disponibles\n"
-      f"{Fore.LIGHTYELLOW_EX}Avertissement !\n"
-      f"Si vous choisissez le site \"1fichier\" et que vous n'avez pas d'interface graphique le téléchargement ne "
-      f"fonctionnera pas\n{Fore.BLACK}")
+print(f"{Style.RESET_ALL}Voici les sites de téléchargements disponibles\n{Fore.BLACK}")
 n = 1
 index_sites = []
 for i in liens_sites:
@@ -317,15 +322,13 @@ while not choix_valide:
 
 dl_site = index_sites[rep - 1]
 lien_page_captcha = liens_sites[dl_site]
-if dl_site == "1fichier":
-    print(f"\n{Fore.LIGHTYELLOW_EX}Si vous n'avez pas d'interface graphique, fermez le programme et relancez avec un "
-          f"autre site de téléchargement{Fore.BLACK}")
-
 
 print(f"\n\n{Fore.LIGHTCYAN_EX}############################################################################\n"
       f"L\'accès au téléchargement nécessite la validation d'un captcha.\n"
       "Ouvrez l'application Captcha Skipper sur votre téléphone pour continuer.\n"
-      f"############################################################################\n{Fore.BLACK}")
+      f"############################################################################\n\n{Style.RESET_ALL}"
+      f"Vous pouvez trouver l'application ici : "
+      f"\"https://github.com/teo-ldsm/CaptchaSkipper/releases/latset\"\n\n\n{Fore.BLACK}")
 
 new_url = ""
 
@@ -373,67 +376,74 @@ if dl_site == "1fichier":
     btn.submit()
 
     try:
-        btn2 = WebDriverWait(driver, 10).until(
+        btn2 = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.LINK_TEXT, "Cliquer ici pour télécharger le fichier")))
     except:
         try:
-            btn2 = WebDriverWait(driver, 10).until(
+            btn2 = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.LINK_TEXT, "Click here to download the file")))
         except:
-            print(f"{Fore.RED}Une erreur est survenue. Pour fonctionner, chrome doit être en français ou en anglais\n\n"
-                  f"{Fore.LIGHTYELLOW_EX}Le site 1fichier a un compte à rebours qui empêche de télécharger plusieurs "
+            print(f"{Fore.RED}Une erreur est survenue.\n\n"
+                  f"{Fore.LIGHTYELLOW_EX}Pour fonctionner, chrome doit être en français ou en anglais.\n"
+                  f"Le site 1fichier a un compte à rebours qui empêche de télécharger plusieurs "
                   f"films d'affilé.\n{Style.RESET_ALL}"
                   f"Ce compte à rebours peut être esquivé en désactivant et en réactivant la carte réseau\n")
             driver.close()
             driver.quit()
 
             rep = demande("Voulez vous utiliser cette technique ? Cela coupera internet sur votre machine pendant "
-                          "quelques secondes.")
+                          "quelques secondes.\n"
+                          "Si vous répondez \"Non\" le programme va s'arrêter")
 
             if rep in ("OUI", "O"):
 
-                os.system("netsh interface ipv4 show interfaces")
+                if os.name == 'nt':  # Windows
+                    os.system("netsh interface ipv4 show interfaces")
+                else:  # Linux, Mac OS X
+                    os.system('ifconfig')
 
                 carte_res = input("Copier-Collez ici le nom de votre carte réseau connectée a internet\n")
 
-                input("Le programme va vous demander 2 fois un accès administrateur\n"
+                input("\n\nLe programme va vous demander 2 fois un accès administrateur\n"
                       "Appuyez sur Entrer pour continuer...\n")
 
-                os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
-                          f"\'Disable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
+                if os.name == 'nt':
+                    os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
+                              f"\'Disable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
+                else:
+                    os.system(f"sudo ifconfig {carte_res} down")
 
                 time.sleep(5)
 
-                os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
-                          f"\'Enable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
+                if os.name == 'nt':
+                    os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
+                              f"\'Enable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
+                else:
+                    os.system(f"sudo ifconfig {carte_res} up")
 
                 input("Relancez maintenant le programme. Si l'erreur persiste essayez de relancer en allant sur un "
                       "autre site de téléchargement\n"
                       "Appuyez sur Entrer pour quitter...")
-            exit()
+            exit(0)
 
     lien_film = btn2.get_attribute("href")
 
-    print(f"{Style.RESET_ALL}Initialising...\n{Fore.BLACK}")
-    options = Options()
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--lang=fr')
-    options.add_experimental_option("prefs", {"download.default_directory": dl_dir})
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    driver.implicitly_wait(10)
-
-    print(f"{Fore.GREEN}Init OK !{Fore.BLACK}\n")
-
-    driver.get(lien_film)
-    driver.get("chrome://downloads/")
-    driver.maximize_window()
-
-    input(f"{Style.RESET_ALL}Merci d'avoir utilisé Wawacity Downloader !\n"
-          f"Une fois que votre téléchargement est terminé, appuyez sur Entrer pour quitter...{Fore.BLACK}")
-
     driver.close()
     driver.quit()
+
+    print(f"{Style.RESET_ALL}Début du téléchargement\n")
+
+    file_name = wget.detect_filename(lien_film)
+    wget.download(lien_film, out=f"{dl_dir}\\{file_name}")
+
+    print(f"{Fore.GREEN}\n\nVotre fichier a été téléchargé ici : {dl_dir}\\{file_name}\n\n{Style.RESET_ALL}")
+
+    # rep = demande(f"Si vos films sont sur un serveur plex, voulez vous actualiser le serveur ?")
+    # TODO Implémenter plex
+
+    input(f"Merci d'avoir utilisé Wawacity Downloader !\n"
+          f"Appuyez sur Entrer pour quitter...")
+
 
 elif dl_site == "Uptobox":
 
@@ -443,36 +453,43 @@ elif dl_site == "Uptobox":
     print(f"{Fore.GREEN}Timer skipped !\n{Style.RESET_ALL}"
           f"En attente du chargement de la page{Fore.BLACK}\n")
 
-    time.sleep(3)
-
     try:
-        btn2 = driver.find_element(By.XPATH, "//*[@id=\"dl\"]/form/table/thead/tr/td[3]/a")
+        btn2 = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.LINK_TEXT, "Cliquez-ici pour lancer votre téléchargement")))
+        lien_film = btn2.get_attribute("href")
     except:
-        input(f"{Fore.RED}Une erreur est survenue.\n\n"
-              f"{Fore.LIGHTYELLOW_EX}Le site Uptobox a un compte à rebours qui empêche de télécharger plusieurs "
-              f"films d'affilé. Essayez de relancer le programme en allant sur un autre site de "
-              f"téléchargement ou en changeant votre localisation avec un VPN.\n{Style.RESET_ALL}"
-              f"Vous pouvez aller vérifier manuellement sur cette page : {new_url}"
-              f"Appuyez sur Entrer pour quitter...\n\n")
-        print(Fore.BLACK)
-        exit()
+        try:
+            btn2 = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.LINK_TEXT, "Click here to start your download")))
+            lien_film = btn2.get_attribute("href")
+        except:
 
-    lien_film = btn2.get_attribute("href")
+            input(f"{Fore.RED}Une erreur est survenue.\n\n"
+                  f"{Fore.LIGHTYELLOW_EX}Pour fonctionner, chrome doit être en français ou en anglais"
+                  f"Le site Uptobox a un compte à rebours qui empêche de télécharger plusieurs "
+                  f"films d'affilé. \n"
+                  f"Essayez de relancer le programme en allant sur un autre site de "
+                  f"téléchargement ou en changeant votre localisation avec un VPN.\n{Style.RESET_ALL}"
+                  f"Vous pouvez aller vérifier manuellement sur cette page : {new_url}\n"
+                  f"Appuyez sur Entrer pour quitter...\n\n")
+            print(Fore.BLACK)
+            exit(1)
 
     print(f"{Fore.GREEN}Page chargée !\n{Style.RESET_ALL}\n\n"
           f"Début du téléchargement\n")
 
+    driver.close()
+    driver.quit()
+
     file_name = wget.detect_filename(lien_film)
     wget.download(lien_film, out=f"{dl_dir}\\{file_name}")
 
-    print(f"{Style.RESET_ALL}\n\nVotre fichier a été téléchargé ici : {dl_dir}\\{file_name}\n\n{Fore.BLACK}")
-    
-    # rep = demande(f"{Style.RESET_ALL}Si vos films sont sur un serveur plex, voulez vous actualiser le serveur ?")
-    # TODO Implémenter plex
-    # print(Fore.BLACK)
-    
-    input(f"{Style.RESET_ALL}Merci d'avoir utilisé Wawacity Downloader !\n"
-          f"Appuyez sur Entrer pour quitter...{Fore.BLACK}")
+    print(f"{Fore.GREEN}\n\nVotre fichier a été téléchargé ici : {dl_dir}\\{file_name}\n\n{Style.RESET_ALL}")
 
-    driver.close()
-    driver.quit()
+    # rep = demande(f"Si vos films sont sur un serveur plex, voulez vous actualiser le serveur ?")
+    # TODO Implémenter plex
+    
+    input("Merci d'avoir utilisé Wawacity Downloader !\n"
+          "Appuyez sur Entrer pour quitter...")
+
+
