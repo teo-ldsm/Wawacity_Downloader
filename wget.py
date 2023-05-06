@@ -22,6 +22,7 @@ __version__ = "3.2"
 import sys, shutil, os
 import tempfile
 import math
+import time
 
 PY3K = sys.version_info >= (3, 0)
 if PY3K:
@@ -356,7 +357,8 @@ def bar_thermometer(current, total, width=80):
     shaded_dots = int(math.floor(float(current) / total * avail_dots))
     return '[' + '.'*shaded_dots + ' '*(avail_dots-shaded_dots) + ']'
 
-def bar_adaptive(current, total, width=80):
+
+def bar_adaptive(current, total, eta_sec, width=80):
     """Return progress bar string for given values in one of three
     styles depending on available width:
 
@@ -403,9 +405,10 @@ def bar_adaptive(current, total, width=80):
     min_width = {
       'percent': 4,  # 100%
       'bar': 3,      # [.]
-      'size': len("%s" % total)*2 + 3, # 'xxxx / yyyy'
+      'size': len("%s" % total)*2 + 3,  # 'xxxx / yyyy'
+      'eta': 16  # 'eta: xxh xxm xxs
     }
-    priority = ['percent', 'bar', 'size']
+    priority = ['percent', 'bar', 'size', 'eta']
 
     # select elements to show
     selected = []
@@ -417,6 +420,7 @@ def bar_adaptive(current, total, width=80):
                                       # the end of line to avoid linefeed on Windows
     # render
     output = ''
+    heures, minutes, secondes = str(eta_sec // 3600), str((eta_sec % 3600) // 60), str(eta_sec % 60)
     for field in selected:
 
       if field == 'percent':
@@ -428,6 +432,8 @@ def bar_adaptive(current, total, width=80):
       elif field == 'size':
         # size field has a constant width (min == max)
         output += ("%s / %s" % (current, total)).rjust(min_width['size'])
+      elif field == 'eta':
+        output += ('eta: %sh %sm %ss' % (heures, minutes, secondes)).rjust(min_width['eta'])
 
       selected = selected[1:]
       if selected:
@@ -442,6 +448,12 @@ __current_size = 0  # global state variable, which exists solely as a
                     # workaround against Python 3.3.0 regression
                     # http://bugs.python.org/issue16409
                     # fixed in Python 3.3.1
+
+__last_tps = 0
+__last_size = 0
+eta = 0
+
+
 def callback_progress(blocks, block_size, total_size, bar_function):
     """callback function for urlretrieve that is called when connection is
     created and when once for each block
@@ -457,6 +469,9 @@ def callback_progress(blocks, block_size, total_size, bar_function):
     :param bar_function: another callback function to visualize progress
     """
     global __current_size
+    global __last_tps
+    global __last_size
+    global eta
  
     width = min(100, get_console_width())
 
@@ -467,8 +482,27 @@ def callback_progress(blocks, block_size, total_size, bar_function):
             __current_size += block_size
         current_size = __current_size
     else:
+
+        if blocks == 0:
+            __last_tps = int(time.perf_counter())
+            __last_size = 0
+            eta = 0
+
+        elif int(time.perf_counter()) - __last_tps > 1:
+            tps_actuel = int(time.perf_counter())
+            ecart_tps = tps_actuel - __last_tps
+            __last_tps = tps_actuel
+
+            size_actuelle = blocks*block_size
+            ecart_size = size_actuelle - __last_size
+            __last_size = size_actuelle
+
+            size_restante = total_size - size_actuelle
+
+            eta = int((ecart_tps*size_restante)/ecart_size)
+
         current_size = min(blocks*block_size, total_size)
-    progress = bar_function(current_size, total_size, width)
+    progress = bar_function(current_size, total_size, eta, width)
     if progress:
         sys.stdout.write("\r" + progress)
 
@@ -485,6 +519,7 @@ def detect_filename(url=None, out=None, headers=None, default="download.wget"):
     if headers:
         names["headers"] = filename_from_headers(headers) or ''
     return names["out"] or names["headers"] or names["url"] or default
+
 
 def download(url, out=None, bar=bar_adaptive):
     """High level function, which downloads URL into tmp file in current
