@@ -1,19 +1,23 @@
+import json
+import os
+import pathlib
+import subprocess
+
+import requests
+import sys
 import time
-
-import selenium.common.exceptions
-
-import plex_refresh
-import wget
-from config_loader import *
+import winreg
 from flask import Flask, request
-import os, sys, pathlib, requests, json
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
+
+import wget
+from config_loader import *
 
 version = "v1.0.0-beta"
 
@@ -57,9 +61,7 @@ print("\n\n\nVérification des mises a jour ...\n\n")
 api_url = 'https://api.github.com/repos/teo-ldsm/Wawacity_Downloader/releases/latest'
 response = requests.get(api_url)
 latest_realease = json.loads(response.text)
-# latest_version = latest_realease["tag_name"] # TODO Décommenter ça
-
-latest_version = "v1.0.0-beta"
+latest_version = latest_realease["tag_name"]
 
 if latest_version != version:
     rep = demande(f'Une nouvelle version est disponible: {latest_version}. Voulez vous la télécharger ?\n')
@@ -107,27 +109,30 @@ options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--lang=fr')
 
-
-dl_dir = str(pathlib.Path(__file__).parent.absolute())
-
-rep = demande(f"{Style.RESET_ALL}Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". Voulez vous changer ?")
-print(Fore.BLACK)
-
-if rep in ("OUI", "O"):
-
-    dl_dir = input(f"{Style.RESET_ALL}\nEntrez le chemin d'accès complet du dossier dans lequel vous souhaitez télécharger les films.\n\n"
-                   f"{Fore.LIGHTYELLOW_EX}Attention ! Si vous entrez un mauvais chemin d'accès le programme ne va pas "
-                   f"fonctionner\n")
-    print(Fore.BLACK)
-
-
-options.add_experimental_option("prefs", {"download.default_directory": dl_dir})
-
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options,
                           service_log_path="./venv/Lib/site-packages/webdriver_manager/log.txt",
                           )
 driver.implicitly_wait(10)
 print(f"{Fore.GREEN}Init OK !{Fore.BLACK}\n")
+
+dl_dir = str(pathlib.Path(__file__).parent.absolute())
+
+rep = demande(f"{Style.RESET_ALL}Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
+              f"Voulez vous changer ?")
+print(Fore.BLACK)
+
+if rep in ("OUI", "O"):
+
+    print(Fore.BLACK)
+    choix_valide = False
+    while not choix_valide:
+        dl_dir = input(f"{Style.RESET_ALL}Entrez le chemin d'accès complet du dossier dans "
+                    f"lequel vous souhaitez télécharger les films.\n{Fore.BLACK}")
+        if os.path.exists(rep.replace("\\", "/")):
+            choix_valide = True
+        else:
+            print(f"{Fore.RED}Réponse invalide. Le chemin d'accès n'existe pas\n{Style.RESET_ALL}"
+                  f"Le chemin doit être sous cette forme : \"C:\\Users\\Fabrice\\Downloads\" par exemple\n{Fore.BLACK}")
 
 
 print(f"{Style.RESET_ALL}Getting wawacity link...{Fore.BLACK}")
@@ -325,42 +330,74 @@ lien_page_captcha = liens_sites[dl_site]
 
 print(f"\n\n{Fore.LIGHTCYAN_EX}############################################################################\n"
       f"L\'accès au téléchargement nécessite la validation d'un captcha.\n"
-      "Ouvrez l'application Captcha Skipper sur votre téléphone pour continuer.\n"
-      f"############################################################################\n\n{Style.RESET_ALL}"
-      f"Vous pouvez trouver l'application ici : "
-      f"\"https://github.com/teo-ldsm/CaptchaSkipper/releases/latset\"\n\n\n{Fore.BLACK}")
+      "Vous devez valider ce captcha manuellement.\n"
+      f"############################################################################\n\n{Style.RESET_ALL}")
+
+choix_valide = False
+rep = None
+while not choix_valide:
+    rep = input(f"{Style.RESET_ALL}Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
+                f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n\n"
+                f"{Fore.LIGHTYELLOW_EX}Attention ! La methode 2 ne fonctionne que sur Windows depuis "
+                f"l'interface graphique (ne fonctionne donc pas en ssh)\n").upper()
+    print(Fore.BLACK)
+    if rep in ("1", "2"):
+        choix_valide = True
+    else:
+        print(f"{Fore.RED}Réponse invalide. Veuillez entrer 1 ou 2\n{Style.RESET_ALL}")
 
 new_url = ""
 
-app = Flask(__name__)
+if rep == "1":
+
+    print(f"{Fore.LIGHTCYAN_EX}\n\nOuvrez l'application Captcha Skipper sur votre téléphone pour valider le captcha.\n"
+          f"{Style.RESET_ALL}Vous pouvez trouver l'application ici : "
+          f"\"https://github.com/teo-ldsm/CaptchaSkipper/releases/latset\"\n\n\n{Fore.BLACK}")
+
+    app = Flask(__name__)
 
 
-@app.route('/get_url')
-def get_url():
-    print(f"\n{Fore.GREEN}Le lien a été transmis à l'application mobile{Fore.BLACK}\n")
-    return lien_page_captcha
+    @app.route('/get_url')
+    def get_url():
+        print(f"\n{Fore.GREEN}Le lien a été transmis à l'application mobile{Fore.BLACK}\n")
+        return lien_page_captcha
 
 
-@app.route('/upload_url', methods=['POST'])
-def upload_url():
-    global new_url
-    new_url = request.form.get('url')
+    @app.route('/upload_url', methods=['POST'])
+    def upload_url():
+        global new_url
+        new_url = request.form.get('url')
 
-    print(f"\n{Fore.GREEN}New URL received: {new_url}{Fore.BLACK}\n")
-    # Arrête le serveur Flask
-    shutdown_server()
+        print(f"\n{Fore.GREEN}New URL received: {new_url}{Fore.BLACK}\n")
+        # Arrête le serveur Flask
+        shutdown_server()
 
-    return 'OK'
-
-
-def shutdown_server():
-    func = request.environ.get('werkzeug.server.shutdown')
-    if func is None:
-        raise RuntimeError('Not running with the Werkzeug Server')
-    func()
+        return 'OK'
 
 
-app.run(host="0.0.0.0", port=5000)
+    def shutdown_server():
+        func = request.environ.get('werkzeug.server.shutdown')
+        if func is None:
+            raise RuntimeError('Not running with the Werkzeug Server')
+        func()
+
+
+    app.run(host="0.0.0.0", port=5000)
+
+elif rep == "2":
+
+    key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe')
+    chrome_path = winreg.QueryValue(key, None)
+
+    input(f"{Style.RESET_ALL}\n\nUne fenêtre chrome va s'ouvrir. Elle contient le captcha qu'il faut résoudre.\n"
+          f"Une fois que le captcha est résolu, vous devez copier-coller dans cette fenêtre le lien du film qui "
+          f"commence par \"https://{dl_site}...\n"
+          f"Le site fait apparaitre de nombreuses popups inutiles. Tout ce passe sur la première page ouverte.\n"
+          f"Appuyez sur Entrer pour ouvrir chrome ...\n{Fore.BLACK}")
+
+    subprocess.run([chrome_path, lien_page_captcha])
+
+    new_url = input(f"{Style.RESET_ALL}Copiez-collez ici le lien qui commence par\"https://{dl_site}...\n")
 
 
 print(f"{Fore.GREEN}Le captcha a été passé avec succès !\n\n"

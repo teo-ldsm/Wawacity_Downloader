@@ -116,7 +116,7 @@ def fill_config(tous=False, path=False, quality=False, site=False, plex=False) -
                 with open("./config.txt", "r", encoding="UTF-8") as file:
                     lignes = file.readlines()
 
-                for nb_ligne in range(len(lignes)): # TODO Ici c beugué les lignes se chevauchent quand tu les créé
+                for nb_ligne in range(len(lignes)):
                     if i + "=" in lignes[nb_ligne]:
                         lignes[nb_ligne] = f"{i}={rep}\n"
 
