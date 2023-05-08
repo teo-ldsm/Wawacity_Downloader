@@ -16,7 +16,7 @@ Le programme fonctionne avec Google Chrome. Il doit impérativement être instal
 <br>
 <br>
 Si vous avez un téléphone android, vous pouvez installer l'application 
-android Captcha Skipper sur votre téléphone. Vous pouvez la trouver 
+android Captcha Skipper sur votre téléphone. Elle vous permettra de passer le captcha sans avoir a subir les popups. Elle est indispensable si vous utilisez le programme sur un serveur sans interface graphique (Ex: Serveur NAS, Serveur Linux en ligne de commande, controle a distance en SSH, etc...) Vous pouvez trouver l'appli 
 <a href="https://github.com/teo-ldsm/CaptchaSkipper/releases/latest">sur ce 
 Github</a>.
 
