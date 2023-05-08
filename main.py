@@ -132,7 +132,7 @@ if rep in ("OUI", "O"):
         dl_dir = input(f"{Style.RESET_ALL}Entrez le chemin d'accès complet du dossier dans "
                        f"lequel vous souhaitez télécharger les films.\n")
         print(Fore.BLACK)
-        if os.path.exists(rep.replace("\\", "/")):
+        if os.path.exists(dl_dir.replace("\\", "/")):
             choix_valide = True
         else:
             print(f"{Fore.RED}Réponse invalide. Le chemin d'accès n'existe pas\n{Style.RESET_ALL}"
