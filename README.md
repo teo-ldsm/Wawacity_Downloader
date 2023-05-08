@@ -7,7 +7,7 @@ Vous pouvez trouver le package complet
 sur cette page
 </a>
 
-Pour lancer le programme normalement, lancez ```python main.py```
+Pour lancer le programme normalement, lancez ```python main.py``` dans un terminal.
 
 
 <br>
