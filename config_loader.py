@@ -1,3 +1,8 @@
+if __name__ == '__main__':
+    import sys
+    sys.path.insert(0, './venv/Scripts')
+    import activate_this
+
 from colorama import Fore, Style
 
 

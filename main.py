@@ -1,10 +1,13 @@
+if __name__ == '__main__':
+    import sys
+    sys.path.insert(0, './venv/Scripts')
+    import activate_this
+
 import json
 import os
 import pathlib
 import subprocess
-
 import requests
-import sys
 import time
 import winreg
 from flask import Flask, request
