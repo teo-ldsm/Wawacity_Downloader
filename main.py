@@ -9,7 +9,8 @@ import pathlib
 import subprocess
 import requests
 import time
-import winreg
+if os.name == 'nt':
+    import winreg
 from flask import Flask, request
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -346,7 +347,11 @@ while not choix_valide:
                 f"l'interface graphique (ne fonctionne donc pas en ssh)\n{Style.RESET_ALL}").upper()
     print(Fore.BLACK)
     if rep in ("1", "2"):
-        choix_valide = True
+        if rep == "2" and os.name != 'nt':
+            print(f"{Fore.RED}Réponse invalide. Vous ne pouvez pas choisir la methode 2 si vous "
+                  f"n'êtes pas sur Windows\n{Style.RESET_ALL}")
+        else:
+            choix_valide = True
     else:
         print(f"{Fore.RED}Réponse invalide. Veuillez entrer 1 ou 2\n{Style.RESET_ALL}")
 
