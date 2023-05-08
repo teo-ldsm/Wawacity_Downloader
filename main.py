@@ -130,7 +130,8 @@ if rep in ("OUI", "O"):
     choix_valide = False
     while not choix_valide:
         dl_dir = input(f"{Style.RESET_ALL}Entrez le chemin d'accès complet du dossier dans "
-                    f"lequel vous souhaitez télécharger les films.\n{Fore.BLACK}")
+                       f"lequel vous souhaitez télécharger les films.\n")
+        print(Fore.BLACK)
         if os.path.exists(rep.replace("\\", "/")):
             choix_valide = True
         else:
@@ -155,7 +156,7 @@ def connect_to_wawacity(link):
               f"Wawacity est contraint de changer d'adresse régulièrement. Il est possible que le site ai changé "
               f"d'adresse dans les dernières heures.\n"
               f"L'adresse {link} n'est donc plus valide.\n"
-              f"Vous pouvez essayer de chercher manuellement la nouvelle adresse du site sur internet")
+              f"Vous pouvez essayer de chercher manuellement la nouvelle adresse du site sur internet\n")
 
         rep = input(f"Entrez la nouvelle adresse du site ici ou entrez \"exit\" pour quitter ...\n{Style.RESET_ALL}")
 
@@ -342,7 +343,7 @@ while not choix_valide:
     rep = input(f"{Style.RESET_ALL}Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
                 f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n\n"
                 f"{Fore.LIGHTYELLOW_EX}Attention ! La methode 2 ne fonctionne que sur Windows depuis "
-                f"l'interface graphique (ne fonctionne donc pas en ssh)\n").upper()
+                f"l'interface graphique (ne fonctionne donc pas en ssh)\n{Style.RESET_ALL}").upper()
     print(Fore.BLACK)
     if rep in ("1", "2"):
         choix_valide = True
@@ -442,7 +443,7 @@ if dl_site == "1fichier":
                 else:  # Linux, Mac OS X
                     os.system('ifconfig')
 
-                carte_res = input("Copier-Collez ici le nom de votre carte réseau connectée a internet\n")
+                carte_res = input(f"{Style.RESET_ALL}Copier-Collez ici le nom de votre carte réseau connectée a internet\n")
 
                 input("\n\nLe programme va vous demander 2 fois un accès administrateur\n"
                       "Appuyez sur Entrer pour continuer...\n")
