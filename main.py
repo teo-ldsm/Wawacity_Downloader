@@ -1,16 +1,20 @@
+import os
+import sys
 if __name__ == '__main__':
-    import sys
-    sys.path.insert(0, './venv/Scripts')
-    import activate_this
+    if os.name == 'nt':
+        sys.path.insert(0, './venv/Scripts')
+    else:
+        sys.path.insert(0, './venv/bin')
+
+import activate_this
+if os.name == 'nt':
+    import winreg
 
 import json
-import os
 import pathlib
 import subprocess
 import requests
 import time
-if os.name == 'nt':
-    import winreg
 from flask import Flask, request
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -192,9 +196,8 @@ def recup_results(num_page):
         n += 1
 
     if len(liste_resultats) == 0:
-        input(f"\n{Fore.RED}Aucun résultat trouvé. {Fore.BLACK}\n"
+        input(f"\n{Fore.RED}Aucun résultat trouvé.\n"
               f"{Style.RESET_ALL}Appuyez sur Entrer pour quitter...")
-        print(Fore.BLACK)
         exit(1)
 
     choix_valide = False
@@ -518,7 +521,6 @@ elif dl_site == "Uptobox":
                   f"téléchargement ou en changeant votre localisation avec un VPN.\n{Style.RESET_ALL}"
                   f"Vous pouvez aller vérifier manuellement sur cette page : {new_url}\n"
                   f"Appuyez sur Entrer pour quitter...\n\n")
-            print(Fore.BLACK)
             exit(1)
 
     print(f"{Fore.GREEN}Page chargée !\n{Style.RESET_ALL}\n\n"
