@@ -2,6 +2,8 @@
 
 Wawacity Downloader est un utilitaire pour télécharger des films depuis le site Wawacity.
 
+### LE PROGRAMME NE FONCTIONNE PAS AVEC LES SERIES (Pas encore)
+
 Vous pouvez trouver le package complet 
 <a href="https://github.com/teo-ldsm/Wawacity_Downloader/releases/latest">
 sur cette page
