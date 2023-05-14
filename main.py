@@ -1,12 +1,8 @@
-import os
-import sys
-if __name__ == '__main__':
-    if os.name == 'nt':
-        sys.path.insert(0, './venv/Scripts')
-    else:
-        sys.path.insert(0, './venv/bin')
+from config_loader import *
 
-import activate_this
+if __name__ == '__main__':
+    venv_init()
+
 if os.name == 'nt':
     import winreg
 
@@ -25,7 +21,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 import wget
-from config_loader import *
+
 
 version = "v1.0.0-beta"
 
@@ -300,7 +296,7 @@ liste_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[
 liste_liens_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[1]/a")
 
 liens_sites = {liste_sites[i].text: liste_liens_sites[i].get_attribute("href") for i in range(len(liste_sites)) \
-               if liste_sites[i].text in ("1fichier", "Uptobox")}
+               if liste_sites[i].text in ("1fichier", "Uptobox") and "Partie" not in liste_liens_sites[i].text}
 
 
 print(f"{Style.RESET_ALL}Voici les sites de téléchargements disponibles\n{Fore.BLACK}")
@@ -514,7 +510,7 @@ elif dl_site == "Uptobox":
         except:
 
             input(f"{Fore.RED}Une erreur est survenue.\n\n"
-                  f"{Fore.LIGHTYELLOW_EX}Pour fonctionner, chrome doit être en français ou en anglais"
+                  f"{Fore.LIGHTYELLOW_EX}Pour fonctionner, chrome doit être en français ou en anglais\n"
                   f"Le site Uptobox a un compte à rebours qui empêche de télécharger plusieurs "
                   f"films d'affilé. \n"
                   f"Essayez de relancer le programme en allant sur un autre site de "
@@ -536,7 +532,7 @@ elif dl_site == "Uptobox":
 
     # rep = demande(f"Si vos films sont sur un serveur plex, voulez vous actualiser le serveur ?")
     # TODO Implémenter plex
-    
+
     input("Merci d'avoir utilisé Wawacity Downloader !\n"
           "Appuyez sur Entrer pour quitter...")
 

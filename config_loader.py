@@ -1,7 +1,18 @@
-if __name__ == '__main__':
-    import sys
-    sys.path.insert(0, './venv/Scripts')
+import os
+import sys
+
+
+def venv_init():
+
+    if os.name == 'nt':
+        sys.path.insert(0, './venv/Scripts')
+    else:
+        sys.path.insert(0, './venv/bin')
     import activate_this
+
+
+if __name__ == '__main__':
+    venv_init()
 
 from colorama import Fore, Style
 
@@ -140,3 +151,5 @@ def demande(msg: str = ""):
             print(f"{Fore.RED}Réponse invalide. Répondez par oui ou non{Style.RESET_ALL}")
 
     return rep
+
+
