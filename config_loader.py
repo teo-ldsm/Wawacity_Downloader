@@ -13,8 +13,7 @@ def venv_init():
 
 if __name__ == '__main__':
     venv_init()
-
-from colorama import Fore, Style
+    from colorama import Fore, Style
 
 
 def load() -> dict:
@@ -73,8 +72,8 @@ def verify_config():
 
 
 def build_config() -> None:
-    print("\n\n!! ATTENTION !! \n"
-          "Toutes les données de \'config.txt\' vont être effacées. Veuillez les sauvegarder et appuyer sur Entrer")
+    print(f"\n\n{Fore.LIGHTYELLOW_EX}!! ATTENTION !! \n"
+          f"Toutes les données de \'config.txt\' vont être effacées. Veuillez les sauvegarder et appuyer sur Entrer{Style.RESET_ALL}")
     input()
     file = open("config.txt", "w", encoding="UTF-8")
     file.write("# Les lignes qui commencent par \"#\" ne sont pas prises en compte \n"
@@ -112,18 +111,9 @@ def fill_config(tous=False, path=False, quality=False, site=False, plex=False) -
     for i in args:
         if args[i]:
             if i in config:
-                print(f"La valeur {i} est par défaut a {config[i]}. Voulez vous la modifier ?(OUI/NON)")
+                rep = demande(f"La valeur {i} est par défaut a {config[i]}. Voulez vous la modifier ?")
             else:
-                print(f"La valeur {i} n'a pas été renseigné. Voulez vous la renseigner ?(OUI/NON)")
-
-            choix_valide = False
-            rep = None
-            while not choix_valide:
-                rep = input().upper()
-                if rep in ("OUI", "NON", "N", "O"):
-                    choix_valide = True
-                else:
-                    print("Réponse invalide. Répondez par oui ou non")
+                rep = demande(f"La valeur {i} n'a pas été renseigné. Voulez vous la renseigner ?")
 
             if rep in ("OUI", "O"):
                 print(f"Entrez la nouvelle valeur de {i}")

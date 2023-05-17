@@ -1,10 +1,9 @@
+from config_loader import *
 if __name__ == '__main__':
-    import sys
-    sys.path.insert(0, './venv/Scripts')
-    import activate_this
+    venv_init()
+    from colorama import Fore, Style
 
 import http.client
-from config_loader import *
 
 
 def refresh(config):
@@ -22,8 +21,8 @@ def refresh(config):
             fill_config(tous=True)
 
     except:
-        print("Un problème est survenu lors de la connexion au serveur plex. Vérifiez que les valeurs dans "
-              "\'config.txt\' sont correctes et que le serveur et connecté au réseau")
+        print(f"{Fore.RED}Un problème est survenu lors de la connexion au serveur plex.\n{Style.RESET_ALL}"
+              f"Vérifiez que les valeurs dans \'config.txt\' sont correctes et que le serveur et connecté au réseau")
         return None
 
     else:
