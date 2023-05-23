@@ -1,14 +1,16 @@
 # Les lignes qui commencent par "#" ne sont pas prises en compte 
 # Veuillez ne pas laisser de champs vide sans un "#" en début de ligne 
-# Les champs seront remplis automatiquement si non précisé ici 
+# Les champs seront remplis automatiquement si non précisé ici
+# - ADDRESS : Adresse courante du site wawacity
 # - PATH : Les medias seront téléchargés dans ce dossier 
 # - QUALITY : Qualité par défaut pour télécharger les médias 
-# - SITE : Site par défaut ou télécharger les médias 
-PATH=
+# - SITE : Site par défaut ou télécharger les médias
+#ADDRESS=
+#PATH=
 #QUALITY=
 #SITE=
 
 # Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement 
-SERVER_IP=pc-nas
+#SERVER_IP=
 PORT=32400
-TOKEN=xGorvyzycZQ2UUNRcPAw
+#TOKEN=
