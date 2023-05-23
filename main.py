@@ -33,6 +33,8 @@ else:  # Linux, Mac OS X
 args = sys.argv
 args = [arg.upper() for arg in args]
 
+config = load()
+
 if "DEBUG" in args:
     class Fore:
         BLACK = ""
@@ -119,7 +121,8 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 driver.implicitly_wait(10)
 print(f"{Fore.GREEN}Init OK !\n{Style.RESET_ALL}")
 
-dl_dir = str(pathlib.Path(__file__).parent.absolute())
+prgm_dir = str(pathlib.Path(__file__).parent.absolute())
+dl_dir = prgm_dir
 
 rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
               f"Voulez vous changer ?")
@@ -136,11 +139,13 @@ if rep in ("OUI", "O"):
             print(f"{Fore.RED}Réponse invalide. Le chemin d'accès n'existe pas\n{Style.RESET_ALL}"
                   f"Le chemin doit être sous cette forme : \"C:\\Users\\Fabrice\\Downloads\" par exemple\n")
 
+# TODO Faire un try qui utilise l'adresse wawacity stockée dans config. Si ça marche pas il va la chercher sur le site
+
 
 print(f"\n\nGetting wawacity link...{Fore.BLACK}")
-driver.get("https://www.justgeek.fr/wawacity-91967/")
+driver.get("https://fulldeals.fr/wawacity-adresse-officielle-site-films-series-gratuits/.html")
 
-lien_wawacity = driver.find_element(By.XPATH, "//strong/a[contains(@href, \'https://www.wawacity.\')]")
+lien_wawacity = driver.find_element(By.XPATH, "//strong/a[contains(@href,\'https://www.wawacity.\')]")
 lien_wawacity = lien_wawacity.text
 print(f"{Fore.GREEN}Link found : {lien_wawacity}{Style.RESET_ALL}\n")
 
@@ -213,7 +218,7 @@ def recup_results(num_page):
             else:
                 print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 0 et {len(index_liens)}{Style.RESET_ALL}")
                 choix_valide = False
-
+    lien = ""
     if rep == 0:
         try:
             print(Fore.BLACK)
@@ -297,8 +302,8 @@ if lien_page_film is not None:
 liste_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[2]")
 liste_liens_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[1]/a")
 
-liens_sites = {liste_sites[i].text: liste_liens_sites[i].get_attribute("href") for i in range(len(liste_sites)) \
-               if liste_sites[i].text in ("1fichier", "Uptobox DESACTIVE") and "Partie" not in liste_liens_sites[i].text}
+liens_sites = {liste_sites[i].text: liste_liens_sites[i].get_attribute("href") for i in range(len(liste_sites))
+               if liste_sites[i].text in ("1fichier", "Uptobox") and "Partie" not in liste_liens_sites[i].text}
 
 # TODO Régler le problème de Uptobox
 
@@ -396,7 +401,7 @@ if methode == "1":
 
     app.run(host="0.0.0.0", port=5000)
 
-elif rep == "2":
+elif methode == "2":
 
     key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe')
     chrome_path = winreg.QueryValue(key, None)
@@ -418,13 +423,13 @@ lien_valide = False
 while not lien_valide:
     try:
         print(f"Connecting to {new_url} ...{Fore.BLACK}\n")
-        driver.get(new_url)
+        driver.get(new_url)                 # TODO PB de connection avec uptobox
         lien_valide = True
     except:
         rep = demande(f"{Fore.RED}Connexion impossible.{Style.RESET_ALL}\n"
                       f"Certains sites de téléchargements sont bloqués par certains opérateurs\n"
                       f"Cette restriction peut être contournée en modifiant les paramètres DNS du PC\n"
-                      f"Voulez vous changer ces paramètres manuellement ?")
+                      f"Voulez vous changer ces paramètres automatiquement ?")
 
         if rep in ("OUI", "O"):
 
@@ -433,22 +438,25 @@ while not lien_valide:
             else:  # Linux, Mac OS X
                 os.system('ifconfig')
 
-            carte_res = input(f"Copier-Collez ici le nom de votre carte réseau connectée a internet\n")                     # TODO Finir le changement de DNS
+            carte_res = input(f"Copier-Collez ici le nom de votre carte réseau connectée a internet\n")
 
-            input("\n\nLe programme va vous demander un accès administrateur\n"
+            input("\n\nLe programme va changer automatiquement les paramètres DNS en mettant le DNS gratuit de Google\n"
+                  "à la place de celui par défaut. Cela ne changera en rien votre navigation sur internet.\n"
+                  "Le programme va vous demander un accès administrateur\n"
                   "Appuyez sur Entrer pour continuer...\n")
 
             if os.name == 'nt':
-                os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
-                          f"\'Disable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
+                os.system(f"powershell -Command \"Start-Process \'{prgm_dir}/change_dns.bat\' -Verb runAs "
+                          f"-ArgumentList \'{carte_res}\'\"")
             else:
-                os.system(f"sudo ifconfig {carte_res} down")
+                os.system(f"sudo nmcli dev modify {carte_res} ipv4.dns \"8.8.8.8 8.8.4.4\"")
 
             time.sleep(3)
 
         else:
             input("Appuyez sur Entrer pour quitter...")
             exit(0)
+            
 
 print(f"{Fore.GREEN}Connected !{Fore.BLACK}\n")
 
