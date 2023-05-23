@@ -79,10 +79,12 @@ def build_config() -> None:
     file.write("# Les lignes qui commencent par \"#\" ne sont pas prises en compte \n"
                "# Veuillez ne pas laisser de champs vide sans un \"#\" en début de ligne \n"
                "# Les champs seront remplis automatiquement si non précisé ici \n"
+               "# - ADDRESS : Adresse courante du site wawacity\n"
                "# - PATH : Les medias seront téléchargés dans ce dossier \n"
                "# - QUALITY : Qualité par défaut pour télécharger les médias \n"
                "# - SITE : Site par défaut ou télécharger les médias. Doit être défini par \'1fichier\' "
                "ou \'Uptobox\'. Les autres sites ne sont pas encore pris en charges\n"
+               "#ADDRESS=\n"
                "#PATH=\n"
                "#QUALITY=\n"
                "#SITE=\n\n"
@@ -103,21 +105,40 @@ def build_config() -> None:
         verify_config()
 
 
-def fill_config(tous=False, path=False, quality=False, site=False, plex=False) -> None:
+def fill_config(tous: bool = False, address: str = False, path: str = False, quality: str = False, site: str = False,
+                plex: bool = False, manual: bool = True) -> None:
+    
+    if not isinstance(tous, bool):
+        raise TypeError("L'argument tous doit être de type bool")
+    if not isinstance(plex, bool):
+        raise TypeError("L'argument plex doit être de type bool")
+    if not isinstance(manual, bool):
+        raise TypeError("L'argument manual doit être de type bool")
+    if plex and not manual:
+        raise ValueError("Les modifications des valeurs du serveur plex doivent être faites avec "
+                         "manual=True en argument")
+
     config = load()
     if tous:
-        path, quality, site, plex = True, True, True, True
-    args = {"PATH": path, "QUALITY": quality, "SITE": site, "SERVER_IP": plex, "PORT": plex, "TOKEN": plex}
+        address, path, quality, site, plex = True, True, True, True, True
+    args = {"ADDRESS": address, "PATH": path, "QUALITY": quality, "SITE": site,
+            "SERVER_IP": plex, "PORT": plex, "TOKEN": plex}
+
     for i in args:
         if args[i]:
-            if i in config:
-                rep = demande(f"La valeur {i} est par défaut a {config[i]}. Voulez vous la modifier ?")
+            if manual:
+                if i in config:
+                    rep = demande(f"La valeur {i} est par défaut a {config[i]}. Voulez vous la modifier ?")
+                else:
+                    rep = demande(f"La valeur {i} n'a pas été renseigné. Voulez vous la renseigner ?")
             else:
-                rep = demande(f"La valeur {i} n'a pas été renseigné. Voulez vous la renseigner ?")
+                rep = "OUI"
 
             if rep in ("OUI", "O"):
-                print(f"Entrez la nouvelle valeur de {i}")
-                rep = input()
+                if manual:
+                    rep = input(f"Entrez la nouvelle valeur de {i}\n")
+                else:
+                    rep = args[i]
 
                 with open("./config.txt", "r", encoding="UTF-8") as file:
                     lignes = file.readlines()
