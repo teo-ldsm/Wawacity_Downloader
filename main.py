@@ -142,14 +142,6 @@ if rep in ("OUI", "O"):
 # TODO Faire un try qui utilise l'adresse wawacity stockée dans config. Si ça marche pas il va la chercher sur le site
 
 
-print(f"\n\nGetting wawacity link...{Fore.BLACK}")
-driver.get("https://fulldeals.fr/wawacity-adresse-officielle-site-films-series-gratuits/.html")
-
-lien_wawacity = driver.find_element(By.XPATH, "//strong/a[contains(@href,\'https://www.wawacity.\')]")
-lien_wawacity = lien_wawacity.text
-print(f"{Fore.GREEN}Link found : {lien_wawacity}{Style.RESET_ALL}\n")
-
-
 def connect_to_wawacity(link):
     try:
         print(f"Connecting to {lien_wawacity} ...{Fore.BLACK}")
@@ -169,7 +161,25 @@ def connect_to_wawacity(link):
             connect_to_wawacity(rep)
 
 
-connect_to_wawacity(lien_wawacity)
+try:
+    lien_wawacity = config['ADDRESS']
+    print(f"Connecting to {lien_wawacity} ...\n{Fore.BLACK}")
+    driver.get(f"https://{lien_wawacity}")
+
+except:
+    print(f"{Style.RESET_ALL}\n\nLien invalide\n"
+          f"Récupération du nouveau lien ...{Fore.BLACK}")
+    driver.get("https://fulldeals.fr/wawacity-adresse-officielle-site-films-series-gratuits/.html")
+
+    lien_wawacity = driver.find_element(By.XPATH, "//strong/a[contains(@href,\'https://www.wawacity.\')]")
+    lien_wawacity = lien_wawacity.text
+
+    print(f"{Fore.GREEN}Lien trouvé : {lien_wawacity}{Style.RESET_ALL}\n")
+
+    connect_to_wawacity(lien_wawacity)
+
+    fill_config(address=lien_wawacity, manual=False)
+
 print(f"{Fore.GREEN}Connected !{Fore.BLACK}\n")
 
 search = driver.find_element(By.NAME, "search")
@@ -573,7 +583,7 @@ if dl_site == "Uptobox":
     file_name = wget.detect_filename(lien_film)
 
 
-print("\n\nDébut du téléchargement\n")
+print(f"\n\n{Style.RESET_ALL}Début du téléchargement\n")
 wget.download(lien_film, out=f"{dl_dir}\\{file_name}")
 
 print(f"{Fore.GREEN}\n\nVotre fichier a été téléchargé ici : {dl_dir}\\{file_name}\n\n{Style.RESET_ALL}")
