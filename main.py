@@ -144,7 +144,7 @@ if rep in ("OUI", "O"):
 
 def connect_to_wawacity(link):
     try:
-        print(f"Connecting to {lien_wawacity} ...{Fore.BLACK}")
+        print(f"\n\nConnecting to {lien_wawacity} ...{Fore.BLACK}")
         driver.get(f"https://{link}")
     except:
         print(f"\n\n{Fore.RED}Une erreur est survenue durant la connexion au site{Style.RESET_ALL}\n"
@@ -163,7 +163,7 @@ def connect_to_wawacity(link):
 
 try:
     lien_wawacity = config['ADDRESS']
-    print(f"Connecting to {lien_wawacity} ...\n{Fore.BLACK}")
+    print(f"\n\nConnecting to {lien_wawacity} ...\n{Fore.BLACK}")
     driver.get(f"https://{lien_wawacity}")
 
 except:
