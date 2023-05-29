@@ -358,7 +358,7 @@ def bar_thermometer(current, total, width=80):
     return '[' + '.'*shaded_dots + ' '*(avail_dots-shaded_dots) + ']'
 
 
-def bar_adaptive(current, total, eta_sec, width=80):
+def bar_adaptive(current, total, eta_sec, speed_bps, width=80):
     """Return progress bar string for given values in one of three
     styles depending on available width:
 
@@ -406,9 +406,10 @@ def bar_adaptive(current, total, eta_sec, width=80):
       'percent': 4,  # 100%
       'bar': 3,      # [.]
       'size': len("%s" % total)*2 + 3,  # 'xxxx / yyyy'
-      'eta': 16  # 'eta: xxh xxm xxs
+      'eta': 16,  # 'eta: xxh xxm xxs'
+      'speed': 9  # 'x.xx Mo/s'
     }
-    priority = ['percent', 'bar', 'size', 'eta']
+    priority = ['percent', 'bar', 'size', "speed", 'eta']
 
     # select elements to show
     selected = []
@@ -420,6 +421,7 @@ def bar_adaptive(current, total, eta_sec, width=80):
                                       # the end of line to avoid linefeed on Windows
     # render
     output = ''
+    speed_mbps = round(speed_bps/1000000, 2)
     heures, minutes, secondes = str(eta_sec // 3600), str((eta_sec % 3600) // 60), str(eta_sec % 60)
     for field in selected:
 
@@ -434,6 +436,8 @@ def bar_adaptive(current, total, eta_sec, width=80):
         output += ("%s / %s" % (current, total)).rjust(min_width['size'])
       elif field == 'eta':
         output += ('eta: %sh %sm %ss' % (heures, minutes, secondes)).rjust(min_width['eta'])
+      elif field == 'speed':
+        output += ('%s Mo/s' % speed_mbps).rjust(min_width['speed'])
 
       selected = selected[1:]
       if selected:
@@ -452,6 +456,8 @@ __current_size = 0  # global state variable, which exists solely as a
 __last_tps = 0
 __last_size = 0
 eta = 0
+lst_speed = [1, 1, 1, 1, 1]
+speed_moy = 1
 
 
 def callback_progress(blocks, block_size, total_size, bar_function):
@@ -472,6 +478,8 @@ def callback_progress(blocks, block_size, total_size, bar_function):
     global __last_tps
     global __last_size
     global eta
+    global lst_speed
+    global speed_moy
  
     width = min(100, get_console_width())
 
@@ -487,6 +495,7 @@ def callback_progress(blocks, block_size, total_size, bar_function):
             __last_tps = int(time.perf_counter())
             __last_size = 0
             eta = 0
+            speed_moy = 1
 
         elif int(time.perf_counter()) - __last_tps > 1:
             tps_actuel = int(time.perf_counter())
@@ -497,12 +506,17 @@ def callback_progress(blocks, block_size, total_size, bar_function):
             ecart_size = size_actuelle - __last_size
             __last_size = size_actuelle
 
+            lst_speed.insert(0, ecart_size/ecart_tps)
+            lst_speed.pop()
+
+            speed_moy = (lst_speed[0] + lst_speed[1] + lst_speed[2] + lst_speed[3] + lst_speed[4]) / 5
+
             size_restante = total_size - size_actuelle
 
-            eta = int((ecart_tps*size_restante)/ecart_size)
+            eta = int(size_restante/speed_moy)
 
         current_size = min(blocks*block_size, total_size)
-    progress = bar_function(current_size, total_size, eta, width)
+    progress = bar_function(current_size, total_size, eta, speed_moy, width)
     if progress:
         sys.stdout.write("\r" + progress)
 
