@@ -1,14 +1,20 @@
 # Les lignes qui commencent par "#" ne sont pas prises en compte 
 # Veuillez ne pas laisser de champs vide sans un "#" en début de ligne 
-# Les champs seront remplis automatiquement si non précisé ici
-# - ADDRESS : Adresse courante du site wawacity
+# Les champs seront remplis automatiquement si non précisé ici 
+# - ADDRESS : Adresse actuelle du site wawacity. Cette valeur est remplie automatiquement
 # - PATH : Les medias seront téléchargés dans ce dossier 
-# - QUALITY : Qualité par défaut pour télécharger les médias 
-# - SITE : Site par défaut ou télécharger les médias
-#ADDRESS=
+# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme normalement pour que la valeur soit remplie automatiquement
+# - SITE : Site par défaut ou télécharger les médias. Doit être défini par '1fichier' ou 'Uptobox'. Les autres sites ne sont pas encore pris en charges
+# - METHOD : Methode à utiliser pour valider le captcha. Doit être défini par '1' ou '2'
+#       + Methode 1 : Avec l'application mobile CaptchaSkipper (Android uniquement)
+#       + Methode 2 : Depuis une fenêtre Chrome (Windows uniquement, beaucoup de popups et de pubs)
+# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le compte a rebours du site 1fichier. Doit être défini par 'OUI' ou 'NON'
+ADDRESS=wawacity.quest
 #PATH=
 #QUALITY=
 #SITE=
+#METHOD=
+#SKIP_COUNTDOWN=
 
 # Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement 
 #SERVER_IP=

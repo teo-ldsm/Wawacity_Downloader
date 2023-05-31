@@ -13,7 +13,6 @@ def venv_init():
 
 if __name__ == '__main__':
     venv_init()
-    from colorama import Fore, Style
 
 
 def load() -> dict:
@@ -61,17 +60,43 @@ def load() -> dict:
             load()
 
         else:
-            verify_config()
+            config = verify_config(config)
             file.close()
             return config
 
 
-def verify_config():
-    pass
-    # TODO Verifier que les arguments de config sont bons (path existe, site existe, quality existe)
+def verify_config(config: dict) -> dict:
+    from colorama import Fore, Style
+    if "PATH" in config:
+        if not os.path.exists(config["PATH"].replace("\\", "/")):
+            print(f"{Fore.LIGHTYELLOW_EX}Le chemin spécifié dans config.txt à la valeur \'PATH\' "
+                  f"n'existe pas{Style.RESET_ALL}\n")
+            config.pop("PATH")
+
+    if "SITE" in config:
+        if config["SITE"].upper() not in ("1FICHIER", "UPTOBOX"):
+            print(f"{Fore.LIGHTYELLOW_EX}La valeur spécifiée dans config.txt à la valeur \'SITE\' "
+                  f"n'est pas valide{Style.RESET_ALL}\n")
+            config.pop("SITE")
+
+    if "METHOD" in config:
+        if config["METHOD"] not in ("1", "2"):
+            print(f"{Fore.LIGHTYELLOW_EX}La valeur spécifiée dans config.txt à la valeur \'METHOD\' "
+                  f"n'est pas valide{Style.RESET_ALL}\n")
+            config.pop("METHOD")
+
+    if "SKIP_COUNTDOWN" in config:
+        if config["SKIP_COUNTDOWN"].upper() not in ("OUI", "NON"):
+            print(f"{Fore.LIGHTYELLOW_EX}La valeur spécifiée dans config.txt à la valeur \'SKIP_COUNTDOWN\' "
+                  f"n'est pas valide{Style.RESET_ALL}\n")
+            config.pop("SKIP_COUNTDOWN")
+
+    return config
+    # TODO Verifier que les arguments de config sont bons (quality existe)
 
 
 def build_config() -> None:
+    from colorama import Fore, Style
     print(f"\n\n{Fore.LIGHTYELLOW_EX}!! ATTENTION !! \n"
           f"Toutes les données de \'config.txt\' vont être effacées. Veuillez les sauvegarder et appuyer sur Entrer{Style.RESET_ALL}")
     input()
@@ -79,15 +104,23 @@ def build_config() -> None:
     file.write("# Les lignes qui commencent par \"#\" ne sont pas prises en compte \n"
                "# Veuillez ne pas laisser de champs vide sans un \"#\" en début de ligne \n"
                "# Les champs seront remplis automatiquement si non précisé ici \n"
-               "# - ADDRESS : Adresse courante du site wawacity\n"
+               "# - ADDRESS : Adresse actuelle du site wawacity. Cette valeur est remplie automatiquement\n"
                "# - PATH : Les medias seront téléchargés dans ce dossier \n"
-               "# - QUALITY : Qualité par défaut pour télécharger les médias \n"
+               "# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme "
+               "normalement pour que la valeur soit remplie automatiquement\n"
                "# - SITE : Site par défaut ou télécharger les médias. Doit être défini par \'1fichier\' "
                "ou \'Uptobox\'. Les autres sites ne sont pas encore pris en charges\n"
+               "# - METHOD : Methode à utiliser pour valider le captcha. Doit être défini par \'1\' ou \'2\'\n"
+               "#       + Methode 1 : Avec l'application mobile CaptchaSkipper (Android uniquement)\n"
+               "#       + Methode 2 : Depuis une fenêtre Chrome (Windows uniquement, beaucoup de popups et de pubs)\n"
+               "# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le "
+               "compte a rebours du site 1fichier. Doit être défini par \'OUI\' ou \'NON\'\n"
                "#ADDRESS=\n"
                "#PATH=\n"
                "#QUALITY=\n"
-               "#SITE=\n\n"
+               "#SITE=\n"
+               "#METHOD=\n"
+               "#SKIP_COUNTDOWN=\n\n"
                "# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser "
                "après chaque téléchargement \n"
                "#SERVER_IP=\n"
@@ -102,11 +135,10 @@ def build_config() -> None:
 
     if rep in ("OUI", "O"):
         fill_config(tous=True)
-        verify_config()
 
 
 def fill_config(tous: bool = False, address: str = False, path: str = False, quality: str = False, site: str = False,
-                plex: bool = False, manual: bool = True) -> None:
+                method: str = False, skip_countdown: str = False, plex: bool = False, manual: bool = True) -> None:
     
     if not isinstance(tous, bool):
         raise TypeError("L'argument tous doit être de type bool")
@@ -118,11 +150,12 @@ def fill_config(tous: bool = False, address: str = False, path: str = False, qua
         raise ValueError("Les modifications des valeurs du serveur plex doivent être faites avec "
                          "manual=True en argument")
 
-    config = load()
+    if manual:
+        config = load()
     if tous:
-        address, path, quality, site, plex = True, True, True, True, True
-    args = {"ADDRESS": address, "PATH": path, "QUALITY": quality, "SITE": site,
-            "SERVER_IP": plex, "PORT": plex, "TOKEN": plex}
+        address, path, quality, site, skip_countdown, method, plex = True, True, True, True, True, True, True
+    args = {"ADDRESS": address, "PATH": path, "QUALITY": quality, "SITE": site, "METHOD": method,
+            "SKIP_COUNTDOWN": skip_countdown, "SERVER_IP": plex, "PORT": plex, "TOKEN": plex}
 
     for i in args:
         if args[i]:
@@ -152,6 +185,7 @@ def fill_config(tous: bool = False, address: str = False, path: str = False, qua
 
 
 def demande(msg: str = ""):
+    from colorama import Fore, Style
     choix_valide = False
     rep = None
     while not choix_valide:
