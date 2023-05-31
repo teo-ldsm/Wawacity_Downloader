@@ -35,6 +35,13 @@ args = [arg.upper() for arg in args]
 
 config = load()
 
+if len(args) > 1 and not args[1] == "DEBUG":
+    config["TITLE"] = args[1]
+    mode_auto = True
+else:
+    mode_auto = False
+
+
 if "DEBUG" in args:
     class Fore:
         BLACK = ""
@@ -115,17 +122,23 @@ options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--lang=fr')
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options,
-                          service_log_path="./venv/Lib/site-packages/webdriver_manager/log.txt",
-                          )
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 driver.implicitly_wait(10)
 print(f"{Fore.GREEN}Init OK !\n{Style.RESET_ALL}")
 
-prgm_dir = str(pathlib.Path(__file__).parent.absolute())
-dl_dir = prgm_dir
 
-rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
-              f"Voulez vous changer ?")
+if not mode_auto:
+    prgm_dir = str(pathlib.Path(__file__).parent.absolute())
+    dl_dir = prgm_dir
+    rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
+                  f"Voulez vous changer ?")
+elif "PATH" in config:
+    dl_dir = config["PATH"]
+    print("\nDossier de téléchargement récupéré dans config.txt\n")
+    rep = None
+
+else:
+    rep = "OUI"
 
 if rep in ("OUI", "O"):
 
@@ -138,8 +151,6 @@ if rep in ("OUI", "O"):
         else:
             print(f"{Fore.RED}Réponse invalide. Le chemin d'accès n'existe pas\n{Style.RESET_ALL}"
                   f"Le chemin doit être sous cette forme : \"C:\\Users\\Fabrice\\Downloads\" par exemple\n")
-
-# TODO Faire un try qui utilise l'adresse wawacity stockée dans config. Si ça marche pas il va la chercher sur le site
 
 
 def connect_to_wawacity(link):
@@ -183,7 +194,11 @@ except:
 print(f"{Fore.GREEN}Connected !{Fore.BLACK}\n")
 
 search = driver.find_element(By.NAME, "search")
-search.send_keys(input(f"{Style.RESET_ALL}\n\nQuel est le titre du film que vous recherchez ?\n"))
+if not mode_auto:
+    search.send_keys(input(f"{Style.RESET_ALL}\n\nQuel est le titre du film que vous recherchez ?\n"))
+else:
+    search.send_keys(config["TITLE"])
+
 print(Fore.BLACK)
 search.submit()
 
@@ -212,7 +227,7 @@ def recup_results(num_page):
     rep = None
     while not choix_valide:
         try:
-            rep = eval(input(f"\nEntrez le numéro correspondant a votre résultat. "
+            rep = eval(input(f"\nEntrez le numéro correspondant a votre résultat. "  # TODO Faire en sorte de skipper ça si le titre du film est exactement le meme 
                              f"Si il ne s'y trouve pas, entrez 0\n"))
             if not isinstance(rep, int):
                 raise TypeError("La variable rep doit être de type int")
@@ -262,45 +277,52 @@ liens_qualites = dict()
 for i in liste_qualites:
     liens_qualites[i.text] = i.get_attribute("href")
 
-liens_qualites[driver.find_element(By.XPATH, "//*[@id=\'detail-page\']/div[2]/div[1]/i[2]").text] = None
-
-# TODO créer un truc qui skip ce bloc si la qualité est définie dans config.txt
-
-print(f"\nVoici les qualités disponible pour votre film\n")
-
-index_qualites = []
-n = 1
-for i in liens_qualites:
-    print(f"{n} : {i}")
-    index_qualites.append(i)
-    n += 1
+liens_qualites[driver.find_element(By.XPATH, "//*[@id=\'detail-page\']/div[2]/div[1]/i[2]").text.replace("]", "")[1:]] = None
 
 
-print("\n\nSi la qualité que vous souhaitez ne se trouve pas dans la liste, fermez le programme \n"
-      "et relancez le en cherchant le titre de votre films dans une autre langue\n"
-      "Exemple: Cherchez \"Avengers - l'Ère d'Ultron\" au lieu de \"Avengers - Age of Ultron\"")
+if mode_auto and ("QUALITY" in config) and (config["QUALITY"] in liens_qualites):
 
-choix_valide = False
-rep = None
-while not choix_valide:
-    try:
-        rep = eval(input(f"\nEntrez le numéro correspondant a votre résultat.\n"))
-        if not isinstance(rep, int):
-            raise TypeError("La variable rep doit être de type int")
-        choix_valide = True
+    lien_page_film = liens_qualites[config["QUALITY"]]
+    print(f"{Style.RESET_ALL}\nQualité récupérée dans config.txt\n")
 
-    except:
-        print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_qualites)}{Style.RESET_ALL}")
-        choix_valide = False
+else:
 
-    else:
-        if 1 <= rep <= len(index_qualites):
-            choix_valide = True
-        else:
+    print(f"\nVoici les qualités disponible pour votre film\n")
+
+    index_qualites = []
+    n = 1
+    for i in liens_qualites:
+        print(f"{n} : {i}")
+        index_qualites.append(i)
+        n += 1
+
+    print("\n\nSi la qualité que vous souhaitez ne se trouve pas dans la liste, fermez le programme \n"
+          "et relancez le en cherchant le titre de votre films dans une autre langue\n"
+          "Exemple: Cherchez \"Avengers - l'Ère d'Ultron\" au lieu de \"Avengers - Age of Ultron\"")
+
+    choix_valide = False
+    index_qualite = None
+    while not choix_valide:
+        try:
+            index_qualite = eval(input(f"\nEntrez le numéro correspondant a votre résultat.\n"))
+            if not isinstance(index_qualite, int):
+                raise TypeError("La variable rep doit être de type int")
+
+        except:
             print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_qualites)}{Style.RESET_ALL}")
             choix_valide = False
 
-lien_page_film = liens_qualites[index_qualites[rep - 1]]
+        else:
+            if 1 <= index_qualite <= len(index_qualites):
+                choix_valide = True
+                rep = demande(f"Voulez vous faire de {index_qualites[index_qualite - 1]} la valeur par défaut")
+                if rep in ("OUI", "O"):
+                    fill_config(quality=str(index_qualites[index_qualite - 1]), manual=False)
+            else:
+                print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_qualites)}{Style.RESET_ALL}")
+                choix_valide = False
+
+    lien_page_film = liens_qualites[index_qualites[index_qualite - 1]]
 
 
 print(Fore.BLACK)
@@ -317,39 +339,45 @@ liens_sites = {liste_sites[i].text: liste_liens_sites[i].get_attribute("href") f
 
 # TODO Régler le problème de Uptobox
 
+if not mode_auto and "SITE" not in config:
 
-print(f"{Style.RESET_ALL}Voici les sites de téléchargements disponibles\n")
-n = 1
-index_sites = []
-for i in liens_sites:
-    print(f"{n} : {i}")
-    index_sites.append(i)
-    n += 1
+    print(f"{Style.RESET_ALL}Voici les sites de téléchargements disponibles\n")
+    n = 1
+    index_sites = []
+    for i in liens_sites:
+        print(f"{n} : {i}")
+        index_sites.append(i)
+        n += 1
 
-print(f"\n{Fore.LIGHTYELLOW_EX}Le site Uptobox est désactivé à cause d'un bug{Style.RESET_ALL}\n")  # TODO Enlever ça
+    print(f"\n{Fore.LIGHTYELLOW_EX}Le site Uptobox est désactivé à cause d'un bug{Style.RESET_ALL}\n")  # TODO Enlever ça
 
-choix_valide = False
-rep = None
-while not choix_valide:
-    try:
-        rep = eval(input(f"\nEntrez le numéro correspondant au site que vous souhaitez utiliser.\n"))
-        if not isinstance(rep, int):
-            raise TypeError("La variable rep doit être de type int")
-        choix_valide = True
-
-    except:
-        print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_sites)}{Style.RESET_ALL}")
-        choix_valide = False
-
-    else:
-        if 1 <= rep <= len(index_sites):
+    choix_valide = False
+    rep = None
+    while not choix_valide:
+        try:
+            rep = eval(input(f"\nEntrez le numéro correspondant au site que vous souhaitez utiliser.\n"))
+            if not isinstance(rep, int):
+                raise TypeError("La variable rep doit être de type int")
             choix_valide = True
-        else:
+
+        except:
             print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_sites)}{Style.RESET_ALL}")
             choix_valide = False
 
+        else:
+            if 1 <= rep <= len(index_sites):
+                choix_valide = True
+            else:
+                print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_sites)}{Style.RESET_ALL}")
+                choix_valide = False
 
-dl_site = index_sites[rep - 1]
+    dl_site = index_sites[rep - 1]
+
+else:
+    dl_site = config["SITE"].capitalize()
+    print("\nSite récupéré dans config.txt\n")
+
+
 lien_page_captcha = liens_sites[dl_site]
 
 print(f"\n\n{Fore.LIGHTCYAN_EX}############################################################################\n"
@@ -362,7 +390,7 @@ methode = None
 while not choix_valide:
     methode = input(f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
                     f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n\n"
-                    f"{Fore.LIGHTYELLOW_EX}Attention ! La methode 2 ne fonctionne que sur Windows depuis "
+                    f"{Fore.LIGHTYELLOW_EX}Attention ! La methode 2 ne fonctionne que sur Windows depuis "      # TODO Régler la methode selon config
                     f"l'interface graphique (ne fonctionne donc pas en ssh)\n{Style.RESET_ALL}").upper()
     if methode in ("1", "2"):
         if methode == "2" and os.name != 'nt':
@@ -433,7 +461,7 @@ lien_valide = False
 while not lien_valide:
     try:
         print(f"Connecting to {new_url} ...{Fore.BLACK}\n")
-        driver.get(new_url)                 # TODO PB de connection avec uptobox
+        driver.get(new_url)
         lien_valide = True
     except:
         rep = demande(f"{Fore.RED}Connexion impossible.{Style.RESET_ALL}\n"
@@ -466,7 +494,7 @@ while not lien_valide:
         else:
             input("Appuyez sur Entrer pour quitter...")
             exit(0)
-            
+
 
 print(f"{Fore.GREEN}Connected !{Fore.BLACK}\n")
 
@@ -553,7 +581,7 @@ elif dl_site == "Uptobox":
 
     try:
         btn2 = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.LINK_TEXT, "Cliquez-ici pour lancer votre téléchargement")))
+            EC.presence_of_element_located((By.XPATH, "//thead/tr/td/a[contains(@href,\'.uptobox.com/dl/\')]")))  # TODO Tester ceci
         lien_film = btn2.get_attribute("href")
     except:
         try:
