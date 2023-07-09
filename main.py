@@ -11,6 +11,7 @@ import pathlib
 import subprocess
 import requests
 import time
+import threading
 from flask import Flask, request
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -21,28 +22,40 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 import wget
+import recup_lien_1fichier
 
 
-version = "v1.0.0-beta"
+version = "v1.0.0-beta"     # TODO Modifier le numéro de version
 
 if os.name == 'nt':  # Windows
     os.system('cls')
 else:  # Linux, Mac OS X
     os.system('clear')
 
-args = sys.argv
-args = [arg.upper() for arg in args]
-
 config = load()
 
-if len(args) > 1 and not args[1] == "DEBUG":
-    config["TITLE"] = args[1]
+args = sys.argv
+
+series, mode_auto = False, False
+
+if "-f" in args:
+    config["TITLE"] = args[args.index("-f") + 1]
     mode_auto = True
-else:
-    mode_auto = False
+elif "-s" in args:
+    config["TITLE"] = args[args.index("-f") + 1]
+    series, mode_auto = True, True
+
+# args = [arg.upper() for arg in args]
 
 
-if "DEBUG" in args:
+# if len(args) > 1 and not args[1] == "DEBUG":
+#     config["TITLE"] = args[1]
+#     mode_auto = True
+# else:
+#     mode_auto = False
+
+
+if "-d" in args:
     class Fore:
         BLACK = ""
         RED = ""
@@ -77,7 +90,7 @@ latest_realease = json.loads(response.text)
 latest_version = latest_realease["tag_name"]
 
 if latest_version != version:
-    rep = demande(f'Une nouvelle version est disponible: {latest_version}. Voulez vous la télécharger ?\n')
+    rep = demande(f'Une nouvelle version est disponible: {latest_version}. Voulez vous la télécharger ?')
 
     if rep in ("OUI", "O"):
         package_url = None
@@ -111,11 +124,9 @@ else:
 
 # TODO Faire un try pour vérifier si tt les bibliothèques sont la
 
-# TODO Faire un système pour skipper la config manuelle
-
 
 # TODO Verifier que chrome est installé
-print(f"Initialising...\n{Fore.BLACK}")
+print(f"\n\nInitialising...\n{Fore.BLACK}")
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
@@ -126,21 +137,23 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 driver.implicitly_wait(10)
 print(f"{Fore.GREEN}Init OK !\n{Style.RESET_ALL}")
 
+prgm_dir = str(pathlib.Path(__file__).parent.absolute())
+dl_dir = None
 
 if not mode_auto:
-    prgm_dir = str(pathlib.Path(__file__).parent.absolute())
     dl_dir = prgm_dir
     rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
-                  f"Voulez vous changer ?")
+                  f"Ce chemin vous convient-t-il ?")
+
 elif "PATH" in config:
     dl_dir = config["PATH"]
     print("\nDossier de téléchargement récupéré dans config.txt\n")
     rep = None
 
 else:
-    rep = "OUI"
+    rep = "NON"
 
-if rep in ("OUI", "O"):
+if rep in ("NON", "N"):
 
     choix_valide = False
     while not choix_valide:
@@ -205,63 +218,176 @@ search.submit()
 
 def recup_results(num_page):
     liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
-    liens_resultats = dict()
-    for i in liste_resultats:
-        title = i.text[:i.text.index(" [")]
-        liens_resultats[title] = i.get_attribute("href")
-
-    print(f"{Fore.GREEN}\nVoici les résultats\n{Style.RESET_ALL}")
-    index_liens = []
-    n = 1
-    for i in liens_resultats:
-        print(f"{n} : {i}")
-        index_liens.append(i)
-        n += 1
 
     if len(liste_resultats) == 0:
         input(f"\n{Fore.RED}Aucun résultat trouvé.\n"
               f"{Style.RESET_ALL}Appuyez sur Entrer pour quitter...")
         exit(1)
 
-    choix_valide = False
-    rep = None
-    while not choix_valide:
-        try:
-            rep = eval(input(f"\nEntrez le numéro correspondant a votre résultat. "  # TODO Faire en sorte de skipper ça si le titre du film est exactement le meme 
-                             f"Si il ne s'y trouve pas, entrez 0\n"))
-            if not isinstance(rep, int):
-                raise TypeError("La variable rep doit être de type int")
-            choix_valide = True
+    liens_resultats = dict()
+    for i in liste_resultats:
+        title = i.text[:i.text.index(" [")]
+        liens_resultats[title] = i.get_attribute("href")
 
-        except:
-            print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_liens)}{Style.RESET_ALL}")
-            choix_valide = False
+    if mode_auto and ("TITLE" in config):
+        def find_closest_title(dictionary, title):
+            closest_title = None
+            min_distance = float('inf')
 
-        else:
-            if 0 <= rep <= len(index_liens):
-                choix_valide = True
-            else:
-                print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 0 et {len(index_liens)}{Style.RESET_ALL}")
-                choix_valide = False
-    lien = ""
-    if rep == 0:
-        try:
-            print(Fore.BLACK)
-            if num_page == 1:
-                next_page = driver.current_url + f"&page={num_page+1}"
-            else:
-                next_page = driver.current_url.replace(f"page={num_page}", f"page={num_page+1}")
-            driver.get(next_page)
-        except:
-            input(f"{Fore.RED}Vous avez atteint la dernière page.{Style.RESET_ALL}\n"
-                  f"Essayez de relancer la recherche avec une orthographe différente.\n"
-                  f"Appuyez sur Entrer pour quitter ...")
-        else:
-            print(f"{Style.RESET_ALL}\n\nRecherche des résultats sur la page {num_page+1} : \n")
-            lien = recup_results(num_page+1)
+            for cle in dictionary.keys():
+                distance = levenshtein_distance(cle.lower(), title.lower())
+
+                if distance < min_distance:
+                    min_distance = distance
+                    closest_title = cle
+
+            return closest_title
+
+        def levenshtein_distance(s, t):
+            if s == t:
+                return 0
+
+            if len(s) == 0:
+                return len(t)
+
+            if len(t) == 0:
+                return len(s)
+
+            previous_row = range(len(t) + 1)
+            for i, c1 in enumerate(s):
+                current_row = [i + 1]
+                for j, c2 in enumerate(t):
+                    insertions = previous_row[j + 1] + 1
+                    deletions = current_row[j] + 1
+                    substitutions = previous_row[j] + (c1 != c2)
+                    current_row.append(min(insertions, deletions, substitutions))
+                previous_row = current_row
+
+            return previous_row[-1]
+
+        # Merci ChatGPT
+        titre = find_closest_title(liens_resultats, config["TITLE"])
+        lien = liens_resultats[titre]
+
+        print(f"{Fore.GREEN}Titre réécupéré : {titre}{Style.RESET_ALL}")
+
+        # def check_input():
+        #     global is_incorrect
+        #     input()  # Attend l'entrée de l'utilisateur
+        #     is_incorrect = True
+        #
+        # def validation():
+        #     valeur = 42  # La valeur à valider
+        #     print("La valeur à valider est :", valeur)
+        #
+        #     print("Appuyez sur Entrée si la valeur est incorrecte.")
+        #
+        #     global is_incorrect
+        #     is_incorrect = False
+        #
+        #     input_thread = threading.Thread(target=check_input)
+        #     input_thread.daemon = True  # Définit le thread comme un thread démon
+        #     input_thread.start()
+        #
+        #     debut_temporisation = time.time()
+        #     while True:
+        #         if is_incorrect:
+        #             print("La valeur est incorrecte.")
+        #             break
+        #
+        #         if time.time() - debut_temporisation > 5:
+        #             print("Temps écoulé. La valeur est considérée comme valide.")
+        #             break
+        #
+        #         time.sleep(0.1)
+        #
+        # validation()
+
+        # ^^^^ Fonctionne mais le thread reste actif pendant toute l'exécution du programme
+
+
+        # def handle_timeout():
+        #     raise TimeoutError
+        #
+        # def validation():
+        #     valeur = 42  # La valeur à valider
+        #     print("La valeur à valider est :", valeur)
+        #
+        #     print("Appuyez sur Entrée si la valeur est incorrecte.")
+        #
+        #     try:
+        #         timer = threading.Timer(5, handle_timeout)
+        #         timer.start()
+        #         input()  # Attend l'entrée de l'utilisateur
+        #         timer.cancel()
+        #         print("La valeur est incorrecte.")
+        #     except TimeoutError:
+        #         print("Temps écoulé. La valeur est considérée comme valide.")
+        #
+        #
+        #
+        #     print("Suite du programme")
+        #     # ...
+        #     # ...
+        #
+        # validation()
+
+        # ^^^^^^ Approche intéréssante mais le try ne capture pas la timeouterror
+
+        # TODO Faire un compte a rebours de 5 secondes qui demande d'appuyer sur entrée si le titre est pas bon.
+        # TODO Si c'est le cas, relancer la recherche en page suivante
 
     else:
-        lien = liens_resultats[index_liens[rep - 1]]
+        print(f"{Fore.GREEN}\nVoici les résultats\n{Style.RESET_ALL}")
+        index_liens = []
+        n = 1
+        for i in liens_resultats:
+            print(f"{n} : {i}")
+            index_liens.append(i)
+            n += 1
+
+        choix_valide = False
+        rep = None
+        while not choix_valide:
+            try:
+                rep = eval(input(f"\nEntrez le numéro correspondant a votre résultat. "
+                                 f"Si il ne s'y trouve pas, entrez 0\n"))
+                if not isinstance(rep, int):
+                    raise TypeError("La variable rep doit être de type int")
+                choix_valide = True
+
+            except KeyboardInterrupt:
+                exit(1)
+
+            except:
+                print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_liens)}{Style.RESET_ALL}")
+                choix_valide = False
+
+            else:
+                if 0 <= rep <= len(index_liens):
+                    choix_valide = True
+                else:
+                    print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 0 et {len(index_liens)}{Style.RESET_ALL}")
+                    choix_valide = False
+        lien = ""
+        if rep == 0:
+            try:
+                print(Fore.BLACK)
+                if num_page == 1:
+                    next_page = driver.current_url + f"&page={num_page+1}"
+                else:
+                    next_page = driver.current_url.replace(f"page={num_page}", f"page={num_page+1}")
+                driver.get(next_page)
+            except:
+                input(f"{Fore.RED}Vous avez atteint la dernière page.{Style.RESET_ALL}\n"
+                      f"Essayez de relancer la recherche avec une orthographe différente.\n"
+                      f"Appuyez sur Entrer pour quitter ...")
+            else:
+                print(f"{Style.RESET_ALL}\n\nRecherche des résultats sur la page {num_page+1} : \n")
+                lien = recup_results(num_page+1)
+
+        else:
+            lien = liens_resultats[index_liens[rep - 1]]
 
     return lien
 
@@ -273,11 +399,21 @@ driver.get(lien_page_film)
 liste_qualites = driver.find_elements(By.XPATH, "//ul[@class=\'wa-post-list-ofLinks row readable-post-list\']/li/a")
 
 
+def supp_spec_car(elt: str):
+    elt = elt.replace("[", "", -1)
+    elt = elt.replace("]", "", -1)
+    elt = elt.replace("(", "", -1)
+    elt = elt.replace(")", "", -1)
+    elt = elt.replace("-", "", -1)
+    return elt
+
+
 liens_qualites = dict()
 for i in liste_qualites:
-    liens_qualites[i.text] = i.get_attribute("href")
+    liens_qualites[supp_spec_car(i.text)] = i.get_attribute("href")
 
-liens_qualites[driver.find_element(By.XPATH, "//*[@id=\'detail-page\']/div[2]/div[1]/i[2]").text.replace("]", "")[1:]] = None
+
+liens_qualites[supp_spec_car(driver.find_element(By.XPATH, "//*[@id=\'detail-page\']/div[2]/div[1]/i[2]").text.replace("]", "")[1:])] = None
 
 
 if mode_auto and ("QUALITY" in config) and (config["QUALITY"] in liens_qualites):
@@ -289,11 +425,12 @@ else:
 
     print(f"\nVoici les qualités disponible pour votre film\n")
 
-    index_qualites = []
+    index_qualites = sorted([i for i in liens_qualites])
     n = 1
-    for i in liens_qualites:
-        print(f"{n} : {i}")
-        index_qualites.append(i)
+    for i in index_qualites:
+        if i.rsplit(" ")[0] != index_qualites[n-2].rsplit(" ")[0]:
+            print()
+        print(f"{n}:{i}")
         n += 1
 
     print("\n\nSi la qualité que vous souhaitez ne se trouve pas dans la liste, fermez le programme \n"
@@ -308,6 +445,9 @@ else:
             if not isinstance(index_qualite, int):
                 raise TypeError("La variable rep doit être de type int")
 
+        except KeyboardInterrupt:
+            exit()
+
         except:
             print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_qualites)}{Style.RESET_ALL}")
             choix_valide = False
@@ -315,9 +455,10 @@ else:
         else:
             if 1 <= index_qualite <= len(index_qualites):
                 choix_valide = True
-                rep = demande(f"Voulez vous faire de {index_qualites[index_qualite - 1]} la valeur par défaut")
-                if rep in ("OUI", "O"):
-                    fill_config(quality=str(index_qualites[index_qualite - 1]), manual=False)
+                if "QUALITY" in config and config["QUALITY"] != index_qualites[index_qualite - 1]:
+                    rep = demande(f"Voulez vous faire de {index_qualites[index_qualite - 1]} la valeur par défaut")
+                    if rep in ("OUI", "O"):
+                        fill_config(quality=str(index_qualites[index_qualite - 1]), manual=False)
             else:
                 print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_qualites)}{Style.RESET_ALL}")
                 choix_valide = False
@@ -335,11 +476,11 @@ liste_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[
 liste_liens_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[1]/a")
 
 liens_sites = {liste_sites[i].text: liste_liens_sites[i].get_attribute("href") for i in range(len(liste_sites))
-               if liste_sites[i].text in ("1fichier", "Uptobox") and "Partie" not in liste_liens_sites[i].text}
+               if liste_sites[i].text in ("1fichier", "Uptobox DESACTIVE") and "Partie" not in liste_liens_sites[i].text}
 
 # TODO Régler le problème de Uptobox
 
-if not mode_auto and "SITE" not in config:
+if not mode_auto or "SITE" not in config:
 
     print(f"{Style.RESET_ALL}Voici les sites de téléchargements disponibles\n")
     n = 1
@@ -359,6 +500,9 @@ if not mode_auto and "SITE" not in config:
             if not isinstance(rep, int):
                 raise TypeError("La variable rep doit être de type int")
             choix_valide = True
+
+        except KeyboardInterrupt:
+            exit(1)
 
         except:
             print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_sites)}{Style.RESET_ALL}")
@@ -388,14 +532,19 @@ print(f"\n\n{Fore.LIGHTCYAN_EX}#################################################
 choix_valide = False
 methode = None
 while not choix_valide:
-    methode = input(f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
-                    f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n\n"
-                    f"{Fore.LIGHTYELLOW_EX}Attention ! La methode 2 ne fonctionne que sur Windows depuis "      # TODO Régler la methode selon config
-                    f"l'interface graphique (ne fonctionne donc pas en ssh)\n{Style.RESET_ALL}").upper()
+    if not mode_auto or "METHOD" not in config:
+        methode = input(f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
+                        f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n\n"
+                        f"{Fore.LIGHTYELLOW_EX}Attention ! La methode 2 ne fonctionne que sur Windows depuis "
+                        f"l'interface graphique (ne fonctionne donc pas en ssh)\n{Style.RESET_ALL}").upper()
+    else:
+        methode = config["METHOD"]
+
     if methode in ("1", "2"):
         if methode == "2" and os.name != 'nt':
             print(f"{Fore.RED}Réponse invalide. Vous ne pouvez pas choisir la methode 2 si vous "
                   f"n'êtes pas sur Windows\n{Style.RESET_ALL}")
+            mode_auto = False
         else:
             choix_valide = True
     else:
@@ -424,17 +573,27 @@ if methode == "1":
         new_url = request.form.get('url')
 
         print(f"\n{Fore.GREEN}New URL received: {new_url}{Style.RESET_ALL}\n")
-        # Arrête le serveur Flask
-        shutdown_server()
+
+        if new_url.startswith(f"https://{dl_site.lower()}"):
+            # Arrête le serveur Flask
+            shutdown_server()
+        else:
+            print(f"\n\n{Fore.RED}Le lien reçu n'est pas valide{Style.RESET_ALL}\n"
+                  f"Sur votre téléphone, vous devez cliquer sur \"Continuer\" dès que le bouton apparait\n"
+                  f"Ensuite, cliquez sur le lien qui commence par https://{dl_site}/...\n"
+                  f"Pour finir, cliquez sur \"Valider\" en haut a droite de l'écran")
 
         return 'OK'
 
 
     def shutdown_server():
+        print(Fore.BLACK)
         func = request.environ.get('werkzeug.server.shutdown')
         if func is None:
+            print(Style.RESET_ALL)
             raise RuntimeError('Not running with the Werkzeug Server')
         func()
+        print(Style.RESET_ALL)
 
 
     app.run(host="0.0.0.0", port=5000)
@@ -446,14 +605,21 @@ elif methode == "2":
 
     input(f"\n\nUne fenêtre chrome va s'ouvrir. Elle contient le captcha qu'il faut résoudre.\n"
           f"Une fois que le captcha est résolu, vous devez copier-coller dans cette fenêtre le lien du film qui "
-          f"commence par \"https://{dl_site}...\n"
+          f"commence par \"https://{dl_site.lower()}...\n"
           f"Le site fait apparaitre de nombreuses popups inutiles. Tout ce passe sur la première page ouverte.\n"
+          f"Une fois le lien copié, fermez chrome, puis revenez sur cette fenêtre\n"
           f"Appuyez sur Entrer pour ouvrir chrome ...\n")
 
     subprocess.run([chrome_path, lien_page_captcha])
 
-    new_url = input(f"Copiez-collez ici le lien qui commence par\"https://{dl_site}...\n")
+    # TODO Demander a ChatGPT pk le programme attends que chrome se ferme pour passer a la suite
 
+    while True:
+        new_url = input(f"Copiez-collez ici le lien qui commence par \"https://{dl_site.lower()}...\n")
+        if new_url.startswith(f"https://{dl_site.lower()}"):
+            break
+        else:
+            print(f"\n\n{Fore.RED}Le lien que vous avez entré n'est pas valide{Style.RESET_ALL}\n\n")
 
 print(f"{Fore.GREEN}Le captcha a été passé avec succès !{Style.RESET_ALL}\n\n")
 
@@ -464,8 +630,11 @@ while not lien_valide:
         driver.get(new_url)
         lien_valide = True
     except:
+
+        # TODO Créer une étape de verification qui demande si l'utilisateur n'as pas copié collé un lien de merde
+
         rep = demande(f"{Fore.RED}Connexion impossible.{Style.RESET_ALL}\n"
-                      f"Certains sites de téléchargements sont bloqués par certains opérateurs\n"
+                      f"Certains sites de téléchargements sont bloqués par certains opérateurs\n"            
                       f"Cette restriction peut être contournée en modifiant les paramètres DNS du PC\n"
                       f"Voulez vous changer ces paramètres automatiquement ?")
 
@@ -478,7 +647,8 @@ while not lien_valide:
 
             carte_res = input(f"Copier-Collez ici le nom de votre carte réseau connectée a internet\n")
 
-            input("\n\nLe programme va changer automatiquement les paramètres DNS en mettant le DNS gratuit de Google\n"
+            input("\n\nLe programme va changer automatiquement les paramètres DNS en mettant le DNS gratuit de "
+                  "Google\n"
                   "à la place de celui par défaut. Cela ne changera en rien votre navigation sur internet.\n"
                   "Le programme va vous demander un accès administrateur\n"
                   "Appuyez sur Entrer pour continuer...\n")
@@ -504,35 +674,41 @@ file_name = ""
 
 if dl_site == "1fichier":
 
-    def recup_link_1fichier():
+    try:
 
-        try:
-            file_name = driver.find_element(By.XPATH, "/html/body/form/table/tbody/tr[1]/td[3]").text
-            btn = driver.find_element(By.ID, "dlb")
-            btn.submit()
-        except:
-            input(f"{Fore.RED}Le fichier à été supprimé du site 1fichier !{Style.RESET_ALL}\n"
-                  f"Vous pouvez essayer sur un autre site de téléchargement ou avec une autre qualité.\n"
-                  f"Appuyez sur Entrer pour quitter ...")
+        lien_film, file_name = recup_lien_1fichier.recup_lien(new_url)
+
+    except Exception as e:
+
+        if e.args[0] != "countdown error":
+            print(Style.RESET_ALL, e)
             exit(1)
 
-        try:
-            btn2 = WebDriverWait(driver, 5).until(
-                EC.presence_of_element_located((By.LINK_TEXT, "Cliquer ici pour télécharger le fichier")))
-        except:
+        print(f"{Fore.RED}Une erreur est survenue.\n\n{Style.RESET_ALL}"
+              f"Le site 1fichier a un compte à rebours qui empêche de télécharger plusieurs "
+              f"films d'affilé.\n"
+              f"Ce compte à rebours peut être esquivé en désactivant et en réactivant la carte réseau\n")
 
-            print(f"{Fore.RED}Une erreur est survenue.\n\n{Style.RESET_ALL}"
-                  f"Le site 1fichier a un compte à rebours qui empêche de télécharger plusieurs "
-                  f"films d'affilé.\n"
-                  f"Ce compte à rebours peut être esquivé en désactivant et en réactivant la carte réseau\n")
-            driver.close()
-            driver.quit()
 
+        print(f"{Fore.LIGHTMAGENTA_EX}{mode_auto}, {'SKIP_COUNTDOWN' in config}{Style.RESET_ALL}")
+        if mode_auto and ("SKIP_COUNTDOWN" in config):
+
+            rep = config["SKIP_COUNTDOWN"].upper()
+
+        else:
             rep = demande("Voulez vous utiliser cette technique ? Cela coupera internet sur votre machine pendant "
                           "quelques secondes.\n"
                           "Si vous répondez \"Non\" le programme va s'arrêter")
 
-            if rep in ("OUI", "O"):
+        if rep in ("OUI", "O"):
+
+            driver.quit()
+
+            if mode_auto and "CARTE_RES" in config:
+
+                carte_res = config["CARTE_RES"]
+
+            else:
 
                 if os.name == 'nt':  # Windows
                     os.system("netsh interface ipv4 show interfaces")
@@ -544,31 +720,51 @@ if dl_site == "1fichier":
                 input("\n\nLe programme va vous demander 2 fois un accès administrateur\n"
                       "Appuyez sur Entrer pour continuer...\n")
 
-                if os.name == 'nt':
-                    os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
-                              f"\'Disable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
-                else:
-                    os.system(f"sudo ifconfig {carte_res} down")
+            if os.name == 'nt':
+                os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
+                          f"\'Disable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
+            else:
+                os.system(f"sudo ifconfig {carte_res} down")
 
-                time.sleep(5)
+            time.sleep(7)
 
-                if os.name == 'nt':
-                    os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
-                              f"\'Enable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
-                else:
-                    os.system(f"sudo ifconfig {carte_res} up")
+            if os.name == 'nt':
+                os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
+                          f"\'Enable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
+            else:
+                os.system(f"sudo ifconfig {carte_res} up")
 
-                input("Relancez maintenant le programme. Si l'erreur persiste essayez de relancer en allant sur un "
-                      "autre site de téléchargement\n"
-                      "Appuyez sur Entrer pour quitter...")
-            exit(0)
+            time.sleep(7)
 
-        else:
-            lien_film = btn2.get_attribute("href")
+            print("\nReconnexion ...\n")
+            while True:
+                try:
+                    options_test = Options()
+                    options_test.add_argument('--headless')
+                    options_test.add_argument('--no-sandbox')
+                    options_test.add_argument('--disable-dev-shm-usage')
+                    options_test.add_argument('--lang=fr')
 
-        return lien_film, file_name
+                    driver_test = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options_test)
+                    driver_test.implicitly_wait(10)
 
-    lien_film, file_name = recup_link_1fichier()
+                    driver_test.get("https://google.com")
+
+                    break
+                except:
+                    time.sleep(1)
+
+            print(f"\n{Fore.GREEN}Connecté ! \n{Style.RESET_ALL}"
+                  f"\nNouvel essai de connexion a 1fichier\n")
+
+            try:
+                lien_film, file_name = recup_lien_1fichier.recup_lien(new_url)
+            except:
+                input(f"\n\n{Fore.RED}Une erreur est survenue durant la reconnexion au site 1fichier{Style.RESET_ALL}\n"
+                      f"Vous pouvez essayer de désactiver puis de réactiver internet sur votre PC.\n"
+                      f"Relancez ensuite le programme.\n"
+                      f"Appuyez sur Entrer pour quitter...\n")
+                exit(1)
 
 
 elif dl_site == "Uptobox":
@@ -580,8 +776,12 @@ elif dl_site == "Uptobox":
           f"En attente du chargement de la page{Fore.BLACK}\n")
 
     try:
-        btn2 = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//thead/tr/td/a[contains(@href,\'.uptobox.com/dl/\')]")))  # TODO Tester ceci
+        # btn2 = WebDriverWait(driver, 10).until(
+        #     EC.presence_of_element_located((By.XPATH, "//thead/tr/td/a[contains(@href,\'.uptobox.com/dl/\')]")))  # TODO Tester ceci
+
+        btn2 = driver.find_element(By.XPATH, "//thead/tr/td/a[contains(@href,\'.uptobox.com/dl/\')]")
+
+        print(f"{Style.RESET_ALL}C'est OUI !!!!")
         lien_film = btn2.get_attribute("href")
     except:
         try:
@@ -603,7 +803,6 @@ elif dl_site == "Uptobox":
     print(f"{Fore.GREEN}Page chargée !\n{Style.RESET_ALL}\n\n")
 
 
-driver.close()
 driver.quit()
 
 
