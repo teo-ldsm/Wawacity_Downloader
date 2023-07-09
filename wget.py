@@ -421,6 +421,18 @@ def bar_adaptive(current, total, eta_sec, speed_bps, width=80):
                                       # the end of line to avoid linefeed on Windows
     # render
     output = ''
+
+    def round_size(val):
+        if val >= 1000000000:
+            return str(round(val / 1000000000, 1)) + " Go"
+        elif val >= 1000000:
+            return str(round(val / 1000000, 1)) + " Mo"
+        elif val >= 1000:
+            return str(round(val / 1000, 1)) + " Ko"
+        else:
+            return str(val) + " o"
+
+    current_rounded, total_rounded = round_size(current), round_size(total)
     speed_mbps = round(speed_bps/1000000, 2)
     heures, minutes, secondes = str(eta_sec // 3600), str((eta_sec % 3600) // 60), str(eta_sec % 60)
     for field in selected:
@@ -433,7 +445,7 @@ def bar_adaptive(current, total, eta_sec, speed_bps, width=80):
         output += bar_thermometer(current, total, min_width['bar']+avail)
       elif field == 'size':
         # size field has a constant width (min == max)
-        output += ("%s / %s" % (current, total)).rjust(min_width['size'])
+        output += ("%s / %s" % (current_rounded, total_rounded)).rjust(min_width['size'])
       elif field == 'eta':
         output += ('eta: %sh %sm %ss' % (heures, minutes, secondes)).rjust(min_width['eta'])
       elif field == 'speed':
