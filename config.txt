@@ -9,12 +9,14 @@
 #       + Methode 1 : Avec l'application mobile CaptchaSkipper (Android uniquement)
 #       + Methode 2 : Depuis une fenêtre Chrome (Windows uniquement, beaucoup de popups et de pubs)
 # - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le compte a rebours du site 1fichier. Doit être défini par 'OUI' ou 'NON'
-ADDRESS=wawacity.quest
+# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le programme normalement pour que la valeur soit remplie automatiquement
+#ADDRESS=
 #PATH=
 #QUALITY=
 #SITE=
 #METHOD=
 #SKIP_COUNTDOWN=
+#CARTE_RES=
 
 # Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement 
 #SERVER_IP=
