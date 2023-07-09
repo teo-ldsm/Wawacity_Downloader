@@ -25,7 +25,7 @@ import wget
 import recup_lien_1fichier
 
 
-version = "v1.0.0-beta"     # TODO Modifier le numéro de version
+version = "v1.1.0-beta"     # TODO Modifier le numéro de version
 
 if os.name == 'nt':  # Windows
     os.system('cls')
@@ -689,8 +689,6 @@ if dl_site == "1fichier":
               f"films d'affilé.\n"
               f"Ce compte à rebours peut être esquivé en désactivant et en réactivant la carte réseau\n")
 
-
-        print(f"{Fore.LIGHTMAGENTA_EX}{mode_auto}, {'SKIP_COUNTDOWN' in config}{Style.RESET_ALL}")
         if mode_auto and ("SKIP_COUNTDOWN" in config):
 
             rep = config["SKIP_COUNTDOWN"].upper()
