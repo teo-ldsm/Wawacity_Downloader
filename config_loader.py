@@ -115,12 +115,15 @@ def build_config() -> None:
                "#       + Methode 2 : Depuis une fenêtre Chrome (Windows uniquement, beaucoup de popups et de pubs)\n"
                "# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le "
                "compte a rebours du site 1fichier. Doit être défini par \'OUI\' ou \'NON\'\n"
+               "# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le "
+               "programme normalement pour que la valeur soit remplie automatiquement\n"
                "#ADDRESS=\n"
                "#PATH=\n"
                "#QUALITY=\n"
                "#SITE=\n"
                "#METHOD=\n"
-               "#SKIP_COUNTDOWN=\n\n"
+               "#SKIP_COUNTDOWN=\n"
+               "#CARTE_RES=\n\n"
                "# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser "
                "après chaque téléchargement \n"
                "#SERVER_IP=\n"
@@ -138,7 +141,8 @@ def build_config() -> None:
 
 
 def fill_config(tous: bool = False, address: str = False, path: str = False, quality: str = False, site: str = False,
-                method: str = False, skip_countdown: str = False, plex: bool = False, manual: bool = True) -> None:
+                method: str = False, skip_countdown: str = False, carte_res: str = False, plex: bool = False,
+                manual: bool = True) -> None:
     
     if not isinstance(tous, bool):
         raise TypeError("L'argument tous doit être de type bool")
@@ -153,9 +157,9 @@ def fill_config(tous: bool = False, address: str = False, path: str = False, qua
     if manual:
         config = load()
     if tous:
-        address, path, quality, site, skip_countdown, method, plex = True, True, True, True, True, True, True
+        address, path, quality, site, skip_countdown, carte_res, method, plex = True, True, True, True, True, True, True, True
     args = {"ADDRESS": address, "PATH": path, "QUALITY": quality, "SITE": site, "METHOD": method,
-            "SKIP_COUNTDOWN": skip_countdown, "SERVER_IP": plex, "PORT": plex, "TOKEN": plex}
+            "SKIP_COUNTDOWN": skip_countdown, "CARTE_RES": carte_res, "SERVER_IP": plex, "PORT": plex, "TOKEN": plex}
 
     for i in args:
         if args[i]:
