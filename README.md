@@ -9,7 +9,19 @@ Vous pouvez trouver le package complet
 sur cette page
 </a>
 
-Pour lancer le programme normalement, lancez ```python main.py``` dans un terminal.
+Pour lancer le programme normalement, lancez ```python main.py``` (Windows) ou ```python3 main.py```(Linux) dans un terminal.
+
+Vous pouvez également lancer le programme en mode automatique. Le mode automatique consiste à limiter au maximum les interractions : vous devez seulement renseigner le titre de votre film et le programme fait le reste seul. Vous devez seulement valider manuellement un captcha.
+
+Pour que le mode automatique soit éfficace, il faut compléter correctement le fichier ```config.txt```. Le fichier contiens des explixations qui explique comment compléter chaque valeur. (Les valeurs plex ne sont pas obligatoires.)
+
+Pour lancer le programme en mode automatique, il faut entrer ceci dans un terminal :
+
+```python main.py -f "Titre du film"``` (Windows)
+
+```python3 main.py -f "Titre du film"``` (Linux)
+
+N'oubliez pas les guillements
 
 
 <br>
@@ -28,7 +40,9 @@ La version IOS n'est pas encore disponible.
 Pour l'instant, le programme prend en charge les sites de téléchargements suivants :
 
 - 1fichier
-- Uptobox (impossible de télécharger plusieurs films d'affilée)
+- ~~Uptobox (impossible de télécharger plusieurs films d'affilée)~~
+
+**Uptobox est désactivé à cause d'un bug** 
 
 Si ```main.py``` ne fonctionne pas, lancez ```python main.py debug``` dans 
 un terminal pour afficher les logs et les erreurs
