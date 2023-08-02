@@ -1,5 +1,6 @@
 import os
 import sys
+from help_manager import ask_help
 
 
 def venv_init():
@@ -50,6 +51,10 @@ def load() -> dict:
                 tmp = i.rsplit("=")
                 config[tmp[0].strip()] = tmp[1]
 
+            if "QUALITY" in config and ',' in config["QUALITY"]:
+                qual1, qual2 = tuple(config["QUALITY"].rsplit(","))
+                config["QUALITY"] = (qual1, qual2.removeprefix(" "))
+
         except:
 
             print("Le fichier \'config.txt\' est mal construit. Appuyez sur Entrer le reconstruire automatiquement.")
@@ -74,7 +79,7 @@ def verify_config(config: dict) -> dict:
             config.pop("PATH")
 
     if "SITE" in config:
-        if config["SITE"].upper() not in ("1FICHIER", "UPTOBOX"):
+        if config["SITE"].upper() not in ("1FICHIER", "UPTOBOX DESACTIVE"):     # TODO Enlever ceci
             print(f"{Fore.LIGHTYELLOW_EX}La valeur spécifiée dans config.txt à la valeur \'SITE\' "
                   f"n'est pas valide{Style.RESET_ALL}\n")
             config.pop("SITE")
@@ -90,6 +95,13 @@ def verify_config(config: dict) -> dict:
             print(f"{Fore.LIGHTYELLOW_EX}La valeur spécifiée dans config.txt à la valeur \'SKIP_COUNTDOWN\' "
                   f"n'est pas valide{Style.RESET_ALL}\n")
             config.pop("SKIP_COUNTDOWN")
+
+    if "QUALITY" in config:
+        if len(config["QUALITY"]) > 2:
+            print(f"{Fore.LIGHTYELLOW_EX}La valeur spécifiée dans config.txt à la valeur \'QUALITY\' "
+                  f"n'est pas valide{Style.RESET_ALL}\n"
+                  f"Il ne peut y avoir que 2 qualité")
+            config.pop("QUALITY")
 
     return config
     # TODO Verifier que les arguments de config sont bons (quality existe)
@@ -108,6 +120,8 @@ def build_config() -> None:
                "# - PATH : Les medias seront téléchargés dans ce dossier \n"
                "# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme "
                "normalement pour que la valeur soit remplie automatiquement\n"
+               "Vous pouvez ajouter une seconde valeur de secours qui sera utilisé si la première n'es pas disponible\n"
+               "Les deux valeurs doivent être séparées avec une virgule\n"
                "# - SITE : Site par défaut ou télécharger les médias. Doit être défini par \'1fichier\' "
                "ou \'Uptobox\'. Les autres sites ne sont pas encore pris en charges\n"
                "# - METHOD : Methode à utiliser pour valider le captcha. Doit être défini par \'1\' ou \'2\'\n"
@@ -201,4 +215,9 @@ def demande(msg: str = ""):
 
     return rep
 
+
+if __name__ == '__main__':
+    ask_help("config_loader")
+
+    # TODO FACULTATIF Faire un système pour lancer config_loader tout seul
 

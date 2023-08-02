@@ -1,7 +1,7 @@
 from config_loader import *
+from help_manager import ask_help
 if __name__ == '__main__':
     venv_init()
-    from colorama import Fore, Style
 
 import http.client
 
@@ -31,5 +31,7 @@ def refresh(config):
 
 
 if __name__ == '__main__':
+    from colorama import Fore, Style
+    ask_help("plex_refresh")
     config = load()
     refresh(config)
