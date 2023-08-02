@@ -1,7 +1,13 @@
+import sys
+
+from help_manager import ask_help
+import plex_refresh
 from config_loader import *
 
 if __name__ == '__main__':
     venv_init()
+
+# ask_help("main")
 
 if os.name == 'nt':
     import winreg
@@ -22,7 +28,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 import wget
-import recup_lien_1fichier
+from recup_lien_1fichier import *
 
 
 version = "v1.1.0-beta"     # TODO Modifier le numéro de version
@@ -35,7 +41,6 @@ else:  # Linux, Mac OS X
 config = load()
 
 args = sys.argv
-
 series, mode_auto = False, False
 
 if "-f" in args:
@@ -90,7 +95,7 @@ latest_realease = json.loads(response.text)
 latest_version = latest_realease["tag_name"]
 
 if latest_version != version:
-    rep = demande(f'Une nouvelle version est disponible: {latest_version}. Voulez vous la télécharger ?')
+    rep = demande(f'{Fore.GREEN}Une nouvelle version est disponible: {latest_version}. Voulez vous la télécharger ?{Style.RESET_ALL}')
 
     if rep in ("OUI", "O"):
         package_url = None
@@ -126,31 +131,31 @@ else:
 
 
 # TODO Verifier que chrome est installé
-print(f"\n\nInitialising...\n{Fore.BLACK}")
-options = Options()
-options.add_argument('--headless')
-options.add_argument('--no-sandbox')
-options.add_argument('--disable-dev-shm-usage')
-options.add_argument('--lang=fr')
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-driver.implicitly_wait(10)
-print(f"{Fore.GREEN}Init OK !\n{Style.RESET_ALL}")
+
+# ----------Initialisation du driver---------- #
+
+driver = driver_init()
+
+# ----------Initialisation du driver---------- #
 
 prgm_dir = str(pathlib.Path(__file__).parent.absolute())
-dl_dir = None
+
+if "PATH" in config:
+    dl_dir = config["PATH"]
+else:
+    dl_dir = prgm_dir
 
 if not mode_auto:
-    dl_dir = prgm_dir
     rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
                   f"Ce chemin vous convient-t-il ?")
 
 elif "PATH" in config:
-    dl_dir = config["PATH"]
-    print("\nDossier de téléchargement récupéré dans config.txt\n")
+    print(f"\nDossier de téléchargement récupéré dans config.txt : {dl_dir}\n")
     rep = None
 
 else:
+    print("\nLa valeur \"PATH\" est absente de config.txt\n\n")
     rep = "NON"
 
 if rep in ("NON", "N"):
@@ -164,6 +169,11 @@ if rep in ("NON", "N"):
         else:
             print(f"{Fore.RED}Réponse invalide. Le chemin d'accès n'existe pas\n{Style.RESET_ALL}"
                   f"Le chemin doit être sous cette forme : \"C:\\Users\\Fabrice\\Downloads\" par exemple\n")
+
+    rep = demande(f"Voulez vous faire de {dl_dir} la valeur par défaut ?")
+
+    if rep in ("OUI", "O"):
+        fill_config(path=dl_dir, manual=False)
 
 
 def connect_to_wawacity(link):
@@ -416,12 +426,7 @@ for i in liste_qualites:
 liens_qualites[supp_spec_car(driver.find_element(By.XPATH, "//*[@id=\'detail-page\']/div[2]/div[1]/i[2]").text.replace("]", "")[1:])] = None
 
 
-if mode_auto and ("QUALITY" in config) and (config["QUALITY"] in liens_qualites):
-
-    lien_page_film = liens_qualites[config["QUALITY"]]
-    print(f"{Style.RESET_ALL}\nQualité récupérée dans config.txt\n")
-
-else:
+def selection_manuelle_qualite():
 
     print(f"\nVoici les qualités disponible pour votre film\n")
 
@@ -455,7 +460,7 @@ else:
         else:
             if 1 <= index_qualite <= len(index_qualites):
                 choix_valide = True
-                if "QUALITY" in config and config["QUALITY"] != index_qualites[index_qualite - 1]:
+                if "QUALITY" in config and len(config["QUALITY"]) == 1 and config["QUALITY"] != index_qualites[index_qualite - 1]:
                     rep = demande(f"Voulez vous faire de {index_qualites[index_qualite - 1]} la valeur par défaut")
                     if rep in ("OUI", "O"):
                         fill_config(quality=str(index_qualites[index_qualite - 1]), manual=False)
@@ -463,7 +468,40 @@ else:
                 print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_qualites)}{Style.RESET_ALL}")
                 choix_valide = False
 
-    lien_page_film = liens_qualites[index_qualites[index_qualite - 1]]
+    return liens_qualites[index_qualites[index_qualite - 1]]
+
+
+if mode_auto and ("QUALITY" in config):
+
+    if len(config["QUALITY"]) == 2:
+        if config["QUALITY"][0] in liens_qualites:
+            lien_page_film = liens_qualites[config["QUALITY"][0]]
+            print(f"{Style.RESET_ALL}\nQualité récupérée dans config.txt : {config['QUALITY']}\n")
+
+        elif config["QUALITY"][1] in liens_qualites:
+            lien_page_film = liens_qualites[config["QUALITY"][1]]
+            print(f"{Style.RESET_ALL}\nQualité récupérée dans config.txt\n"
+                  f"\"{config['QUALITY'][0]}\" n'était pas disponible, "
+                  f"\"{config['QUALITY'][1]}\" a été utilisé à la place")
+        else:
+            print(f"{Fore.LIGHTYELLOW_EX}Les qualités renseignées dans config.txt (\"{config['QUALITY'][0]}\" et "
+                  f"\"{config['QUALITY'][1]}\")\n"
+                  f"ne sont pas disponibles pour ce film{Style.RESET_ALL}\n"
+                  f"Veuillez en choisir une manuellement")
+            lien_page_film = selection_manuelle_qualite()
+
+    elif config["QUALITY"] in liens_qualites:
+        lien_page_film = liens_qualites[config["QUALITY"]]
+        print(f"{Style.RESET_ALL}\nQualité récupérée dans config.txt\n")
+
+    else:
+        print(f"{Fore.LIGHTYELLOW_EX}La qualité renseignée dans config.txt (\"{config['QUALITY'][0]}\")"
+              f"ne sont pas disponibles pour ce film{Style.RESET_ALL}\n"
+              f"Veuillez en choisir une manuellement")
+        lien_page_film = selection_manuelle_qualite()
+
+else:
+    lien_page_film = selection_manuelle_qualite()
 
 
 print(Fore.BLACK)
@@ -491,6 +529,7 @@ if not mode_auto or "SITE" not in config:
         n += 1
 
     print(f"\n{Fore.LIGHTYELLOW_EX}Le site Uptobox est désactivé à cause d'un bug{Style.RESET_ALL}\n")  # TODO Enlever ça
+    # TODO Enlever aussi le blocage de Uptobox dans le config_loader.verify_config()
 
     choix_valide = False
     rep = None
@@ -518,6 +557,7 @@ if not mode_auto or "SITE" not in config:
     dl_site = index_sites[rep - 1]
 
 else:
+
     dl_site = config["SITE"].capitalize()
     print("\nSite récupéré dans config.txt\n")
 
@@ -607,7 +647,7 @@ elif methode == "2":
           f"Une fois que le captcha est résolu, vous devez copier-coller dans cette fenêtre le lien du film qui "
           f"commence par \"https://{dl_site.lower()}...\n"
           f"Le site fait apparaitre de nombreuses popups inutiles. Tout ce passe sur la première page ouverte.\n"
-          f"Une fois le lien copié, fermez chrome, puis revenez sur cette fenêtre\n"
+          f"Une fois le lien copié, fermez l'onglet, puis revenez sur cette fenêtre\n"
           f"Appuyez sur Entrer pour ouvrir chrome ...\n")
 
     subprocess.run([chrome_path, lien_page_captcha])
@@ -621,6 +661,9 @@ elif methode == "2":
         else:
             print(f"\n\n{Fore.RED}Le lien que vous avez entré n'est pas valide{Style.RESET_ALL}\n\n")
 
+if new_url == "":
+    exit()
+
 print(f"{Fore.GREEN}Le captcha a été passé avec succès !{Style.RESET_ALL}\n\n")
 
 lien_valide = False
@@ -631,7 +674,6 @@ while not lien_valide:
         lien_valide = True
     except:
 
-        # TODO Créer une étape de verification qui demande si l'utilisateur n'as pas copié collé un lien de merde
 
         rep = demande(f"{Fore.RED}Connexion impossible.{Style.RESET_ALL}\n"
                       f"Certains sites de téléchargements sont bloqués par certains opérateurs\n"            
@@ -676,7 +718,7 @@ if dl_site == "1fichier":
 
     try:
 
-        lien_film, file_name = recup_lien_1fichier.recup_lien(new_url)
+        lien_film, file_name = recup_lien(new_url)
 
     except Exception as e:
 
@@ -714,6 +756,12 @@ if dl_site == "1fichier":
                     os.system('ifconfig')
 
                 carte_res = input(f"Copier-Collez ici le nom de votre carte réseau connectée a internet\n")
+
+                if "CARTE_RES" in config and config["CARTE_RES"] != carte_res:
+                    rep = demande(f"Voulez vous faire de {carte_res} la valeur par défaut ?")
+
+                    if rep in ("OUI", "O"):
+                        fill_config(carte_res=carte_res, manual=False)
 
                 input("\n\nLe programme va vous demander 2 fois un accès administrateur\n"
                       "Appuyez sur Entrer pour continuer...\n")
@@ -756,7 +804,7 @@ if dl_site == "1fichier":
                   f"\nNouvel essai de connexion a 1fichier\n")
 
             try:
-                lien_film, file_name = recup_lien_1fichier.recup_lien(new_url)
+                lien_film, file_name = recup_lien(new_url)
             except:
                 input(f"\n\n{Fore.RED}Une erreur est survenue durant la reconnexion au site 1fichier{Style.RESET_ALL}\n"
                       f"Vous pouvez essayer de désactiver puis de réactiver internet sur votre PC.\n"
@@ -809,14 +857,19 @@ if dl_site == "Uptobox":
 
 
 print(f"\n\n{Style.RESET_ALL}Début du téléchargement\n")
-wget.download(lien_film, out=f"{dl_dir}\\{file_name}")
+wget.download(lien_film, out=f"{dl_dir}/{file_name}")
 
 print(f"{Fore.GREEN}\n\nVotre fichier a été téléchargé ici : {dl_dir}\\{file_name}\n\n{Style.RESET_ALL}")
 
-# rep = demande(f"Si vos films sont sur un serveur plex, voulez vous actualiser le serveur ?")
-# TODO Implémenter plex
+if "SERVER_IP" in config and "PORT" in config and "TOKEN" in config:
+    print("Actualisation de votre serveur plex ...\n")
 
-input("Merci d'avoir utilisé Wawacity Downloader !\n"
+    if plex_refresh.refresh(config) == "200":
+        print(f"\n{Fore.GREEN}Serveur actualisé avec succès{Style.RESET_ALL}\n")
+    else:
+        print(f"{Fore.RED}\nEchec de l'actualisation du serveur{Style.RESET_ALL}\n")
+
+input("\n\nMerci d'avoir utilisé Wawacity Downloader !\n"
       "Appuyez sur Entrer pour quitter...")
 
 
