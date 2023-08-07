@@ -859,7 +859,7 @@ if dl_site == "Uptobox":
 print(f"\n\n{Style.RESET_ALL}Début du téléchargement\n")
 wget.download(lien_film, out=f"{dl_dir}/{file_name}")
 
-print(f"{Fore.GREEN}\n\nVotre fichier a été téléchargé ici : {dl_dir}\\{file_name}\n\n{Style.RESET_ALL}")
+print(f"{Fore.GREEN}\n\nVotre fichier a été téléchargé ici : {dl_dir}/{file_name}\n\n{Style.RESET_ALL}")
 
 if "SERVER_IP" in config and "PORT" in config and "TOKEN" in config:
     print("Actualisation de votre serveur plex ...\n")

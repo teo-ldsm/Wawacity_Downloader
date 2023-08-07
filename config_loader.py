@@ -57,7 +57,7 @@ def load() -> dict:
 
         except:
 
-            print("Le fichier \'config.txt\' est mal construit. Appuyez sur Entrer le reconstruire automatiquement.")
+            print("Le fichier \'config.txt\' est mal rempli. Appuyez sur Entrer le reconstruire automatiquement.")
             input()
 
             file.close()
@@ -119,18 +119,18 @@ def build_config() -> None:
                "# - ADDRESS : Adresse actuelle du site wawacity. Cette valeur est remplie automatiquement\n"
                "# - PATH : Les medias seront téléchargés dans ce dossier \n"
                "# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme "
-               "normalement pour que la valeur soit remplie automatiquement\n"
-               "Vous pouvez ajouter une seconde valeur de secours qui sera utilisé si la première n'es pas disponible\n"
-               "Les deux valeurs doivent être séparées avec une virgule\n"
+               "# normalement pour que la valeur soit remplie automatiquement\n"
+               "# Vous pouvez ajouter une seconde valeur de secours qui sera utilisée si la première n'es pas disponible\n"
+               "# Les deux valeurs doivent être séparées avec une virgule\n"
                "# - SITE : Site par défaut ou télécharger les médias. Doit être défini par \'1fichier\' "
-               "ou \'Uptobox\'. Les autres sites ne sont pas encore pris en charges\n"
+               "# ou \'Uptobox\'. Les autres sites ne sont pas encore pris en charges\n"
                "# - METHOD : Methode à utiliser pour valider le captcha. Doit être défini par \'1\' ou \'2\'\n"
                "#       + Methode 1 : Avec l'application mobile CaptchaSkipper (Android uniquement)\n"
                "#       + Methode 2 : Depuis une fenêtre Chrome (Windows uniquement, beaucoup de popups et de pubs)\n"
                "# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le "
-               "compte a rebours du site 1fichier. Doit être défini par \'OUI\' ou \'NON\'\n"
+               "# compte a rebours du site 1fichier. Doit être défini par \'OUI\' ou \'NON\'\n"
                "# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le "
-               "programme normalement pour que la valeur soit remplie automatiquement\n"
+               "# programme normalement pour que la valeur soit remplie automatiquement\n"
                "#ADDRESS=\n"
                "#PATH=\n"
                "#QUALITY=\n"
@@ -139,7 +139,7 @@ def build_config() -> None:
                "#SKIP_COUNTDOWN=\n"
                "#CARTE_RES=\n\n"
                "# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser "
-               "après chaque téléchargement \n"
+               "#après chaque téléchargement \n"
                "#SERVER_IP=\n"
                "PORT=32400\n"
                "#TOKEN=")
@@ -217,7 +217,8 @@ def demande(msg: str = ""):
 
 
 if __name__ == '__main__':
-    ask_help("config_loader")
+    # ask_help("config_loader")
+    print(load())
 
     # TODO FACULTATIF Faire un système pour lancer config_loader tout seul
 

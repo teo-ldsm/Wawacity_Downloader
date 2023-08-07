@@ -3,13 +3,15 @@
 # Les champs seront remplis automatiquement si non précisé ici 
 # - ADDRESS : Adresse actuelle du site wawacity. Cette valeur est remplie automatiquement
 # - PATH : Les medias seront téléchargés dans ce dossier 
-# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme normalement pour que la valeur soit remplie automatiquement
-# - SITE : Site par défaut ou télécharger les médias. Doit être défini par '1fichier' ou 'Uptobox'. Les autres sites ne sont pas encore pris en charges
+# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme # normalement pour que la valeur soit remplie automatiquement
+# Vous pouvez ajouter une seconde valeur de secours qui sera utilisée si la première n'es pas disponible
+# Les deux valeurs doivent être séparées avec une virgule
+# - SITE : Site par défaut ou télécharger les médias. Doit être défini par '1fichier' # ou 'Uptobox'. Les autres sites ne sont pas encore pris en charges
 # - METHOD : Methode à utiliser pour valider le captcha. Doit être défini par '1' ou '2'
 #       + Methode 1 : Avec l'application mobile CaptchaSkipper (Android uniquement)
 #       + Methode 2 : Depuis une fenêtre Chrome (Windows uniquement, beaucoup de popups et de pubs)
-# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le compte a rebours du site 1fichier. Doit être défini par 'OUI' ou 'NON'
-# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le programme normalement pour que la valeur soit remplie automatiquement
+# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le # compte a rebours du site 1fichier. Doit être défini par 'OUI' ou 'NON'
+# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le # programme normalement pour que la valeur soit remplie automatiquement
 #ADDRESS=
 #PATH=
 #QUALITY=
@@ -18,7 +20,7 @@
 #SKIP_COUNTDOWN=
 #CARTE_RES=
 
-# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser après chaque téléchargement 
+# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser #après chaque téléchargement 
 #SERVER_IP=
 PORT=32400
 #TOKEN=

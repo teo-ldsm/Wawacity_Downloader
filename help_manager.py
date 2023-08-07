@@ -61,12 +61,26 @@ def config_loader_help():
 def plex_refresh_help():
     print("\n\n\nAide pour plex_refresh:\n\n\n"
           "plex_refresh est un utilitaire pour réactualiser toutes les bibliothèques d'un serveur plex\n"
-          "Pour l'utiliser, il faut avoir complété les champs SERVER_IP, PORT et TOKEN dans config.txt")
+          "Pour l'utiliser, il faut avoir complété les champs SERVER_IP, PORT et TOKEN dans config.txt\n"
+          "Il suffit de lancer \"python plex_refresh.py\". Le programme renverra la réponse de votre serveur.\n"
+          "Si la réponse est \"OK\", c'est que le programme s'est terminé correctement.\n\n\n")
 
 
 def wget_help():
     print("\n\n\nAide pour wget:\n\n\n"
-          "")
+          "Download utility as an easy way to get file from the net\n"
+          "python -m wget <URL>\n"
+          "python wget.py <URL>\n\n"
+          
+          "Downloads: http://pypi.python.org/pypi/wget/\n"
+          "Development: http://bitbucket.org/techtonik/python-wget/\n\n"
+       
+          "wget.py is not option compatible with Unix wget utility,\n"
+          "to make command line interface intuitive for new people.\n\n"
+    
+          "Public domain by anatoly techtonik <techtonik@gmail.com>\n"
+          "Also available under the terms of MIT license\n"
+          "Copyright (c) 2010-2015 anatoly techtonik)\n\n\n")
 
 
 def help_manager_help():
