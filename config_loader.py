@@ -217,7 +217,7 @@ def demande(msg: str = ""):
 
 
 if __name__ == '__main__':
-    # ask_help("config_loader")
+    ask_help("config_loader")
     print(load())
 
     # TODO FACULTATIF Faire un système pour lancer config_loader tout seul
