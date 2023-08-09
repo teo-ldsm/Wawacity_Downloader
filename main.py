@@ -1,3 +1,4 @@
+import os
 import sys
 
 from help_manager import ask_help
@@ -100,9 +101,13 @@ if latest_version != version:
     if rep in ("OUI", "O"):
         package_url = None
         for asset in latest_realease['assets']:
-            if asset["name"].startswith("WawacityDownloader"):
-                package_url = asset["browser_download_url"]
-                break
+            if asset["name"].startswith("wawacity_downloader"):
+                if os.name == "nt" and "windows" in asset["name"]:
+                    package_url = asset["browser_download_url"]
+                    break
+                if os.name != "nt" and "linux" in asset["name"]:
+                    package_url = asset["browser_download_url"]
+                    break
 
         if package_url is not None:
             parent_dir = str(pathlib.Path(__file__).parent.parent.absolute())
