@@ -208,10 +208,10 @@ try:
 except:
     print(f"{Style.RESET_ALL}\n\nLien invalide\n"
           f"Récupération du nouveau lien ...{Fore.BLACK}")
-    driver.get("https://fulldeals.fr/wawacity-adresse-officielle-site-films-series-gratuits/.html")
+    driver.get("https://www.astuces-aide-informatique.info/17934/nouvelle-adresse-wawacity")
 
-    lien_wawacity = driver.find_element(By.XPATH, "//strong/a[contains(@href,\'https://www.wawacity.\')]")
-    lien_wawacity = lien_wawacity.text
+    lien_wawacity = driver.find_element(By.XPATH, "//p/a[contains(@href,\'https://www.wawacity.\')]")
+    lien_wawacity = lien_wawacity.text.removeprefix("https://")
 
     print(f"{Fore.GREEN}Lien trouvé : {lien_wawacity}{Style.RESET_ALL}\n")
 
