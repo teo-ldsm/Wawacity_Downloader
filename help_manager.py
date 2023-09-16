@@ -29,7 +29,8 @@ def main_help():
           "respecter l'orthographe au maximum.\n\n\n"
           "\nListe des commandes:\n\n"
           "-h, --help \t\t|\tAffiche cette page d'aide\n"
-          "-f <\"titre_du_film\">\t|\tLance le programme en mode auto\n\n"
+          "-f <\"titre_du_film\">\t|\tLance le programme en mode auto\n"
+          "-d \t\t\t|\tDebug mode : lance le programme en mode normal en affichant tous les messages d'erreurs\n\n"
           "Exemples:\n\n"
           "python main.py \t\t\t\t (Mode normal)\n"
           "python main.py -f \"Titanic\" \t\t (Mode automatique, le programme va télécharger le film Titanic)\n\n\n")

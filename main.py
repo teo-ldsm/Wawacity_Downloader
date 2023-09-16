@@ -8,7 +8,7 @@ from config_loader import *
 if __name__ == '__main__':
     venv_init()
 
-# ask_help("main")
+ask_help("main")
 
 if os.name == 'nt':
     import winreg
