@@ -6,8 +6,6 @@ if __name__ == '__main__':
     venv_init()
     ask_help("recup_lien_1fichier")
 
-from colorama import Fore, Style
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -17,21 +15,59 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 import sys
 
+args = sys.argv
+
+
+if "-d" in args:
+    class Fore:
+        BLACK = ""
+        RED = ""
+        GREEN = ""
+        YELLOW = ""
+        BLUE = ""
+        MAGENTA = ""
+        CYAN = ""
+        WHITE = ""
+        RESET = ""
+        LIGHTBLACK_EX = ""
+        LIGHTRED_EX = ""
+        LIGHTGREEN_EX = ""
+        LIGHTYELLOW_EX = ""
+        LIGHTBLUE_EX = ""
+        LIGHTMAGENTA_EX = ""
+        LIGHTCYAN_EX = ""
+        LIGHTWHITE_EX = ""
+
+
+    class Style:
+        RESET_ALL = ""
+
+else:
+    from colorama import Fore, Style
+
 
 def driver_init():
     print(f"\n\nInitialising...\n{Fore.BLACK}")
 
+    chrome_path = 'venv\\Chrome\\GoogleChromePortable64\\App\\Chrome-bin\\chrome.exe'
     # options = Options()
     service = Service()
     options = webdriver.ChromeOptions()
 
+    options.add_argument(chrome_path)
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--lang=fr')
+    options.add_argument('--disable-extensions')
+    options.binary_location = chrome_path
+
+    # service = ChromeService(executable_path=chromedriver_path)
 
     # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    driver = webdriver.Chrome(service=service, options=options)
+    # driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Chrome(options)
+    # driver = webdriver.Chrome("venv/Lib/site-packages/chromedriver-win64")
     driver.implicitly_wait(10)
     print(f"{Fore.GREEN}Init OK !\n{Style.RESET_ALL}")
 
