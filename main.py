@@ -233,6 +233,7 @@ search.submit()
 
 def recup_results(num_page):
     liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
+    liste_dates = driver.find_elements(By.XPATH, "//a[contains(@href,\'?p=films&year=\')]")
 
     if len(liste_resultats) == 0:
         input(f"\n{Fore.RED}Aucun résultat trouvé.\n"
@@ -240,9 +241,13 @@ def recup_results(num_page):
         exit(1)
 
     liens_resultats = dict()
+    dates = dict()
     for i in liste_resultats:
         title = i.text[:i.text.index(" [")]
         liens_resultats[title] = i.get_attribute("href")
+        dates[title] = liste_dates[liste_resultats.index(i)].text
+
+    titre_correct = True
 
     if mode_auto and ("TITLE" in config):
         def find_closest_title(dictionary, title):
@@ -284,7 +289,7 @@ def recup_results(num_page):
         titre = find_closest_title(liens_resultats, config["TITLE"])
         lien = liens_resultats[titre]
 
-        print(f"{Fore.GREEN}Titre réécupéré : {titre}{Style.RESET_ALL}")
+        print(f"{Fore.GREEN}Titre récupéré : {titre} ({dates[titre]}){Style.RESET_ALL}\n")
 
         # def check_input():
         #     global is_incorrect
@@ -292,31 +297,37 @@ def recup_results(num_page):
         #     is_incorrect = True
         #
         # def validation():
-        #     valeur = 42  # La valeur à valider
-        #     print("La valeur à valider est :", valeur)
         #
-        #     print("Appuyez sur Entrée si la valeur est incorrecte.")
+        #     import multiprocessing
+        #
+        #     print("Appuyez sur Entrée si le titre récupéré est incorrect.")
         #
         #     global is_incorrect
         #     is_incorrect = False
         #
-        #     input_thread = threading.Thread(target=check_input)
-        #     input_thread.daemon = True  # Définit le thread comme un thread démon
+        #     # input_thread = threading.Thread(target=check_input)
+        #     input_thread = multiprocessing.Process(target=check_input())
+        #     # input_thread.daemon = True  # Définit le thread comme un thread démon
         #     input_thread.start()
         #
         #     debut_temporisation = time.time()
         #     while True:
         #         if is_incorrect:
-        #             print("La valeur est incorrecte.")
-        #             break
+        #             print(f"\n\n{Fore.LIGHTYELLOW_EX}Opération annulée, vous avez indiqué que le titre était incorrect\n"
+        #                   f"Veuillez choisir un titre manuellement{Style.RESET_ALL}\n\n")
+        #             return False
         #
-        #         if time.time() - debut_temporisation > 5:
-        #             print("Temps écoulé. La valeur est considérée comme valide.")
-        #             break
+        #         if time.time() - debut_temporisation > 7:
+        #             print("Temps écoulé. La titre est considérée comme valide.")
+        #             input_thread.terminate()
+        #             return True
         #
         #         time.sleep(0.1)
         #
-        # validation()
+        # titre_correct = validation()
+        #
+        # print("bite")
+        # input("Zgueg")
 
         # ^^^^ Fonctionne mais le thread reste actif pendant toute l'exécution du programme
 
@@ -352,12 +363,12 @@ def recup_results(num_page):
         # TODO Faire un compte a rebours de 5 secondes qui demande d'appuyer sur entrée si le titre est pas bon.
         # TODO Si c'est le cas, relancer la recherche en page suivante
 
-    else:
+    if not mode_auto or not ("TITLE" in config) or not titre_correct:
         print(f"{Fore.GREEN}\nVoici les résultats\n{Style.RESET_ALL}")
         index_liens = []
         n = 1
         for i in liens_resultats:
-            print(f"{n} : {i}")
+            print(f"{n} : {i} ({dates[i]})")
             index_liens.append(i)
             n += 1
 
@@ -576,7 +587,7 @@ print(f"\n\n{Fore.LIGHTCYAN_EX}#################################################
 
 choix_valide = False
 methode = None
-while not choix_valide:
+while not choix_valide:             # TODO Vérifier si tu ne peut pat etre bloqué ici indéfiniment avec le mode auto
     if not mode_auto or "METHOD" not in config:
         methode = input(f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
                         f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n\n"
@@ -648,7 +659,7 @@ elif methode == "2":
     key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe')
     chrome_path = winreg.QueryValue(key, None)
 
-    input(f"\n\nUne fenêtre chrome va s'ouvrir. Elle contient le captcha qu'il faut résoudre.\n"
+    input(f"{Style.RESET_ALL}\n\nUne fenêtre chrome va s'ouvrir. Elle contient le captcha qu'il faut résoudre.\n"
           f"Une fois que le captcha est résolu, vous devez copier-coller dans cette fenêtre le lien du film qui "
           f"commence par \"https://{dl_site.lower()}...\n"
           f"Le site fait apparaitre de nombreuses popups inutiles. Tout ce passe sur la première page ouverte.\n"

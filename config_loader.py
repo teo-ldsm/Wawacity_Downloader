@@ -6,10 +6,14 @@ from help_manager import ask_help
 def venv_init():
 
     if os.name == 'nt':
-        sys.path.insert(0, './venv/Scripts')
+        # sys.path.insert(0, './venv/Scripts')
+        exec(open("venv/Scripts/activate_this.py").read(), {'__file__': "venv/Scripts/activate_this.py"})
     else:
-        sys.path.insert(0, './venv/bin')
-    import activate_this
+    #     sys.path.insert(0, './venv/bin')
+        exec(open("venv/bin/activate_this.py").read(), {'__file__': "venv/bin/activate_this.py"})
+    # import activate_this
+
+
 
 
 if __name__ == '__main__':
