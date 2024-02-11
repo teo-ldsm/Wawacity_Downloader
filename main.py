@@ -32,7 +32,7 @@ import wget
 from recup_lien_1fichier import *
 
 
-version = "v1.1.1-beta"     # TODO Modifier le numéro de version
+version = "v1.1.2-beta"     # TODO Modifier le numéro de version
 
 if os.name == 'nt':  # Windows
     os.system('cls')
