@@ -49,7 +49,7 @@ else:
 def driver_init():
     print(f"\n\nInitialising...\n{Fore.BLACK}")
 
-    chrome_path = 'venv\\Chrome\\GoogleChromePortable64\\App\\Chrome-bin\\chrome.exe'
+    chrome_path = 'venv311\\Chrome\\GoogleChromePortable64\\App\\Chrome-bin\\chrome.exe'
     # options = Options()
     service = Service()
     options = webdriver.ChromeOptions()
@@ -67,7 +67,7 @@ def driver_init():
     # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     # driver = webdriver.Chrome(service=service, options=options)
     driver = webdriver.Chrome(options)
-    # driver = webdriver.Chrome("venv/Lib/site-packages/chromedriver-win64")
+    # driver = webdriver.Chrome("venv311/Lib/site-packages/chromedriver-win64")
     driver.implicitly_wait(10)
     print(f"{Fore.GREEN}Init OK !\n{Style.RESET_ALL}")
 
@@ -96,7 +96,7 @@ def recup_lien(lien) -> tuple[str, str]:
         print(f"{Style.RESET_ALL}Vérification de la présence du compte a rebours{Fore.BLACK}")
         btn2 = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.LINK_TEXT, "Cliquer ici pour télécharger le fichier")))
-        print(f"{Fore.GREEN}Aucun compte a rebours{Style.RESET_ALL}")
+        print(f"{Fore.GREEN}Aucun compte a rebours{Fore.BLACK}")
 
     except KeyboardInterrupt:
         exit()

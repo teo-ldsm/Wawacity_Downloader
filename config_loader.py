@@ -7,17 +7,17 @@ def venv_init():
 
     if os.name == 'nt':
         # sys.path.insert(0, './venv/Scripts')
-        exec(open("venv/Scripts/activate_this.py").read(), {'__file__': "venv/Scripts/activate_this.py"})
+        exec(open("venv311/Scripts/activate_this.py").read(), {'__file__': "venv311/Scripts/activate_this.py"})
     else:
-    #     sys.path.insert(0, './venv/bin')
-        exec(open("venv/bin/activate_this.py").read(), {'__file__': "venv/bin/activate_this.py"})
+        # sys.path.insert(0, './venv/bin')
+        exec(open("venv311_linux/bin/activate_this.py").read(), {'__file__': "venv311_linux/bin/activate_this.py"})
     # import activate_this
-
-
 
 
 if __name__ == '__main__':
     venv_init()
+    from colorama import Fore, Style
+
 
 
 def load() -> dict:
@@ -49,7 +49,17 @@ def load() -> dict:
 
         [config_tmp.remove(i) for i in a_supp]
 
+        lst_plateformes = config_tmp[config_tmp.index("PLATFORMS="):]
+
         config = dict()
+
+        if len(lst_plateformes) > 1:
+            config["PLATFORMS"] = lst_plateformes[1:]
+            [config_tmp.pop() for _ in range(len(lst_plateformes))]
+
+        else:
+            config_tmp.pop()
+
         try:
             for i in config_tmp:
                 tmp = i.rsplit("=")
@@ -75,7 +85,6 @@ def load() -> dict:
 
 
 def verify_config(config: dict) -> dict:
-    from colorama import Fore, Style
     if "PATH" in config:
         if not os.path.exists(config["PATH"].replace("\\", "/")):
             print(f"{Fore.LIGHTYELLOW_EX}Le chemin spécifié dans config.txt à la valeur \'PATH\' "
@@ -112,7 +121,6 @@ def verify_config(config: dict) -> dict:
 
 
 def build_config() -> None:
-    from colorama import Fore, Style
     print(f"\n\n{Fore.LIGHTYELLOW_EX}!! ATTENTION !! \n"
           f"Toutes les données de \'config.txt\' vont être effacées. Veuillez les sauvegarder et appuyer sur Entrer{Style.RESET_ALL}")
     input()
@@ -142,11 +150,16 @@ def build_config() -> None:
                "#METHOD=\n"
                "#SKIP_COUNTDOWN=\n"
                "#CARTE_RES=\n\n"
-               "# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser "
-               "#après chaque téléchargement \n"
-               "#SERVER_IP=\n"
-               "PORT=32400\n"
-               "#TOKEN=")
+               "# Vous pouvez ici retirer les \"#\" devant les plateformes que vous payez. \n"
+               "# Le programme vous préviendra si vous essayez de télécharger un film déjà présent sur l'une de ces plateformes\n\n"
+               "PLATFORMS=\n"
+               "# Netflix\n"
+               "# Canal+\n"
+               "# Amazon Prime Video\n"
+               "# Disney Plus\n"
+               "# Apple TV Plus\n"
+               "# Crunchyroll\n"
+               "# Anime Digital Networks\n")
 
     file.close()
 
@@ -220,8 +233,11 @@ def demande(msg: str = ""):
     return rep
 
 
+config = load()
+
+
 if __name__ == '__main__':
-    ask_help("config_loader")
+    # ask_help("config_loader")
     print(load())
 
     # TODO FACULTATIF Faire un système pour lancer config_loader tout seul

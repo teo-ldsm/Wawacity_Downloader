@@ -1,35 +1,28 @@
 import os
 import sys
 
-from help_manager import ask_help
-import plex_refresh
 from config_loader import *
+from help_manager import ask_help
+
 
 if __name__ == '__main__':
     venv_init()
 
 ask_help("main")
 
-if os.name == 'nt':
-    import winreg
-
-import json
+from colorama import Fore, Style
+import plex_refresh
+from just_watch import where_to_watch
 import pathlib
-import subprocess
-import requests
 import time
 import threading
 from flask import Flask, request
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
+
+
 
 import wget
 from recup_lien_1fichier import *
+from updater import check_download_extract
 
 
 version = "v1.1.2-beta"     # TODO Modifier le numéro de version
@@ -39,7 +32,7 @@ if os.name == 'nt':  # Windows
 else:  # Linux, Mac OS X
     os.system('clear')
 
-config = load()
+# config = load()
 
 args = sys.argv
 series, mode_auto = False, False
@@ -59,7 +52,6 @@ elif "-s" in args:
 #     mode_auto = True
 # else:
 #     mode_auto = False
-
 
 if "-d" in args:
     class Fore:
@@ -88,55 +80,10 @@ if "-d" in args:
 else:
     from colorama import Fore, Style
 
+check_download_extract(version)
 
-print("\n\n\nVérification des mises a jour ...\n\n")
-api_url = 'https://api.github.com/repos/teo-ldsm/Wawacity_Downloader/releases/latest'
-response = requests.get(api_url)
-latest_realease = json.loads(response.text)
-latest_version = latest_realease["tag_name"]
-
-if latest_version != version:
-    rep = demande(f'{Fore.GREEN}Une nouvelle version est disponible: {latest_version}. Voulez vous la télécharger ?{Style.RESET_ALL}')
-
-    if rep in ("OUI", "O"):
-        package_url = None
-        for asset in latest_realease['assets']:
-            if asset["name"].startswith("wawacity_downloader"):
-                if os.name == "nt" and "windows" in asset["name"]:
-                    package_url = asset["browser_download_url"]
-                    break
-                if os.name != "nt" and "linux" in asset["name"]:
-                    package_url = asset["browser_download_url"]
-                    break
-
-        if package_url is not None:
-            parent_dir = str(pathlib.Path(__file__).parent.parent.absolute())
-            package_name = wget.detect_filename(package_url)
-            print(f"\nDébut du téléchargement depuis {package_url}\n")
-
-            wget.download(package_url, out=f"{parent_dir}\\{package_name}")
-
-            input(f"\n\nVotre fichier a été téléchargé ici : {parent_dir}\\{package_name}\n"
-                  f"Vous pouvez supprimer cette version et extraire la nouvelle a la place\n"
-                  f"{Fore.LIGHTYELLOW_EX}Attention ! Pensez à sauvegarder le contenu de config.txt !{Style.RESET_ALL}\n"
-                  f"Appuyez sur Entrer pour quitter ...")
-            exit(0)
-
-        else:
-            input("Une erreur est survenue durant la recherche de mise à jour\n"
-                  "Vous pouvez télécharger manuellement la mise a jour ici : "
-                  "\"https://github.com/teo-ldsm/Wawacity_Downloader/releases/\"\n"
-                  "Appuyez sur Entrer pour quitter ...")
-            exit(1)
-
-else:
-    print(f"\n{Fore.GREEN}Le programme est a jour.{Style.RESET_ALL}\n\n")
 
 # TODO Faire un try pour vérifier si tt les bibliothèques sont la
-
-
-# TODO Verifier que chrome est installé
-
 
 # ----------Initialisation du driver---------- #
 
@@ -408,17 +355,26 @@ def recup_results(num_page):
                 input(f"{Fore.RED}Vous avez atteint la dernière page.{Style.RESET_ALL}\n"
                       f"Essayez de relancer la recherche avec une orthographe différente.\n"
                       f"Appuyez sur Entrer pour quitter ...")
+                exit(0)
             else:
                 print(f"{Style.RESET_ALL}\n\nRecherche des résultats sur la page {num_page+1} : \n")
-                lien = recup_results(num_page+1)
+                lien, titre = recup_results(num_page+1)
 
         else:
-            lien = liens_resultats[index_liens[rep - 1]]
+            titre = index_liens[rep - 1]
+            lien = liens_resultats[titre]
 
-    return lien
+    return lien, titre
+
+# TODO Transférer ce système dans just_watch.py pour utiliser le moteur de recherche de justwatch
+#  au lieu de celui de wawacity
+#  TODO Utiliser la distance de levenstein pour déterminer quel est le titre le plus proche renvoyé par
+#   wawacity en lui donnant le résultat de justwatch
 
 
-lien_page_film = recup_results(1)
+print()
+lien_page_film, titre = recup_results(1)
+where_to_watch(titre)
 
 driver.get(lien_page_film)
 
@@ -488,6 +444,9 @@ def selection_manuelle_qualite():
 
 
 if mode_auto and ("QUALITY" in config):
+
+    liens_qualites_bis = liens_qualites
+    liens_qualites = {i.replace("  ", " "): liens_qualites_bis[i] for i in liens_qualites_bis}
 
     if len(config["QUALITY"]) == 2:
         if config["QUALITY"][0] in liens_qualites:
@@ -656,17 +615,28 @@ if methode == "1":
 
 elif methode == "2":
 
-    key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe')
-    chrome_path = winreg.QueryValue(key, None)
+    # ----------ATENTIONNNNNNNNNNNNNNNNNNNN---------- #
+
+    # TODO On peut rendre la methode 2 dispo sous linux en faisant os.startfile(lien_page_captcha) (A TESTER SOUS LINUX)
+
+    # ----------ATENTIONNNNNNNNNNNNNNNNNNNN---------- #
+
+    # key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe')
+    # chrome_path = winreg.QueryValue(key, None)
 
     input(f"{Style.RESET_ALL}\n\nUne fenêtre chrome va s'ouvrir. Elle contient le captcha qu'il faut résoudre.\n"
-          f"Une fois que le captcha est résolu, vous devez copier-coller dans cette fenêtre le lien du film qui "
+          f"Une fois que le captcha est résolu, vous devez copier-coller ci-dessous le lien du film qui "
           f"commence par \"https://{dl_site.lower()}...\n"
           f"Le site fait apparaitre de nombreuses popups inutiles. Tout ce passe sur la première page ouverte.\n"
           f"Une fois le lien copié, fermez l'onglet, puis revenez sur cette fenêtre\n"
           f"Appuyez sur Entrer pour ouvrir chrome ...\n")
 
-    subprocess.run([chrome_path, lien_page_captcha])
+    # subprocess.run([chrome_path, lien_page_captcha])
+
+    if os.name == "nt":	
+    	os.startfile(lien_page_captcha)
+    else:
+    	os.system(f"xdg-open {lien_page_captcha}")
 
     # TODO Demander a ChatGPT pk le programme attends que chrome se ferme pour passer a la suite
 
@@ -682,6 +652,13 @@ if new_url == "":
 
 print(f"{Fore.GREEN}Le captcha a été passé avec succès !{Style.RESET_ALL}\n\n")
 
+
+if "--no_download" in args:
+    input(f"Voici le lien vers votre film : {new_url}\n"
+          "Merci d'avoir utilisé Wawacity Downloader\n\n"
+          "Appuyez sur Enter pour quiter\n\n")
+    exit(0)
+
 lien_valide = False
 while not lien_valide:
     try:
@@ -689,7 +666,6 @@ while not lien_valide:
         driver.get(new_url)
         lien_valide = True
     except:
-
 
         rep = demande(f"{Fore.RED}Connexion impossible.{Style.RESET_ALL}\n"
                       f"Certains sites de téléchargements sont bloqués par certains opérateurs\n"            

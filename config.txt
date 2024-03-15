@@ -20,7 +20,14 @@
 #SKIP_COUNTDOWN=
 #CARTE_RES=
 
-# Retirez les # si vous utilisez un serveur plex et que vous souhaitez l'actualiser #après chaque téléchargement 
-#SERVER_IP=
-PORT=32400
-#TOKEN=
+# Vous pouvez ici retirer les "#" devant les plateformes que vous payez.
+# Le programme vous préviendra si vous essayez de télécharger un film déjà présent sur l'une de ces plateformes
+
+PLATFORMS=
+# Netflix
+# Canal+
+# Amazon Prime Video
+# Disney Plus
+# Apple TV Plus
+# Crunchyroll
+# Anime Digital Networks
