@@ -41,7 +41,7 @@ Pour l'instant, le programme prend en charge les sites de téléchargements suiv
 
 **Uptobox est désactivé à cause d'un bug** 
 
-Si ```main.py``` ne fonctionne pas, lancez ```python main.py debug``` dans 
+Si ```main.py``` ne fonctionne pas, lancez ```python main.py -d``` dans 
 un terminal pour afficher les logs et les erreurs
 
 ```plex_refresh.py``` peut être lancé seul. Il va actualiser les bibliothèques de votre serveur plex. Vous devez avoir complété ```config.txt``` pour le lancer.
