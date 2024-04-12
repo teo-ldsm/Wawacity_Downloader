@@ -4,7 +4,7 @@ from help_manager import ask_help
 from config_loader import *
 if __name__ == '__main__':
     venv_init()
-    ask_help("recup_lien_1fichier")
+    # ask_help("recup_lien_1fichier")
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -49,7 +49,7 @@ else:
 def driver_init():
     print(f"\n\nInitialising...\n{Fore.BLACK}")
 
-    chrome_path = 'venv311\\Chrome\\GoogleChromePortable64\\App\\Chrome-bin\\chrome.exe'
+    chrome_path = 'Chrome\\App\\Chrome-bin\\chrome.exe'
     # options = Options()
     service = Service()
     options = webdriver.ChromeOptions()
@@ -149,3 +149,5 @@ if __name__ == '__main__':
         else:
             print(e)
 
+
+    # TODO Changer tout ceci

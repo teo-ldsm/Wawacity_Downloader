@@ -1,5 +1,8 @@
 import os
 import sys
+
+import pathlib
+
 from help_manager import ask_help
 
 
@@ -15,9 +18,8 @@ def venv_init():
 
 
 if __name__ == '__main__':
-    venv_init()
+    # venv_init()
     from colorama import Fore, Style
-
 
 
 def load() -> dict:
@@ -25,16 +27,17 @@ def load() -> dict:
     try:
         file = open("./config.txt", "r", encoding="UTF-8")
 
-    except:
+    except FileNotFoundError:
 
         rep = demande("Le fichier \'config.txt\' est absent. Voulez vous le reconstruire automatiquement ?")
 
         if rep in ("OUI", "O"):
             build_config()
+            file = open("./config.txt", "r", encoding="UTF-8")
+        else:
+            return dict()
 
-        file = open("./config.txt", "r", encoding="UTF-8")
-
-    finally:
+    else:
         config_tmp = []
 
         for i in file.readlines():
@@ -49,7 +52,10 @@ def load() -> dict:
 
         [config_tmp.remove(i) for i in a_supp]
 
-        lst_plateformes = config_tmp[config_tmp.index("PLATFORMS="):]
+        try:
+            lst_plateformes = config_tmp[config_tmp.index("PLATFORMS="):]
+        except:
+            lst_plateformes = []
 
         config = dict()
 
@@ -76,7 +82,7 @@ def load() -> dict:
 
             file.close()
             build_config()
-            load()
+            return load()
 
         else:
             config = verify_config(config)
@@ -185,6 +191,9 @@ def fill_config(tous: bool = False, address: str = False, path: str = False, qua
         raise ValueError("Les modifications des valeurs du serveur plex doivent être faites avec "
                          "manual=True en argument")
 
+    if not pathlib.Path("config.txt").exists():
+        return None
+
     if manual:
         config = load()
     if tous:
@@ -238,7 +247,7 @@ config = load()
 
 if __name__ == '__main__':
     # ask_help("config_loader")
-    print(load())
+    print(config)
 
     # TODO FACULTATIF Faire un système pour lancer config_loader tout seul
 

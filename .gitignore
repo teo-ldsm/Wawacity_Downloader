@@ -3,3 +3,12 @@ __pycache__/
 ".idea/Utilitaires NAS.iml"
 .idea/workspace.xml
 .idea/misc.xml
+build_executable.ps1
+main.spec
+dist/
+build/
+venv311/
+collections/
+/main.exe
+/Chrome/
+/Chrome/

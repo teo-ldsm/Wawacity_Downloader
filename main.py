@@ -6,9 +6,9 @@ from help_manager import ask_help
 
 
 if __name__ == '__main__':
-    venv_init()
+    # venv_init()
 
-ask_help("main")
+    ask_help("main")
 
 from colorama import Fore, Style
 import plex_refresh
@@ -17,8 +17,6 @@ import pathlib
 import time
 import threading
 from flask import Flask, request
-
-
 
 import wget
 from recup_lien_1fichier import *
@@ -43,6 +41,8 @@ if "-f" in args:
 elif "-s" in args:
     config["TITLE"] = args[args.index("-f") + 1]
     series, mode_auto = True, True
+
+no_download = True if "--no_download" in args else False
 
 # args = [arg.upper() for arg in args]
 
@@ -96,19 +96,26 @@ prgm_dir = str(pathlib.Path(__file__).parent.absolute())
 if "PATH" in config:
     dl_dir = config["PATH"]
 else:
-    dl_dir = prgm_dir
+    if os.name == "nt":
+        dl_dir = pathlib.Path().home() / "Downloads"
+    else:
+        dl_dir = "~/Downloads"
 
-if not mode_auto:
-    rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
-                  f"Ce chemin vous convient-t-il ?")
-
-elif "PATH" in config:
-    print(f"\nDossier de téléchargement récupéré dans config.txt : {dl_dir}\n")
+if no_download:
     rep = None
 
 else:
-    print("\nLa valeur \"PATH\" est absente de config.txt\n\n")
-    rep = "NON"
+    if not mode_auto:
+        rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
+                      f"Ce chemin vous convient-t-il ?")
+
+    elif "PATH" in config:
+        print(f"\nDossier de téléchargement récupéré dans config.txt : {dl_dir}\n")
+        rep = None
+
+    else:
+        print("\nLa valeur \"PATH\" est absente de config.txt\n\n")
+        rep = "NON"
 
 if rep in ("NON", "N"):
 
@@ -633,7 +640,7 @@ elif methode == "2":
 
     # subprocess.run([chrome_path, lien_page_captcha])
 
-    if os.name == "nt":	
+    if os.name == "nt":
     	os.startfile(lien_page_captcha)
     else:
     	os.system(f"xdg-open {lien_page_captcha}")
@@ -653,7 +660,7 @@ if new_url == "":
 print(f"{Fore.GREEN}Le captcha a été passé avec succès !{Style.RESET_ALL}\n\n")
 
 
-if "--no_download" in args:
+if no_download:
     input(f"Voici le lien vers votre film : {new_url}\n"
           "Merci d'avoir utilisé Wawacity Downloader\n\n"
           "Appuyez sur Enter pour quiter\n\n")
