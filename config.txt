@@ -1,33 +1,30 @@
 # Les lignes qui commencent par "#" ne sont pas prises en compte 
 # Veuillez ne pas laisser de champs vide sans un "#" en début de ligne 
-# Les champs seront remplis automatiquement si non précisé ici 
+# Les champs seront remplis automatiquement si non précisé ici
 # - ADDRESS : Adresse actuelle du site wawacity. Cette valeur est remplie automatiquement
 # - PATH : Les medias seront téléchargés dans ce dossier 
-# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme # normalement pour que la valeur soit remplie automatiquement
-# Vous pouvez ajouter une seconde valeur de secours qui sera utilisée si la première n'es pas disponible
-# Les deux valeurs doivent être séparées avec une virgule
-# - SITE : Site par défaut ou télécharger les médias. Doit être défini par '1fichier' # ou 'Uptobox'. Les autres sites ne sont pas encore pris en charges
+# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme normalement pour que la valeur soit remplie automatiquement
+# - SITE : Site par défaut ou télécharger les médias. Doit être défini par '1fichier' ou 'Uptobox'. Les autres sites ne sont pas encore pris en charges
 # - METHOD : Methode à utiliser pour valider le captcha. Doit être défini par '1' ou '2'
 #       + Methode 1 : Avec l'application mobile CaptchaSkipper (Android uniquement)
 #       + Methode 2 : Depuis une fenêtre Chrome (Windows uniquement, beaucoup de popups et de pubs)
-# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le # compte a rebours du site 1fichier. Doit être défini par 'OUI' ou 'NON'
-# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le # programme normalement pour que la valeur soit remplie automatiquement
-#ADDRESS=
-#PATH=
-#QUALITY=
-#SITE=
-#METHOD=
-#SKIP_COUNTDOWN=
-#CARTE_RES=
+# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le compte a rebours du site 1fichier. Doit être défini par 'OUI' ou 'NON'
+# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le programme normalement pour que la valeur soit remplie automatiquement
+ADDRESS=www.wawacity.tokyo
+PATH=C:/Users/Teo/Downloads
+QUALITY=HDLIGHT 1080p MULTI TRUEFRENCH, HDLIGHT 1080p FRENCH
+SITE=1fichier
+METHOD=2
+SKIP_COUNTDOWN=OUI
+CARTE_RES=Wi-Fi
 
-# Vous pouvez ici retirer les "#" devant les plateformes que vous payez.
-# Le programme vous préviendra si vous essayez de télécharger un film déjà présent sur l'une de ces plateformes
-
+# Vous pouvez ici retirer les "#" devant les plateformes que vous payez. Le programme vous
+# préviendra si vous essayez de télécharger un film déjà présent sur l'une de ces plateformes
 PLATFORMS=
-# Netflix
-# Canal+
+Netflix
+Canal+
 # Amazon Prime Video
-# Disney Plus
-# Apple TV Plus
+Disney Plus
+Apple TV Plus
 # Crunchyroll
 # Anime Digital Networks

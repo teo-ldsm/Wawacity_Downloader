@@ -24,6 +24,7 @@ from updater import check_download_extract
 
 
 version = "v1.1.3-beta"     # TODO Modifier le numéro de version
+# TODO MODIFIER AUSSI LE NUM DE VERSION DANS L'INSTALLATEUR
 
 if os.name == 'nt':  # Windows
     os.system('cls')
