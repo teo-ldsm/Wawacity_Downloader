@@ -37,9 +37,6 @@ La version IOS n'est pas encore disponible.
 Pour l'instant, le programme prend en charge les sites de téléchargements suivants :
 
 - 1fichier
-- ~~Uptobox (impossible de télécharger plusieurs films d'affilée)~~
-
-**Uptobox est désactivé à cause d'un bug** 
 
 Si ```main.py``` ne fonctionne pas, lancez ```python main.py -d``` dans 
 un terminal pour afficher les logs et les erreurs
