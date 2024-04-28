@@ -30,6 +30,7 @@ def main_help():
           "\nListe des commandes:\n\n"
           "-h, --help \t\t|\tAffiche cette page d'aide\n"
           "-f <\"titre_du_film\">\t|\tLance le programme en mode auto\n"
+          "--no_download\t|\tAffiche seulement le lien vers le film sans le télécharger"
           "-d \t\t\t|\tDebug mode : lance le programme en mode normal en affichant tous les messages d'erreurs\n\n"
           "Exemples:\n\n"
           "python main.py \t\t\t\t (Mode normal)\n"
@@ -88,6 +89,59 @@ def help_manager_help():
     general_help()
 
 
+def synthax_is_correct(file) -> bool:
+
+    args = sys.argv[1:]
+    args_patern = {
+        "main": {"-d": 0,
+                 "-f": 1,
+                 # "-s": 1,
+                 "--no_download": 0},
+        "recup_lien_1fichier": "any",
+        "config_loader": "no_argument",
+        "help_manager": "no_argument",
+        "just_watch": "no_argument"
+    }
+
+    no_args_allowed = ("main", "config_loader", "just_watch", "help_manager")
+
+    if file in args_patern:
+        patern = args_patern[file]
+    else:
+        return True
+
+    if len(args) == 0 and file not in no_args_allowed:
+        return False
+
+    if patern == "no_argument":
+        return True
+
+    if patern == "any":
+        return False if len(args) < 1 else True
+
+    try:
+        if isinstance(patern, dict) and len(args) >= 1:
+            arg_index = 0
+            while arg_index <= len(args)-1:
+                arg = args[arg_index]
+                if arg not in patern:
+                    return False
+
+                if patern[arg] == 0:
+                    arg_index += 1
+                else:
+                    for i in range(1, patern[arg] + 1):
+                        if args[arg_index + i] in patern:
+                            return False
+                    arg_index += patern[arg] + 1
+            return True
+
+    except IndexError:
+        return False
+
+    return True
+
+
 def display_help(file: str):
     file.removesuffix(".py")
     function_name = file + "_help"
@@ -101,12 +155,12 @@ def display_help(file: str):
 
 def ask_help(file: str):
     args = sys.argv
-    no_args_allowed = ("main", "plex_refresh", "help_manager")
+
     if "-h" in args or "--help" in args:
         display_help(file)
         input("Appuyez sur Entrer pour quitter ...")
         exit()
-    elif args[0] != file + ".py" or (len(args) < 2 and file not in no_args_allowed):
+    elif not synthax_is_correct(file):
         print("\n\nSyntaxe incorrecte !\n\n")
         display_help(file)
         input("Appuyez sur Entrer pour quitter ...")
@@ -121,5 +175,3 @@ if __name__ == '__main__':
     else:
         display_help(args[1])
         input("Appuyez sur Entrer pour quitter ...")
-
-

@@ -22,12 +22,12 @@ def check_download_extract(version):
     latest_version = latest_realease["tag_name"]
 
     if latest_version != version:
-        rep = demande(f'{Fore.GREEN}Une nouvelle version est disponible: {latest_version}. Voulez vous la télécharger ?{Style.RESET_ALL}')
+        rep = demande(f'{Fore.GREEN}Une nouvelle version est disponible: {latest_version}. Voulez-vous mettre a jour ?{Style.RESET_ALL}')
 
         if rep in ("OUI", "O"):
             package_url = None
             for asset in latest_realease['assets']:
-                if asset["name"].startswith("wawacity_downloader"):
+                if asset["name"].startswith("wawacity_downloader_updater"):
                     if os.name == "nt" and "windows" in asset["name"]:
                         package_url = asset["browser_download_url"]
                         break
