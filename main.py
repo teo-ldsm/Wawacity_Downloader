@@ -93,8 +93,8 @@ driver = driver_init()
 
 prgm_dir = str(pathlib.Path(__file__).parent.absolute())
 
-if "PATH" in config:
-    dl_dir = config["PATH"]
+if "DOWNLOAD_PATH" in config:
+    dl_dir = config["DOWNLOAD_PATH"]
 else:
     if os.name == "nt":
         dl_dir = pathlib.Path().home() / "Downloads"
@@ -109,12 +109,12 @@ else:
         rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
                       f"Ce chemin vous convient-t-il ?")
 
-    elif "PATH" in config:
+    elif "DOWNLOAD_PATH" in config:
         print(f"\nDossier de téléchargement récupéré dans config.txt : {dl_dir}\n")
         rep = None
 
     else:
-        print("\nLa valeur \"PATH\" est absente de config.txt\n\n")
+        print("\nLa valeur \"DOWNLOAD_PATH\" est absente de config.txt\n\n")
         rep = "NON"
 
 if rep in ("NON", "N"):

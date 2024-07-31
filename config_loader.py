@@ -91,11 +91,11 @@ def load() -> dict:
 
 
 def verify_config(config: dict) -> dict:
-    if "PATH" in config:
-        if not os.path.exists(config["PATH"].replace("\\", "/")):
-            print(f"{Fore.LIGHTYELLOW_EX}Le chemin spécifié dans config.txt à la valeur \'PATH\' "
+    if "DOWNLOAD_PATH" in config:
+        if not os.path.exists(config["DOWNLOAD_PATH"].replace("\\", "/")):
+            print(f"{Fore.LIGHTYELLOW_EX}Le chemin spécifié dans config.txt à la valeur \'DOWNLOAD_PATH\' "
                   f"n'existe pas{Style.RESET_ALL}\n")
-            config.pop("PATH")
+            config.pop("DOWNLOAD_PATH")
 
     if "SITE" in config:
         if config["SITE"].upper() not in ("1FICHIER", "UPTOBOX DESACTIVE"):     # TODO Enlever ceci
@@ -122,6 +122,13 @@ def verify_config(config: dict) -> dict:
                   f"Il ne peut y avoir que 2 qualité")
             config.pop("QUALITY")
 
+    if "CHROME_PATH" in config:
+        if not os.path.exists(config["CHROME_PATH"].replace("\\", "/")):
+            print(f"{Fore.LIGHTYELLOW_EX}Le chemin spécifié dans config.txt à la valeur \'CHROME_PATH\' "
+                  f"n'existe pas{Style.RESET_ALL}\n")
+            config.pop("CHROME_PATH")
+
+
     return config
     # TODO Verifier que les arguments de config sont bons (quality existe)
 
@@ -135,7 +142,7 @@ def build_config() -> None:
                "# Veuillez ne pas laisser de champs vide sans un \"#\" en début de ligne \n"
                "# Les champs seront remplis automatiquement si non précisé ici \n"
                "# - ADDRESS : Adresse actuelle du site wawacity. Cette valeur est remplie automatiquement\n"
-               "# - PATH : Les medias seront téléchargés dans ce dossier \n"
+               "# - DOWNLOAD_PATH : Les medias seront téléchargés dans ce dossier \n"
                "# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme "
                "# normalement pour que la valeur soit remplie automatiquement\n"
                "# Vous pouvez ajouter une seconde valeur de secours qui sera utilisée si la première n'es pas disponible\n"
@@ -147,14 +154,17 @@ def build_config() -> None:
                "#       + Methode 2 : Depuis une fenêtre Chrome (Windows uniquement, beaucoup de popups et de pubs)\n"
                "# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le "
                "# compte a rebours du site 1fichier. Doit être défini par \'OUI\' ou \'NON\'\n"
+               "# - CHROME_PATH : (Facultatif) Chemin vers l'exécutable Chrome. "
+               "# Remplir uniquement si le programme Chrome n'est pas trouvé ou pour utiliser une version différente de celle du système \n"
                "# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le "
                "# programme normalement pour que la valeur soit remplie automatiquement\n"
                "#ADDRESS=\n"
-               "#PATH=\n"
+               "#DOWNLOAD_PATH=\n"
                "#QUALITY=\n"
                "#SITE=\n"
                "#METHOD=\n"
                "#SKIP_COUNTDOWN=\n"
+               "#CHROME_PATH=\n"
                "#CARTE_RES=\n\n"
                "# Vous pouvez ici retirer les \"#\" devant les plateformes que vous payez. \n"
                "# Le programme vous préviendra si vous essayez de télécharger un film déjà présent sur l'une de ces plateformes\n\n"
@@ -197,9 +207,9 @@ def fill_config(tous: bool = False, address: str = False, path: str = False, qua
     if manual:
         config = load()
     if tous:
-        address, path, quality, site, skip_countdown, carte_res, method, plex = True, True, True, True, True, True, True, True
-    args = {"ADDRESS": address, "PATH": path, "QUALITY": quality, "SITE": site, "METHOD": method,
-            "SKIP_COUNTDOWN": skip_countdown, "CARTE_RES": carte_res, "SERVER_IP": plex, "PORT": plex, "TOKEN": plex}
+        address, download_path, quality, site, skip_countdown, chrome_path, carte_res, method, plex = True, True, True, True, True, True, True, True, True
+    args = {"ADDRESS": address, "DOWNLOAD_PATH": download_path, "QUALITY": quality, "SITE": site, "METHOD": method,
+            "SKIP_COUNTDOWN": skip_countdown, "CHROME_PATH": chrome_path, "CARTE_RES": carte_res, "SERVER_IP": plex, "PORT": plex, "TOKEN": plex}
 
     for i in args:
         if args[i]:

@@ -50,6 +50,9 @@ def driver_init():
     print(f"\n\nInitialising...\n{Fore.BLACK}")
 
     chrome_path = 'Chrome\\App\\Chrome-bin\\chrome.exe'
+    if "CHROME_PATH" in config:
+        chrome_path = config["CHROME_PATH"]
+
     # options = Options()
     service = Service()
     options = webdriver.ChromeOptions()
@@ -60,6 +63,7 @@ def driver_init():
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--lang=fr')
     options.add_argument('--disable-extensions')
+    options.add_argument("--disable-search-engine-choice-screen")
     options.binary_location = chrome_path
 
     # service = ChromeService(executable_path=chromedriver_path)
