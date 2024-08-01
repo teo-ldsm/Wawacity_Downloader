@@ -132,7 +132,7 @@ if rep in ("NON", "N"):
     rep = demande(f"Voulez vous faire de {dl_dir} la valeur par défaut ?")
 
     if rep in ("OUI", "O"):
-        fill_config(path=dl_dir, manual=False)
+        fill_config(download_path=dl_dir, manual=False)
 
 
 def connect_to_wawacity(link):
