@@ -187,8 +187,8 @@ def build_config() -> None:
         fill_config(tous=True)
 
 
-def fill_config(tous: bool = False, address: str = False, path: str = False, quality: str = False, site: str = False,
-                method: str = False, skip_countdown: str = False, carte_res: str = False, plex: bool = False,
+def fill_config(tous: bool = False, address: str = False, download_path: str = False, quality: str = False, site: str = False,
+                method: str = False, skip_countdown: str = False, chrome_path: str = False, carte_res: str = False, plex: bool = False,
                 manual: bool = True) -> None:
     
     if not isinstance(tous, bool):
