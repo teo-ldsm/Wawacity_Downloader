@@ -184,31 +184,48 @@ else:
 print(Fore.BLACK)
 search.submit()
 
+class Movie:
+    def __init__(self, title, date, link) -> None:
+        self.title = title
+        self.date = date
+        self.link = link
 
-def recup_results(num_page):
+uploadDates = dict()
+
+def parse_search_result_page():
     liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
     liste_dates = driver.find_elements(By.XPATH, "//a[contains(@href,\'?p=films&year=\')]")
+    liste_dates_upload = driver.find_elements(By.XPATH, "//span[@class=\'date-text text-muted\']")
+    liens_titres = dict()
+    dates_titres = dict()
+    for index, htmlElement in enumerate(liste_resultats):
+        uploadTitle = htmlElement.text
+        movieTitle = uploadTitle[:uploadTitle.index(" [")]
+        uploadLink = htmlElement.get_attribute("href")
+        uploadDate = liste_dates_upload[index]
+        uploadDates[uploadLink] = uploadDate
+        liens_titres[movieTitle] = htmlElement.get_attribute("href")
+        dates_titres[movieTitle] = liste_dates[index].text
+    movies = dict()
+    for title in liens_titres:
+        movies[title] = Movie(title = title, date = dates_titres[title], link = liens_titres[title])
+    return movies
 
-    if len(liste_resultats) == 0:
+def recup_results(num_page):
+    movies = parse_search_result_page()
+    if len(movies) == 0:
         input(f"\n{Fore.RED}Aucun résultat trouvé.\n"
               f"{Style.RESET_ALL}Appuyez sur Entrer pour quitter...")
         exit(1)
 
-    liens_resultats = dict()
-    dates = dict()
-    for i in liste_resultats:
-        title = i.text[:i.text.index(" [")]
-        liens_resultats[title] = i.get_attribute("href")
-        dates[title] = liste_dates[liste_resultats.index(i)].text
-
     titre_correct = True
 
     if mode_auto and ("TITLE" in config):
-        def find_closest_title(dictionary, title):
+        def find_closest_title(list, title):
             closest_title = None
             min_distance = float('inf')
 
-            for cle in dictionary.keys():
+            for cle in list:
                 distance = levenshtein_distance(cle.lower(), title.lower())
 
                 if distance < min_distance:
@@ -239,11 +256,11 @@ def recup_results(num_page):
 
             return previous_row[-1]
 
-        # Merci ChatGPT
-        titre = find_closest_title(liens_resultats, config["TITLE"])
-        lien = liens_resultats[titre]
+        titles = movies.keys()
+        title = find_closest_title(titles, config["TITLE"])
+        link = movies[title].link
 
-        print(f"{Fore.GREEN}Titre récupéré : {titre} ({dates[titre]}){Style.RESET_ALL}\n")
+        print(f"{Fore.GREEN}Titre récupéré : {title} ({movies[title].date}){Style.RESET_ALL}\n")
 
         # def check_input():
         #     global is_incorrect
@@ -319,11 +336,11 @@ def recup_results(num_page):
 
     if not mode_auto or not ("TITLE" in config) or not titre_correct:
         print(f"{Fore.GREEN}\nVoici les résultats\n{Style.RESET_ALL}")
-        index_liens = []
+        titles = []
         n = 1
-        for i in liens_resultats:
-            print(f"{n} : {i} ({dates[i]})")
-            index_liens.append(i)
+        for title, movie in movies.items():
+            print(f"{n} : {title} ({movie.date})")
+            titles.append(title)
             n += 1
 
         choix_valide = False
@@ -340,16 +357,16 @@ def recup_results(num_page):
                 exit(1)
 
             except:
-                print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_liens)}{Style.RESET_ALL}")
+                print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(titles)}{Style.RESET_ALL}")
                 choix_valide = False
 
             else:
-                if 0 <= rep <= len(index_liens):
+                if 0 <= rep <= len(titles):
                     choix_valide = True
                 else:
-                    print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 0 et {len(index_liens)}{Style.RESET_ALL}")
+                    print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 0 et {len(titles)}{Style.RESET_ALL}")
                     choix_valide = False
-        lien = ""
+        link = ""
         if rep == 0:
             try:
                 print(Fore.BLACK)
@@ -365,13 +382,13 @@ def recup_results(num_page):
                 exit(0)
             else:
                 print(f"{Style.RESET_ALL}\n\nRecherche des résultats sur la page {num_page+1} : \n")
-                lien, titre = recup_results(num_page+1)
+                link, title = recup_results(num_page+1)
 
         else:
-            titre = index_liens[rep - 1]
-            lien = liens_resultats[titre]
+            title = titles[rep - 1]
+            link = movies[title].link
 
-    return lien, titre
+    return link, title
 
 # TODO Transférer ce système dans just_watch.py pour utiliser le moteur de recherche de justwatch
 #  au lieu de celui de wawacity
