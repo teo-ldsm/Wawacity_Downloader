@@ -16,7 +16,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import sys
 
 args = sys.argv
-
+mode_debug = False
 
 if "-d" in args:
     class Fore:
@@ -38,10 +38,11 @@ if "-d" in args:
         LIGHTCYAN_EX = ""
         LIGHTWHITE_EX = ""
 
-
     class Style:
         RESET_ALL = ""
 
+    mode_debug = True
+    
 else:
     from colorama import Fore, Style
 
@@ -58,7 +59,8 @@ def driver_init():
     options = webdriver.ChromeOptions()
 
     options.add_argument(chrome_path)
-    options.add_argument('--headless')
+    if not mode_debug:
+        options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--lang=fr')
