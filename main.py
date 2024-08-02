@@ -164,7 +164,7 @@ except:
           f"Récupération du nouveau lien ...{Fore.BLACK}")
     driver.get("https://www.astuces-aide-informatique.info/17934/nouvelle-adresse-wawacity")
 
-    lien_wawacity = driver.find_element(By.XPATH, "//p/a[contains(@href,\'https://www.wawacity.\')]")
+    lien_wawacity = driver.find_element(By.XPATH, "//p//a[contains(@href,\'https://www.wawacity.\')]")
     lien_wawacity = lien_wawacity.text.removeprefix("https://")
 
     print(f"{Fore.GREEN}Lien trouvé : {lien_wawacity}{Style.RESET_ALL}\n")
@@ -381,7 +381,8 @@ def recup_results(num_page):
 
 print()
 lien_page_film, titre = recup_results(1)
-where_to_watch(titre)
+if "PLATFORMS" in config:
+    where_to_watch(titre)
 
 driver.get(lien_page_film)
 
