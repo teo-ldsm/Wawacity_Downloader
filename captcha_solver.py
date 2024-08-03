@@ -21,10 +21,22 @@ class CaptchaSolver:
 
     @staticmethod
     def methode1(lien_page_captcha, dl_site):
+        
+        def findLocalIpAddress():
+            import socket
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            ip = s.getsockname()[0]
+            s.close()
+            return ip
+        localIp = findLocalIpAddress()
+
         global lien_dl_site
         print(f"{Fore.LIGHTCYAN_EX}\n\nOuvrez l'application Captcha Skipper sur votre téléphone pour valider le captcha.\n"
               f"{Style.RESET_ALL}Vous pouvez trouver l'application ici : "
-              f"\"https://github.com/teo-ldsm/CaptchaSkipper/releases/latset\"\n\n\n")
+              f"\"https://github.com/teo-ldsm/CaptchaSkipper/releases/latset\"\n"
+              f"Connecter l'application sur l'adresse IP {localIp} et le port 5000.\n"
+              f"Attention, le smartphone doit être sur le même réseau Wifi que ce PC.\n\n\n")
 
         app = Flask(__name__)
 
