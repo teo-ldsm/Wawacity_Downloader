@@ -673,12 +673,10 @@ if methode == "1":
 
     def shutdown_server():
         print(Fore.BLACK)
-        func = request.environ.get('werkzeug.server.shutdown')
-        if func is None:
-            print(Style.RESET_ALL)
-            raise RuntimeError('Not running with the Werkzeug Server')
-        func()
+        import signal
+        signal.raise_signal(signal.SIGINT)
         print(Style.RESET_ALL)
+        return "Envoi du signal d'arrêt..."
 
 
     app.run(host="0.0.0.0", port=5000)
