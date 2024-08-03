@@ -199,7 +199,7 @@ def parse_search_result_page():
         uploadTitle = htmlElement.text
         movieTitle = uploadTitle[:uploadTitle.index(" [")]
         uploadLink = htmlElement.get_attribute("href")
-        uploadDate = liste_dates_upload[index]
+        uploadDate = liste_dates_upload[index].text
         uploadDates[uploadLink] = uploadDate
         liens_titres[movieTitle] = htmlElement.get_attribute("href")
         dates_titres[movieTitle] = liste_dates[index].text
@@ -405,7 +405,7 @@ driver.get(lien_page_film)
 # ----------SELECTION QUALITE---------- #
 
 
-lien_page_film = select_quality(driver, mode_auto)
+lien_page_film = select_quality(driver, mode_auto, uploadDates, lien_page_film)
 
 
 # ----------SELECTION QUALITE---------- #
