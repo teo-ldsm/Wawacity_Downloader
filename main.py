@@ -202,7 +202,7 @@ def parse_search_result_page():
         uploadTitle = htmlElement.text
         movieTitle = uploadTitle[:uploadTitle.index(" [")]
         uploadLink = htmlElement.get_attribute("href")
-        uploadDate = liste_dates_upload[index]
+        uploadDate = liste_dates_upload[index].text
         uploadDates[uploadLink] = uploadDate
         liens_titres[movieTitle] = htmlElement.get_attribute("href")
         dates_titres[movieTitle] = liste_dates[index].text
@@ -405,6 +405,24 @@ driver.get(lien_page_film)
 
 liste_qualites = driver.find_elements(By.XPATH, "//ul[@class=\'wa-post-list-ofLinks row readable-post-list\']/li/a")
 
+class MovieUpload:
+    def __init__(self, name, links, size, uploadDate) -> None:
+        self.name = name
+        self.links = links
+        self.size = size
+        self.uploadDate = uploadDate
+    def __repr__(self):
+        return repr(vars(self))
+
+def parseMovieUploadPage(uploadName, uploadUrl):
+    liste_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[2]")
+    liste_liens_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[1]/a")
+    links = {liste_sites[i].text: liste_liens_sites[i].get_attribute("href") for i in range(len(liste_sites))
+               if  "Partie" not in liste_liens_sites[i].text}
+    liste_tailles = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[3]")
+    size = liste_tailles[0].text
+    uploadDate = uploadDates.get(uploadUrl)
+    return MovieUpload(name = uploadName, links = links, size = size, uploadDate=uploadDate)
 
 def supp_spec_car(elt: str):
     elt = elt.replace("[", "", -1)
@@ -425,15 +443,32 @@ liens_qualites[supp_spec_car(driver.find_element(By.XPATH, "//*[@id=\'detail-pag
 
 def selection_manuelle_qualite():
 
-    print(f"\nVoici les qualités disponible pour votre film\n")
+    movieUpload = parseMovieUploadPage(
+        uploadName = supp_spec_car(driver.find_element(By.XPATH, "//*[@id=\'detail-page\']/div[2]/div[1]/i[2]").text.replace("]", "")[1:]),
+        uploadUrl = lien_page_film
+    )
+    movieUploads = {movieUpload.name: movieUpload}
+    for name, url in liens_qualites.items():
+        if url:
+            driver.get(url)
+        else:
+            driver.get(lien_page_film)
+        movieUpload = parseMovieUploadPage(name, url)
+        movieUploads[name] = movieUpload
+    movieUploads = dict(sorted(movieUploads.items()))
+
+    print(f"\nVoici les qualités disponibles pour votre film\n")
 
     index_qualites = sorted([i for i in liens_qualites])
     n = 1
-    for i in index_qualites:
-        if i.rsplit(" ")[0] != index_qualites[n-2].rsplit(" ")[0]:
+    previous_quality_name = None
+    for name, movieUpload in movieUploads.items():
+        quality_name = name.rsplit(" ")[0]
+        if quality_name != previous_quality_name:
             print()
-        print(f"{n}:{i}")
+        print(f"{n}:{name}\t| {movieUpload.size} | {movieUpload.uploadDate}")
         n += 1
+        previous_quality_name = quality_name
 
     print("\n\nSi la qualité que vous souhaitez ne se trouve pas dans la liste, fermez le programme \n"
           "et relancez le en cherchant le titre de votre films dans une autre langue\n"
