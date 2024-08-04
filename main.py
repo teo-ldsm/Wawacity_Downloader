@@ -408,13 +408,15 @@ choix_valide = False
 methode = None
 while not choix_valide:             # TODO Vérifier si tu ne peut pat être bloqué ici indéfiniment avec le mode auto
     if not mode_auto or "METHOD" not in config:
-        methode = input(f"{Style.RESET_ALL}Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
-                        f"Entrez 2 pour résoudre le captcha depuis une fenêtre Firefox\n\n"
-                        f"{Fore.LIGHTYELLOW_EX}Attention ! La methode 2 ne fonctionne que sur Windows\n{Style.RESET_ALL}").upper()
+        methode = input(f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
+                        f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n"
+                        f"Entrez 3 pour résoudre le captcha de manière automatisée (expérimental)\n\n"
+                        f"{Fore.LIGHTYELLOW_EX}Attention ! Les méthodes 2 et 3 ne fonctionnent que depuis "
+                        f"l'interface graphique (ne fonctionnent donc pas en ssh).\n").upper()
     else:
         methode = config["METHOD"]
 
-    if methode in ("1", "2"):
+    if methode in ("1", "2", "3"):
         if methode == "2" and os.name != 'nt':
             print(f"{Fore.RED}Réponse invalide. Vous ne pouvez pas choisir la methode 2 si vous "
                   f"n'êtes pas sur Windows\n{Style.RESET_ALL}")
@@ -422,15 +424,23 @@ while not choix_valide:             # TODO Vérifier si tu ne peut pat être blo
         else:
             choix_valide = True
     else:
-        print(f"{Fore.RED}Réponse invalide. Veuillez entrer 1 ou 2\n{Style.RESET_ALL}")
+        print(f"{Fore.RED}Réponse invalide. Veuillez entrer 1, 2 ou 3\n{Style.RESET_ALL}")
 
 new_url = ""
 
 if methode == "1":
     new_url = CaptchaSolver.methode1(lien_page_captcha, dl_site)
 
-else:
+elif methode == "2":
     new_url = CaptchaSolver.methode2(lien_page_captcha, dl_site)
+
+elif methode == "3":
+    resolved_links = LinkResolver().resolveLinks([lien_page_captcha])
+    new_url = resolved_links[lien_page_captcha]
+
+else:
+    print(f"{Fore.RED}La méthode '{methode}' n'est pas disponible.\n{Style.RESET_ALL}")
+    exit(1)
 
 if new_url == "":
     exit()
