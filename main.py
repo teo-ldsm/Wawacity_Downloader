@@ -21,6 +21,7 @@ from flask import Flask, request
 import wget
 from recup_lien_1fichier import *
 from updater import check_download_extract
+from dl_protect_resolver import LinkResolver
 
 
 version = "v1.1.3-beta"     # TODO Modifier le numéro de version
@@ -609,13 +610,15 @@ methode = None
 while not choix_valide:             # TODO Vérifier si tu ne peut pat etre bloqué ici indéfiniment avec le mode auto
     if not mode_auto or "METHOD" not in config:
         methode = input(f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
-                        f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n\n"
-                        f"{Fore.LIGHTYELLOW_EX}Attention ! La methode 2 ne fonctionne que sur Windows depuis "
-                        f"l'interface graphique (ne fonctionne donc pas en ssh)\n{Style.RESET_ALL}").upper()
+                        f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n"
+                        f"Entrez 3 pour résoudre le captcha de manière automatisée (expérimental)\n\n"
+                        f"{Fore.LIGHTYELLOW_EX}Attention ! Les méthodes 2 et 3 ne fonctionnent que depuis "
+                        f"l'interface graphique (ne fonctionnent donc pas en ssh).\n"
+                        f"La méthode 2 ne fonctionne que sous Windows.\n{Style.RESET_ALL}").upper()
     else:
         methode = config["METHOD"]
 
-    if methode in ("1", "2"):
+    if methode in ("1", "2", "3"):
         if methode == "2" and os.name != 'nt':
             print(f"{Fore.RED}Réponse invalide. Vous ne pouvez pas choisir la methode 2 si vous "
                   f"n'êtes pas sur Windows\n{Style.RESET_ALL}")
@@ -623,7 +626,7 @@ while not choix_valide:             # TODO Vérifier si tu ne peut pat etre bloq
         else:
             choix_valide = True
     else:
-        print(f"{Fore.RED}Réponse invalide. Veuillez entrer 1 ou 2\n{Style.RESET_ALL}")
+        print(f"{Fore.RED}Réponse invalide. Veuillez entrer 1, 2 ou 3\n{Style.RESET_ALL}")
 
 new_url = ""
 
@@ -714,6 +717,10 @@ elif methode == "2":
             break
         else:
             print(f"\n\n{Fore.RED}Le lien que vous avez entré n'est pas valide{Style.RESET_ALL}\n\n")
+
+elif methode == "3":
+    resolved_links = LinkResolver().resolveLinks([lien_page_captcha])
+    new_url = resolved_links[lien_page_captcha]
 
 if new_url == "":
     exit()

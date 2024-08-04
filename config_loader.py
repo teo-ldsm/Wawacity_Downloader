@@ -104,7 +104,7 @@ def verify_config(config: dict) -> dict:
             config.pop("SITE")
 
     if "METHOD" in config:
-        if config["METHOD"] not in ("1", "2"):
+        if config["METHOD"] not in ("1", "2", "3"):
             print(f"{Fore.LIGHTYELLOW_EX}La valeur spécifiée dans config.txt à la valeur \'METHOD\' "
                   f"n'est pas valide{Style.RESET_ALL}\n")
             config.pop("METHOD")
@@ -118,7 +118,7 @@ def verify_config(config: dict) -> dict:
     if "QUALITY" in config:
         if len(config["QUALITY"]) > 2:
             print(f"{Fore.LIGHTYELLOW_EX}La valeur spécifiée dans config.txt à la valeur \'QUALITY\' "
-                  f"n'est pas valide{Style.RESET_ALL}\n"
+                  f"n'est pas valide : {config['QUALITY']}{Style.RESET_ALL}\n"
                   f"Il ne peut y avoir que 2 qualité")
             config.pop("QUALITY")
 
@@ -152,6 +152,7 @@ def build_config() -> None:
                "# - METHOD : Methode à utiliser pour valider le captcha. Doit être défini par \'1\' ou \'2\'\n"
                "#       + Methode 1 : Avec l'application mobile CaptchaSkipper (Android uniquement)\n"
                "#       + Methode 2 : Depuis une fenêtre Chrome (Windows uniquement, beaucoup de popups et de pubs)\n"
+               "#       + Méthode 3 : Résolution automatique avec Chrome, uniquement en mode graphique\n"
                "# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le "
                "# compte a rebours du site 1fichier. Doit être défini par \'OUI\' ou \'NON\'\n"
                "# - CHROME_PATH : (Facultatif) Chemin vers l'exécutable Chrome. "
