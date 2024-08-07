@@ -106,13 +106,13 @@ if no_download:
     rep = None
 
 else:
-    if not mode_auto:
-        rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
-                      f"Ce chemin vous convient-t-il ?")
-
-    elif "DOWNLOAD_PATH" in config:
+    if "DOWNLOAD_PATH" in config:
         print(f"\nDossier de téléchargement récupéré dans config.txt : {dl_dir}\n")
         rep = None
+
+    elif not mode_auto:
+        rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
+                      f"Ce chemin vous convient-t-il ?")
 
     else:
         print("\nLa valeur \"DOWNLOAD_PATH\" est absente de config.txt\n\n")
@@ -130,6 +130,7 @@ if rep in ("NON", "N"):
             print(f"{Fore.RED}Réponse invalide. Le chemin d'accès n'existe pas\n{Style.RESET_ALL}"
                   f"Le chemin doit être sous cette forme : \"C:\\Users\\Fabrice\\Downloads\" par exemple\n")
 
+if "DOWNLOAD_PATH" not in config and not mode_auto and not no_download:
     rep = demande(f"Voulez vous faire de {dl_dir} la valeur par défaut ?")
 
     if rep in ("OUI", "O"):
