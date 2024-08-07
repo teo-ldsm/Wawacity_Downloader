@@ -10,6 +10,7 @@
 # - METHOD : Methode à utiliser pour valider le captcha. Doit être défini par '1' ou '2'
 #       + Methode 1 : Avec l'application mobile CaptchaSkipper (Android uniquement)
 #       + Methode 2 : Depuis une fenêtre Chrome (Windows uniquement, beaucoup de popups et de pubs)
+#       + Méthode 3 : Résolution automatique avec Chrome, uniquement en mode graphique
 # - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le # compte a rebours du site 1fichier. Doit être défini par 'OUI' ou 'NON'
 # - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le # programme normalement pour que la valeur soit remplie automatiquement
 # - CHROME_PATH : (Facultatif) Chemin vers l'exécutable Chrome. Remplir uniquement si Chrome n'est pas trouvé ou pour utiliser une version différente de celle du système  

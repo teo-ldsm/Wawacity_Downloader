@@ -21,6 +21,7 @@ from flask import Flask, request
 import wget
 from recup_lien_1fichier import *
 from updater import check_download_extract
+from dl_protect_resolver import LinkResolver
 
 
 version = "v1.1.3-beta"     # TODO Modifier le numéro de version
@@ -184,31 +185,48 @@ else:
 print(Fore.BLACK)
 search.submit()
 
+class Movie:
+    def __init__(self, title, date, link) -> None:
+        self.title = title
+        self.date = date
+        self.link = link
 
-def recup_results(num_page):
+uploadDates = dict()
+
+def parse_search_result_page():
     liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
     liste_dates = driver.find_elements(By.XPATH, "//a[contains(@href,\'?p=films&year=\')]")
+    liste_dates_upload = driver.find_elements(By.XPATH, "//span[@class=\'date-text text-muted\']")
+    liens_titres = dict()
+    dates_titres = dict()
+    for index, htmlElement in enumerate(liste_resultats):
+        uploadTitle = htmlElement.text
+        movieTitle = uploadTitle[:uploadTitle.index(" [")]
+        uploadLink = htmlElement.get_attribute("href")
+        uploadDate = liste_dates_upload[index].text
+        uploadDates[uploadLink] = uploadDate
+        liens_titres[movieTitle] = htmlElement.get_attribute("href")
+        dates_titres[movieTitle] = liste_dates[index].text
+    movies = dict()
+    for title in liens_titres:
+        movies[title] = Movie(title = title, date = dates_titres[title], link = liens_titres[title])
+    return movies
 
-    if len(liste_resultats) == 0:
+def recup_results(num_page):
+    movies = parse_search_result_page()
+    if len(movies) == 0:
         input(f"\n{Fore.RED}Aucun résultat trouvé.\n"
               f"{Style.RESET_ALL}Appuyez sur Entrer pour quitter...")
         exit(1)
 
-    liens_resultats = dict()
-    dates = dict()
-    for i in liste_resultats:
-        title = i.text[:i.text.index(" [")]
-        liens_resultats[title] = i.get_attribute("href")
-        dates[title] = liste_dates[liste_resultats.index(i)].text
-
     titre_correct = True
 
     if mode_auto and ("TITLE" in config):
-        def find_closest_title(dictionary, title):
+        def find_closest_title(list, title):
             closest_title = None
             min_distance = float('inf')
 
-            for cle in dictionary.keys():
+            for cle in list:
                 distance = levenshtein_distance(cle.lower(), title.lower())
 
                 if distance < min_distance:
@@ -239,11 +257,11 @@ def recup_results(num_page):
 
             return previous_row[-1]
 
-        # Merci ChatGPT
-        titre = find_closest_title(liens_resultats, config["TITLE"])
-        lien = liens_resultats[titre]
+        titles = movies.keys()
+        title = find_closest_title(titles, config["TITLE"])
+        link = movies[title].link
 
-        print(f"{Fore.GREEN}Titre récupéré : {titre} ({dates[titre]}){Style.RESET_ALL}\n")
+        print(f"{Fore.GREEN}Titre récupéré : {title} ({movies[title].date}){Style.RESET_ALL}\n")
 
         # def check_input():
         #     global is_incorrect
@@ -319,11 +337,11 @@ def recup_results(num_page):
 
     if not mode_auto or not ("TITLE" in config) or not titre_correct:
         print(f"{Fore.GREEN}\nVoici les résultats\n{Style.RESET_ALL}")
-        index_liens = []
+        titles = []
         n = 1
-        for i in liens_resultats:
-            print(f"{n} : {i} ({dates[i]})")
-            index_liens.append(i)
+        for title, movie in movies.items():
+            print(f"{n} : {title} ({movie.date})")
+            titles.append(title)
             n += 1
 
         choix_valide = False
@@ -340,16 +358,16 @@ def recup_results(num_page):
                 exit(1)
 
             except:
-                print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(index_liens)}{Style.RESET_ALL}")
+                print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 1 et {len(titles)}{Style.RESET_ALL}")
                 choix_valide = False
 
             else:
-                if 0 <= rep <= len(index_liens):
+                if 0 <= rep <= len(titles):
                     choix_valide = True
                 else:
-                    print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 0 et {len(index_liens)}{Style.RESET_ALL}")
+                    print(f"{Fore.RED}Réponse invalide, entrez un chiffre entre 0 et {len(titles)}{Style.RESET_ALL}")
                     choix_valide = False
-        lien = ""
+        link = ""
         if rep == 0:
             try:
                 print(Fore.BLACK)
@@ -365,13 +383,13 @@ def recup_results(num_page):
                 exit(0)
             else:
                 print(f"{Style.RESET_ALL}\n\nRecherche des résultats sur la page {num_page+1} : \n")
-                lien, titre = recup_results(num_page+1)
+                link, title = recup_results(num_page+1)
 
         else:
-            titre = index_liens[rep - 1]
-            lien = liens_resultats[titre]
+            title = titles[rep - 1]
+            link = movies[title].link
 
-    return lien, titre
+    return link, title
 
 # TODO Transférer ce système dans just_watch.py pour utiliser le moteur de recherche de justwatch
 #  au lieu de celui de wawacity
@@ -388,6 +406,24 @@ driver.get(lien_page_film)
 
 liste_qualites = driver.find_elements(By.XPATH, "//ul[@class=\'wa-post-list-ofLinks row readable-post-list\']/li/a")
 
+class MovieUpload:
+    def __init__(self, name, links, size, uploadDate) -> None:
+        self.name = name
+        self.links = links
+        self.size = size
+        self.uploadDate = uploadDate
+    def __repr__(self):
+        return repr(vars(self))
+
+def parseMovieUploadPage(uploadName, uploadUrl):
+    liste_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[2]")
+    liste_liens_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[1]/a")
+    links = {liste_sites[i].text: liste_liens_sites[i].get_attribute("href") for i in range(len(liste_sites))
+               if  "Partie" not in liste_liens_sites[i].text}
+    liste_tailles = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[3]")
+    size = liste_tailles[0].text
+    uploadDate = uploadDates.get(uploadUrl)
+    return MovieUpload(name = uploadName, links = links, size = size, uploadDate=uploadDate)
 
 def supp_spec_car(elt: str):
     elt = elt.replace("[", "", -1)
@@ -408,15 +444,32 @@ liens_qualites[supp_spec_car(driver.find_element(By.XPATH, "//*[@id=\'detail-pag
 
 def selection_manuelle_qualite():
 
-    print(f"\nVoici les qualités disponible pour votre film\n")
+    movieUpload = parseMovieUploadPage(
+        uploadName = supp_spec_car(driver.find_element(By.XPATH, "//*[@id=\'detail-page\']/div[2]/div[1]/i[2]").text.replace("]", "")[1:]),
+        uploadUrl = lien_page_film
+    )
+    movieUploads = {movieUpload.name: movieUpload}
+    for name, url in liens_qualites.items():
+        if url:
+            driver.get(url)
+        else:
+            driver.get(lien_page_film)
+        movieUpload = parseMovieUploadPage(name, url)
+        movieUploads[name] = movieUpload
+    movieUploads = dict(sorted(movieUploads.items()))
+
+    print(f"\nVoici les qualités disponibles pour votre film\n")
 
     index_qualites = sorted([i for i in liens_qualites])
     n = 1
-    for i in index_qualites:
-        if i.rsplit(" ")[0] != index_qualites[n-2].rsplit(" ")[0]:
+    previous_quality_name = None
+    for name, movieUpload in movieUploads.items():
+        quality_name = name.rsplit(" ")[0]
+        if quality_name != previous_quality_name:
             print()
-        print(f"{n}:{i}")
+        print(f"{n}:{name}\t| {movieUpload.size} | {movieUpload.uploadDate}")
         n += 1
+        previous_quality_name = quality_name
 
     print("\n\nSi la qualité que vous souhaitez ne se trouve pas dans la liste, fermez le programme \n"
           "et relancez le en cherchant le titre de votre films dans une autre langue\n"
@@ -557,13 +610,15 @@ methode = None
 while not choix_valide:             # TODO Vérifier si tu ne peut pat etre bloqué ici indéfiniment avec le mode auto
     if not mode_auto or "METHOD" not in config:
         methode = input(f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
-                        f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n\n"
-                        f"{Fore.LIGHTYELLOW_EX}Attention ! La methode 2 ne fonctionne que sur Windows depuis "
-                        f"l'interface graphique (ne fonctionne donc pas en ssh)\n{Style.RESET_ALL}").upper()
+                        f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n"
+                        f"Entrez 3 pour résoudre le captcha de manière automatisée (expérimental)\n\n"
+                        f"{Fore.LIGHTYELLOW_EX}Attention ! Les méthodes 2 et 3 ne fonctionnent que depuis "
+                        f"l'interface graphique (ne fonctionnent donc pas en ssh).\n"
+                        f"La méthode 2 ne fonctionne que sous Windows.\n{Style.RESET_ALL}").upper()
     else:
         methode = config["METHOD"]
 
-    if methode in ("1", "2"):
+    if methode in ("1", "2", "3"):
         if methode == "2" and os.name != 'nt':
             print(f"{Fore.RED}Réponse invalide. Vous ne pouvez pas choisir la methode 2 si vous "
                   f"n'êtes pas sur Windows\n{Style.RESET_ALL}")
@@ -571,15 +626,25 @@ while not choix_valide:             # TODO Vérifier si tu ne peut pat etre bloq
         else:
             choix_valide = True
     else:
-        print(f"{Fore.RED}Réponse invalide. Veuillez entrer 1 ou 2\n{Style.RESET_ALL}")
+        print(f"{Fore.RED}Réponse invalide. Veuillez entrer 1, 2 ou 3\n{Style.RESET_ALL}")
 
 new_url = ""
 
 if methode == "1":
 
+    def findLocalIpAddress():
+        import socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    localIp = findLocalIpAddress()
     print(f"{Fore.LIGHTCYAN_EX}\n\nOuvrez l'application Captcha Skipper sur votre téléphone pour valider le captcha.\n"
           f"{Style.RESET_ALL}Vous pouvez trouver l'application ici : "
-          f"\"https://github.com/teo-ldsm/CaptchaSkipper/releases/latset\"\n\n\n")
+          f"\"https://github.com/teo-ldsm/CaptchaSkipper/releases/latset\"\n"
+          f"Connecter l'application sur l'adresse IP {localIp} et le port 5000.\n"
+          f"Attention, le smartphone doit être sur le même réseau Wifi que ce PC.\n\n\n")
 
     app = Flask(__name__)
 
@@ -611,12 +676,10 @@ if methode == "1":
 
     def shutdown_server():
         print(Fore.BLACK)
-        func = request.environ.get('werkzeug.server.shutdown')
-        if func is None:
-            print(Style.RESET_ALL)
-            raise RuntimeError('Not running with the Werkzeug Server')
-        func()
+        import signal
+        signal.raise_signal(signal.SIGINT)
         print(Style.RESET_ALL)
+        return "Envoi du signal d'arrêt..."
 
 
     app.run(host="0.0.0.0", port=5000)
@@ -654,6 +717,10 @@ elif methode == "2":
             break
         else:
             print(f"\n\n{Fore.RED}Le lien que vous avez entré n'est pas valide{Style.RESET_ALL}\n\n")
+
+elif methode == "3":
+    resolved_links = LinkResolver().resolveLinks([lien_page_captcha])
+    new_url = resolved_links[lien_page_captcha]
 
 if new_url == "":
     exit()
