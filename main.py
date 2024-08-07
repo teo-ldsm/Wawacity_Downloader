@@ -22,6 +22,7 @@ import wget
 from recup_lien_1fichier import *
 from updater import check_download_extract
 from dl_protect_resolver import LinkResolver
+import signal
 
 
 version = "v1.1.3-beta"     # TODO Modifier le numéro de version
@@ -89,6 +90,15 @@ check_download_extract(version)
 # ----------Initialisation du driver---------- #
 
 driver = driver_init()
+
+# Fermeture du webdriver quand on fait Ctrl+C, pour éviter de ralentir le PC avec des processus Chrome fantômes
+def signal_handler(sig, frame):
+    driver.quit()
+    print("Webdriver arrêté")
+    sys.exit(0)
+    print("exit(0)")
+signal.signal(signal.SIGINT, signal_handler)
+
 
 # ----------Initialisation du driver---------- #
 
