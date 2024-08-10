@@ -78,7 +78,7 @@ def where_to_watch(film, entree_media: MediaEntry = None):
         rep = demande("\nVoulez vous continuer le téléchargement")
         if rep in ("NON", "N"):
             input("\n\nMerci d'avoir utilisé Wawacity Downloader\n\n"
-                  "Appuyez sur Enter pour quiter\n\n")
+                  "Appuyez sur Enter pour quitter ...\n\n")
             exit(0)
 
 

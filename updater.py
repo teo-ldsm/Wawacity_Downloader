@@ -7,11 +7,13 @@ import os, sys
 import requests
 import json
 import pathlib
-from colorama import Fore, Style
+from driver_init import *
 
 import wget
 
 args = sys.argv
+
+debug_mode_check(args)
 
 
 def check_for_update(version):
@@ -27,7 +29,7 @@ def check_for_update(version):
         if rep in ("OUI", "O"):
             package_url = None
             for asset in latest_realease['assets']:
-                if asset["name"].startswith("wawacity_downloader"):
+                if asset["name"].startswith("wawacity_downloader_installer"):
                     if os.name == "nt" and "windows" in asset["name"]:
                         package_url = asset["browser_download_url"]
                         break

@@ -1,6 +1,7 @@
 import os
 import sys
 
+exit = sys.exit
 
 def general_help():
     print("\n\n\nAide générale pour Wawacity Downloader:\n\n"
