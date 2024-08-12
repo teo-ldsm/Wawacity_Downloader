@@ -26,9 +26,6 @@ N'oubliez pas les guillements
 
 <br>
 <br>
-Le programme fonctionne avec Google Chrome. Il doit impérativement être installé.
-<br>
-<br>
 Si vous avez un téléphone Android, vous pouvez installer l'application 
 Android Captcha Skipper sur votre téléphone. Elle vous permettra de passer le captcha sans avoir à subir les popups. Elle est indispensable si vous utilisez le programme sur un serveur sans interface graphique (Ex: Serveur NAS, Serveur Linux en ligne de commande, controle à distance en SSH, etc...) Vous pouvez trouver l'appli 
 <a href="https://github.com/teo-ldsm/CaptchaSkipper/releases/latest">sur ce 
@@ -40,14 +37,10 @@ La version IOS n'est pas encore disponible.
 Pour l'instant, le programme prend en charge les sites de téléchargements suivants :
 
 - 1fichier
-- ~~Uptobox (impossible de télécharger plusieurs films d'affilée)~~
 
-**Uptobox est désactivé à cause d'un bug** 
-
-Si ```main.py``` ne fonctionne pas, lancez ```python main.py debug``` dans 
+Si ```main.py``` ne fonctionne pas, lancez ```python main.py -d``` dans 
 un terminal pour afficher les logs et les erreurs
 
-```plex_refresh.py``` peut être lancé seul. Il va actualiser les bibliothèques de votre serveur plex. Vous devez avoir complété ```config.txt``` pour le lancer.
 <br>
 <br>
 

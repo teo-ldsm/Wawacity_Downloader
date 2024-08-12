@@ -24,6 +24,7 @@ def recup_lien(lien, driver) -> tuple[str, str]:
 
     # driver = DriverInit.chrome()
 
+
     print(Fore.BLACK)
 
     driver.get(lien)
@@ -96,6 +97,3 @@ if __name__ == '__main__':
 
         else:
             print(e)
-
-
-    # TODO Changer tout ceci
