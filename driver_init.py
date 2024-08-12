@@ -1,0 +1,127 @@
+import requests
+
+from config_loader import *
+import colorama
+from colorama import Fore, Style
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.support.wait import WebDriverWait
+# from webdriver_manager.chrome import ChromeDriverManager
+import sys
+
+exit = sys.exit
+
+
+class DriverInit:
+
+    lien_wawacity = "wawacity.tokyo"
+
+    @staticmethod
+    def chrome(headless=True, ip_wawacity=config["ADDRESS"]):
+
+        print(f"\n\nInitialising...\n{Fore.BLACK}")
+
+        chrome_path = r'Chrome\App\Chrome-bin\chrome.exe'
+        profile_path = fr"{sys.path[0]}\Chrome\Data\profile\Profile 1"
+
+        options = Options()
+        # service = Service()
+        # options = webdriver.ChromeOptions()
+
+        options.binary_location = chrome_path
+
+        # options.add_argument(chrome_path)
+        if headless:
+            options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--remote-debugging-port=9222')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--lang=fr')
+        options.add_argument('--disable-extensions')
+        # options.add_argument(f"--user-data-dir={profile_path}")
+        options.add_argument(f"--host-resolver-rules=MAP {DriverInit.lien_wawacity} {ip_wawacity},EXCLUDE localhost")
+
+        # service = ChromeService(executable_path=chromedriver_path)
+
+        # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        # driver = webdriver.Chrome(service=service, options=options)
+        driver = webdriver.Chrome(options=options)
+        # driver = webdriver.Chrome("venv311/Lib/site-packages/chromedriver-win64")
+        driver.implicitly_wait(10)
+        print(f"{Fore.GREEN}Init OK !\n{Style.RESET_ALL}")
+
+        return driver
+
+    @staticmethod
+    def firefox(headless=True):
+
+        print(f"\n\nInitialising...\n{Fore.BLACK}")
+
+        firefox_path = r".\FirefoxPortable\App\Firefox64\firefox.exe"
+
+        options = webdriver.FirefoxOptions()
+
+        if headless:
+            options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--lang=fr')
+        # options.add_argument('--proxy-server=http://127.0.0.1:8080')
+        # options.add_argument('--disable-extensions')
+        options.binary_location = firefox_path
+
+        driver = webdriver.Firefox(options)
+
+        driver.implicitly_wait(10)
+        print(f"{Fore.GREEN}Init OK !\n{Style.RESET_ALL}")
+
+        return driver
+
+    @staticmethod
+    def fetch_new_ip_adress():
+        url = f'https://dns.google/resolve?name={DriverInit.lien_wawacity}'
+        response = requests.get(url)
+        data = response.json()
+        ip_address = data['Answer'][0]['data']
+        fill_config(manual=False, address=ip_address)
+        return ip_address
+
+
+def debug_mode_check(args):
+    global Fore, Style
+    if "-d" in args:
+        class Fore:
+            BLACK = ""
+            RED = ""
+            GREEN = ""
+            YELLOW = ""
+            BLUE = ""
+            MAGENTA = ""
+            CYAN = ""
+            WHITE = ""
+            RESET = ""
+            LIGHTBLACK_EX = ""
+            LIGHTRED_EX = ""
+            LIGHTGREEN_EX = ""
+            LIGHTYELLOW_EX = ""
+            LIGHTBLUE_EX = ""
+            LIGHTMAGENTA_EX = ""
+            LIGHTCYAN_EX = ""
+            LIGHTWHITE_EX = ""
+
+        class Style:
+            RESET_ALL = ""
+
+    # else:
+    #     from colorama import Fore, Style
+    #
+    # return Fore, Style
+
+
+if __name__ == '__main__':
+    pass
+    # driver = DriverInit.chrome(False)

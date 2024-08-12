@@ -1,9 +1,11 @@
 import os
 import sys
-
+from colorama import Fore, Style
 import pathlib
 
 from help_manager import ask_help
+
+exit = sys.exit
 
 
 def venv_init():
@@ -33,7 +35,7 @@ def load() -> dict:
 
         if rep in ("OUI", "O"):
             build_config()
-            file = open("./config.txt", "r", encoding="UTF-8")
+            return load()
         else:
             return dict()
 
@@ -87,7 +89,10 @@ def load() -> dict:
         else:
             config = verify_config(config)
             file.close()
-            return config
+            if config is not None:
+                return config
+            else:
+                return dict()
 
 
 def verify_config(config: dict) -> dict:
@@ -98,7 +103,7 @@ def verify_config(config: dict) -> dict:
             config.pop("DOWNLOAD_PATH")
 
     if "SITE" in config:
-        if config["SITE"].upper() not in ("1FICHIER", "UPTOBOX DESACTIVE"):     # TODO Enlever ceci
+        if config["SITE"].upper() not in ("1FICHIER"):
             print(f"{Fore.LIGHTYELLOW_EX}La valeur spécifiée dans config.txt à la valeur \'SITE\' "
                   f"n'est pas valide{Style.RESET_ALL}\n")
             config.pop("SITE")
@@ -141,6 +146,7 @@ def build_config() -> None:
     file.write("# Les lignes qui commencent par \"#\" ne sont pas prises en compte \n"
                "# Veuillez ne pas laisser de champs vide sans un \"#\" en début de ligne \n"
                "# Les champs seront remplis automatiquement si non précisé ici \n"
+               "# - TOKEN : Votre jeton d'accès unique"
                "# - ADDRESS : Adresse actuelle du site wawacity. Cette valeur est remplie automatiquement\n"
                "# - DOWNLOAD_PATH : Les medias seront téléchargés dans ce dossier \n"
                "# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme "
@@ -158,10 +164,10 @@ def build_config() -> None:
                "# Remplir uniquement si le programme Chrome n'est pas trouvé ou pour utiliser une version différente de celle du système \n"
                "# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le "
                "# programme normalement pour que la valeur soit remplie automatiquement\n"
+               "#TOKEN=\n"
                "#ADDRESS=\n"
                "#DOWNLOAD_PATH=\n"
                "#QUALITY=\n"
-               "#SITE=\n"
                "#METHOD=\n"
                "#SKIP_COUNTDOWN=\n"
                "#CHROME_PATH=\n"
@@ -187,19 +193,15 @@ def build_config() -> None:
         fill_config(tous=True)
 
 
+
 def fill_config(tous: bool = False, address: str = False, download_path: str = False, quality: str = False, site: str = False,
                 method: str = False, skip_countdown: str = False, chrome_path: str = False, carte_res: str = False, plex: bool = False,
                 manual: bool = True) -> None:
     
     if not isinstance(tous, bool):
         raise TypeError("L'argument tous doit être de type bool")
-    if not isinstance(plex, bool):
-        raise TypeError("L'argument plex doit être de type bool")
     if not isinstance(manual, bool):
         raise TypeError("L'argument manual doit être de type bool")
-    if plex and not manual:
-        raise ValueError("Les modifications des valeurs du serveur plex doivent être faites avec "
-                         "manual=True en argument")
 
     if not pathlib.Path("config.txt").exists():
         return None
@@ -258,6 +260,4 @@ config = load()
 if __name__ == '__main__':
     # ask_help("config_loader")
     print(config)
-
-    # TODO FACULTATIF Faire un système pour lancer config_loader tout seul
 

@@ -3,12 +3,19 @@ __pycache__/
 ".idea/Utilitaires NAS.iml"
 .idea/workspace.xml
 .idea/misc.xml
-build_executable.ps1
 main.spec
-dist/
+obf/
 build/
 venv311/
 collections/
 /main.exe
 /Chrome/
 /Chrome/
+/config_default.txt
+/FirefoxPortable/
+/activate_venv.bat
+/Authenticator/authenticator.py
+/Authenticator/
+/pyarmor_runtime_000000/
+/obf_authenticator.py
+/build_executable.ps1
