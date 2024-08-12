@@ -24,7 +24,6 @@ def recup_lien(lien, driver) -> tuple[str, str]:
 
     # driver = DriverInit.chrome()
 
-
     print(Fore.BLACK)
 
     driver.get(lien)

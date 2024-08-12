@@ -14,6 +14,40 @@ from selenium.webdriver.support import expected_conditions as EC
 import sys
 
 exit = sys.exit
+args = sys.argv
+
+debug = False
+
+
+def debug_mode_check(arguments):
+    global Fore, Style, debug
+    if "-d" in arguments:
+        debug = True
+
+        class Fore:
+            BLACK = ""
+            RED = ""
+            GREEN = ""
+            YELLOW = ""
+            BLUE = ""
+            MAGENTA = ""
+            CYAN = ""
+            WHITE = ""
+            RESET = ""
+            LIGHTBLACK_EX = ""
+            LIGHTRED_EX = ""
+            LIGHTGREEN_EX = ""
+            LIGHTYELLOW_EX = ""
+            LIGHTBLUE_EX = ""
+            LIGHTMAGENTA_EX = ""
+            LIGHTCYAN_EX = ""
+            LIGHTWHITE_EX = ""
+
+        class Style:
+            RESET_ALL = ""
+
+
+debug_mode_check(args)
 
 
 class DriverInit:
@@ -35,7 +69,7 @@ class DriverInit:
         options.binary_location = chrome_path
 
         # options.add_argument(chrome_path)
-        if headless:
+        if headless and not debug:
             options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument('--remote-debugging-port=9222')
@@ -65,7 +99,7 @@ class DriverInit:
 
         options = webdriver.FirefoxOptions()
 
-        if headless:
+        if headless and not debug:
             options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
@@ -89,37 +123,6 @@ class DriverInit:
         ip_address = data['Answer'][0]['data']
         fill_config(manual=False, address=ip_address)
         return ip_address
-
-
-def debug_mode_check(args):
-    global Fore, Style
-    if "-d" in args:
-        class Fore:
-            BLACK = ""
-            RED = ""
-            GREEN = ""
-            YELLOW = ""
-            BLUE = ""
-            MAGENTA = ""
-            CYAN = ""
-            WHITE = ""
-            RESET = ""
-            LIGHTBLACK_EX = ""
-            LIGHTRED_EX = ""
-            LIGHTGREEN_EX = ""
-            LIGHTYELLOW_EX = ""
-            LIGHTBLUE_EX = ""
-            LIGHTMAGENTA_EX = ""
-            LIGHTCYAN_EX = ""
-            LIGHTWHITE_EX = ""
-
-        class Style:
-            RESET_ALL = ""
-
-    # else:
-    #     from colorama import Fore, Style
-    #
-    # return Fore, Style
 
 
 if __name__ == '__main__':
