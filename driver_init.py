@@ -100,6 +100,8 @@ class DriverInit:
         options.add_argument('--lang=fr')
         options.add_argument('--disable-extensions')
         options.add_argument("--disable-search-engine-choice-screen")
+        if not headless:
+            options.add_argument("--blink-settings=imagesEnabled=false")
         # options.add_argument(f"--user-data-dir={profile_path}")
         options.add_argument(f"--host-resolver-rules=MAP {DriverInit.lien_wawacity} {ip_wawacity},EXCLUDE localhost")
 
