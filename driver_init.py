@@ -76,6 +76,10 @@ def get_chrome_path():
 class DriverInit:
 
     lien_wawacity = "wawacity.ing"
+    # TODO remplacer par une liste. A ce jour (17/08/2024), wawacity.ing et wawacity.al fonctionnent sans DNS, 
+    # et wawacity.tokyo avec DNS. 
+    # Faire aussi un testeur d'URL qui essaie toute la liste, et si aucune URL ne répond, récupère la nouvelle URL sur 
+    # https://www.astuces-aide-informatique.info/17934/nouvelle-adresse-wawacity ou sur https://t.me/s/Wawacity_officiel?before=60
 
     @staticmethod
     def chrome(headless=True, ip_wawacity=config["ADDRESS"]):
