@@ -8,6 +8,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from config_loader import *
 
+
 class LinkResolver:
     def __init__(self) -> None:
         options = webdriver.ChromeOptions()
@@ -17,7 +18,7 @@ class LinkResolver:
         if "CHROME_PATH" in config:
             chrome_path = config["CHROME_PATH"]
         self.driver = uc.Chrome(headless=False, browser_executable_path=chrome_path, options = options)
-    
+
     def resolveLinks(self, urls):
         links = dict()
         for url in urls:
@@ -47,8 +48,8 @@ class LinkResolver:
 
 if __name__ == '__main__':
     urls = [
-        "https://dl-protect.link/bb80536c?fn=RXF1YWxpemVyIDMgW0hEUklQXSAtIFRSVUVGUkVOQ0g%253D", #Equilizer 3
-        "https://dl-protect.link/c2599b48?fn=RHVjb2J1IHBhc3NlIGF1IHZlcnQgW1dFQlJJUF0gLSBGUkVOQ0g%3D&rl=a2" # Ducobu
+        "https://dl-protect.link/bb80536c?fn=RXF1YWxpemVyIDMgW0hEUklQXSAtIFRSVUVGUkVOQ0g%253D",  # Equilizer 3
+        "https://dl-protect.link/c2599b48?fn=RHVjb2J1IHBhc3NlIGF1IHZlcnQgW1dFQlJJUF0gLSBGUkVOQ0g%3D&rl=a2"  # Ducobu
     ]
     linkResolver = LinkResolver()
     links = linkResolver.resolveLinks(urls)

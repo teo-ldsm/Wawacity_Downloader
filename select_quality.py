@@ -1,5 +1,6 @@
 from driver_init import *
 from config_loader import *
+from wget import bar_thermometer, get_console_width
 
 from colorama import Fore, Style
 import sys
@@ -53,6 +54,10 @@ def select_quality(driver, mode_auto, uploadDates, lien_page_film) -> str:
             uploadUrl = lien_page_film
         )
         movieUploads = {movieUpload.name: movieUpload}
+
+        print("\n\nRécupération des infos pour chaque qualité...\n")
+        cpt = 0
+
         for name, url in liens_qualites.items():
             if url:
                 driver.get(url)
@@ -60,9 +65,28 @@ def select_quality(driver, mode_auto, uploadDates, lien_page_film) -> str:
                 driver.get(lien_page_film)
             movieUpload = parseMovieUploadPage(name, url)
             movieUploads[name] = movieUpload
+
+            cpt += 1
+            # Affichage d'une barre de chargement et d'un pourcentage qui affiche la progression dans la
+            # recherche des qualités
+            print(f"{bar_thermometer(cpt, len(liens_qualites), int(get_console_width()*3/4))}\t{int(cpt*100/len(liens_qualites))}%", end="\r")
+
         movieUploads = dict(sorted(movieUploads.items()))
 
-        print(f"\nVoici les qualités disponibles pour votre film\n")
+        print(f"\n\nVoici les qualités disponibles pour votre film (Qualité | Taille | Date d'upload)\n")
+
+        def justified_str(expr: str, lg: int) -> str:
+            """Renvoie un str de longueur lg commençant par expr et complété avec des espaces pour arriver à la
+            longueur lg. Lg doit être supérieur ou egal a len(expr)"""
+            if len(expr) > lg:
+                raise ValueError("L'expression a centrer ne peut pes être plus grande que la la taille totale")
+            if len(expr) == lg:
+                return expr
+            espacement = (lg - len(expr))
+            texte = expr + " " * espacement
+            return texte
+
+        long_max = len(max(movieUploads.keys(), key=len))
 
         index_qualites = sorted([i for i in liens_qualites])
         n = 1
@@ -71,7 +95,7 @@ def select_quality(driver, mode_auto, uploadDates, lien_page_film) -> str:
             quality_name = name.rsplit(" ")[0]
             if quality_name != previous_quality_name:
                 print()
-            print(f"{n}:{name}\t| {movieUpload.size} | {movieUpload.uploadDate}")
+            print(f"{n}:\t{justified_str(name, long_max)}   | {justified_str(movieUpload.size, 7)} | {movieUpload.uploadDate}")
             n += 1
             previous_quality_name = quality_name
 
@@ -89,6 +113,7 @@ def select_quality(driver, mode_auto, uploadDates, lien_page_film) -> str:
 
             except KeyboardInterrupt:
                 exit()
+                # TODO Ici le Ctrl+C n'arrete pas le programme ce except n'arrive pas a choper le keyboard interrupt
 
             except:
                 print(

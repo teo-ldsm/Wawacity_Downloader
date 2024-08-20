@@ -52,7 +52,7 @@ debug_mode_check(args)
 
 class DriverInit:
 
-    lien_wawacity = "wawacity.tokyo"
+    lien_wawacity = "wawacity.ing"
 
     @staticmethod
     def chrome(headless=True, ip_wawacity=config["ADDRESS"]):

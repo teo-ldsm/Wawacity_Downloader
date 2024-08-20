@@ -69,9 +69,11 @@ check_for_update(version)
 # driver = DriverInit.firefox()
 driver = DriverInit.chrome()
 
-# Fermeture du webdriver quand on fait Ctrl+C, pour éviter de ralentir le PC avec des processus Chrome fantômes
+
 def signal_handler(sig, frame):
+    """Fermeture du webdriver quand on fait Ctrl+C, pour éviter de ralentir le PC avec des processus Chrome fantômes"""
     def killDriver():
+        print(Style.RESET_ALL)
         driver.quit()
     print("Arrêt du programme en cours...")
     kill_thread = threading.Thread(target=killDriver)
@@ -196,13 +198,16 @@ else:
 print(Fore.BLACK)
 search.submit()
 
+
 class Movie:
     def __init__(self, title, year, link) -> None:
         self.title = title
         self.year = year
         self.link = link
 
+
 uploadDates = dict()
+
 
 def parse_search_result_page():
     liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
@@ -429,6 +434,7 @@ print(Fore.BLACK)
 
 # ----------SELECTION DL SITE---------- #
 
+
 lien_page_captcha, dl_site = recup_page_captcha(driver, lien_page_film, mode_auto)
 
 
@@ -437,10 +443,11 @@ lien_page_captcha, dl_site = recup_page_captcha(driver, lien_page_film, mode_aut
 
 choix_valide = False
 methode = None
-while not choix_valide:             # TODO Vérifier si tu ne peut pat être bloqué ici indéfiniment avec le mode auto
+while not choix_valide:
     if not mode_auto or "METHOD" not in config:
-        methode = input(f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
-                        f"Entrez 2 pour résoudre le captcha depuis une fenêtre chrome\n"
+        methode = input(f"{Style.RESET_ALL}"
+                        f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
+                        f"Entrez 2 pour résoudre le captcha depuis votre navigateur\n"
                         f"Entrez 3 pour résoudre le captcha de manière automatisée (expérimental)\n\n"
                         f"{Fore.LIGHTYELLOW_EX}Attention ! Les méthodes 2 et 3 ne fonctionnent que depuis "
                         f"l'interface graphique (ne fonctionnent donc pas en ssh).\n").upper()
@@ -466,8 +473,7 @@ elif methode == "2":
     new_url = CaptchaSolver.methode2(lien_page_captcha, dl_site)
 
 elif methode == "3":
-    resolved_links = LinkResolver().resolveLinks([lien_page_captcha])
-    new_url = resolved_links[lien_page_captcha]
+    new_url = CaptchaSolver.methode3(lien_page_captcha, dl_site)
 
 else:
     print(f"{Fore.RED}La méthode '{methode}' n'est pas disponible.\n{Style.RESET_ALL}")

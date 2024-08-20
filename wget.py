@@ -347,7 +347,7 @@ def bar_thermometer(current, total, width=80):
     """Return thermometer style progress bar string. `total` argument
     can not be zero. The minimum size of bar returned is 3. Example:
 
-        [..........            ]
+        [==========            ]
 
     Control and trailing symbols (\r and spaces) are not included.
     See `bar_adaptive` for more information.
@@ -355,16 +355,16 @@ def bar_thermometer(current, total, width=80):
     # number of dots on thermometer scale
     avail_dots = width-2
     shaded_dots = int(math.floor(float(current) / total * avail_dots))
-    return '[' + '.'*shaded_dots + ' '*(avail_dots-shaded_dots) + ']'
+    return '[' + '='*shaded_dots + ' '*(avail_dots-shaded_dots) + ']'
 
 
 def bar_adaptive(current, total, eta_sec, speed_bps, width=80):
     """Return progress bar string for given values in one of three
     styles depending on available width:
 
-        [..  ] downloaded / total
+        [==  ] downloaded / total
         downloaded / total
-        [.. ]
+        [== ]
 
     if total value is unknown or <= 0, show bytes counter using two
     adaptive styles:
