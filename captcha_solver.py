@@ -7,6 +7,7 @@ from flask import Flask, request
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from dl_protect_resolver import LinkResolver
 import os
 
 args = sys.argv
@@ -145,3 +146,8 @@ class CaptchaSolver:
                     print(f"\n\n{Fore.RED}Le lien que vous avez entré n'est pas valide{Style.RESET_ALL}\n\n")
 
             return new_url
+
+    @staticmethod
+    def methode3(lien_page_captcha, dl_site):
+        resolved_links = LinkResolver().resolveLinks([lien_page_captcha])
+        return resolved_links[lien_page_captcha]
