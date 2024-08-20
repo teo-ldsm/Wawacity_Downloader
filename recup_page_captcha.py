@@ -20,7 +20,7 @@ def recup_page_captcha(driver, lien_page_film, mode_auto) -> tuple:
     liste_liens_sites = driver.find_elements(By.XPATH, "//*[@id=\"DDLLinks\"]/tbody/tr/td[1]/a")
 
     liens_sites = {liste_sites[i].text: liste_liens_sites[i].get_attribute("href") for i in range(len(liste_sites))
-                   if liste_sites[i].text == "1fichier" and "Partie" not in liste_liens_sites[i].text}
+                   if liste_sites[i].text == "1fichier" and "Partie " not in liste_liens_sites[i].text}
 
     # if not mode_auto or "SITE" not in config:
     #

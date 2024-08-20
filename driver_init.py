@@ -60,6 +60,8 @@ class DriverInit:
         print(f"\n\nInitialising...\n{Fore.BLACK}")
 
         chrome_path = r'Chrome\App\Chrome-bin\chrome.exe'
+        if "CHROME_PATH" in config:
+            chrome_path = config["CHROME_PATH"]
         profile_path = fr"{sys.path[0]}\Chrome\Data\profile\Profile 1"
 
         options = Options()
@@ -76,6 +78,7 @@ class DriverInit:
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--lang=fr')
         options.add_argument('--disable-extensions')
+        options.add_argument("--disable-search-engine-choice-screen")
         # options.add_argument(f"--user-data-dir={profile_path}")
         options.add_argument(f"--host-resolver-rules=MAP {DriverInit.lien_wawacity} {ip_wawacity},EXCLUDE localhost")
 

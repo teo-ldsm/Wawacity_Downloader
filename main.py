@@ -23,6 +23,9 @@ import time
 import wget
 from recup_lien_1fichier import *
 from updater import check_for_update
+import signal
+import threading
+
 
 version = "v1.1.3-beta"     # TODO Modifier le numéro de version
 # TODO MODIFIER AUSSI LE NUM DE VERSION DANS LE NOM DE L'INSTALLATEUR
@@ -65,6 +68,18 @@ check_for_update(version)
 
 # driver = DriverInit.firefox()
 driver = DriverInit.chrome()
+
+# Fermeture du webdriver quand on fait Ctrl+C, pour éviter de ralentir le PC avec des processus Chrome fantômes
+def signal_handler(sig, frame):
+    def killDriver():
+        driver.quit()
+    print("Arrêt du programme en cours...")
+    kill_thread = threading.Thread(target=killDriver)
+    kill_thread.start()
+    print("Webdriver arrêté")
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+
 
 # ----------Initialisation du driver---------- #
 
