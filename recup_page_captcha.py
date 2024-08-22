@@ -65,4 +65,12 @@ def recup_page_captcha(driver, lien_page_film, mode_auto) -> tuple:
 
     dl_site = "1fichier"
 
-    return liens_sites[dl_site], dl_site
+    if dl_site in liens_sites:
+        return liens_sites[dl_site], dl_site
+    else:
+        print(f"{Fore.RED}Aucun lien sur {dl_site} n'est disponible pour cette qualité.\n"
+            f"Veuillez relancer le programme et choisir une autre qualité.\n{Style.RESET_ALL}")
+        driver.quit()
+        input("Appuyez sur Entrer pour quitter...")
+        exit(0)
+
