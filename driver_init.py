@@ -73,6 +73,7 @@ def get_chrome_path():
         chrome_path = None
     return chrome_path
 
+
 class DriverInit:
 
     lien_wawacity = "wawacity.ing"
@@ -82,7 +83,7 @@ class DriverInit:
     # https://www.astuces-aide-informatique.info/17934/nouvelle-adresse-wawacity ou sur https://t.me/s/Wawacity_officiel?before=60
 
     @staticmethod
-    def chrome(headless=True):
+    def chrome(headless=True, ip_wawacity: str = None):
 
         print(f"\n\nInitialising...\n{Fore.BLACK}")
 
@@ -107,9 +108,13 @@ class DriverInit:
         if not headless:
             options.add_argument("--blink-settings=imagesEnabled=false")
         
-        if "ADDRESS" in config:
-            ip_wawacity=config["ADDRESS"]
-            options.add_argument(f"--host-resolver-rules=MAP {DriverInit.lien_wawacity} {ip_wawacity},EXCLUDE localhost")
+        if ip_wawacity is None:
+            if "ADDRESS" in config:
+                ip_wawacity = config["ADDRESS"]
+            else:
+                ip_wawacity = DriverInit.fetch_new_ip_adress()
+
+        options.add_argument(f"--host-resolver-rules=MAP {DriverInit.lien_wawacity} {ip_wawacity},EXCLUDE localhost")
 
         # service = ChromeService(executable_path=chromedriver_path)
 
@@ -149,6 +154,7 @@ class DriverInit:
 
     @staticmethod
     def fetch_new_ip_adress():
+        """Demande au serveur dns de Google l'adresse ip de wawacity et la sauvegarde dans config.txt"""
         url = f'https://dns.google/resolve?name={DriverInit.lien_wawacity}'
         response = requests.get(url)
         data = response.json()

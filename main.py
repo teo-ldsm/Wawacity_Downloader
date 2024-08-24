@@ -153,17 +153,22 @@ try:
     # lien_wawacity = config['ADDRESS']
     print(f"\n\nConnecting to {DriverInit.lien_wawacity} ...\n{Fore.BLACK}")
     driver.get(f"https://{DriverInit.lien_wawacity}")
+    print(Style.RESET_ALL)
 
     if not driver.title.startswith("Wawacity"):
         raise WebDriverException
 
 except WebDriverException as e:
-    if "ERR_CONNECTION_TIMED_OUT" in e.msg:
-        print("Adresse invalide ! Recherche de la nouvelle adresse...")
+    if "ERR_CONNECTION_TIMED_OUT" in e.msg or "ERR_CONNECTION_REFUSED" in e.msg:
+        print(f"Adresse invalide ! Recherche de la nouvelle adresse... {Fore.BLACK}")
         driver.quit()
+        del driver
         driver = DriverInit.chrome(ip_wawacity=DriverInit.fetch_new_ip_adress())
+        driver.get(f"https://{DriverInit.lien_wawacity}")
+        print(Style.RESET_ALL)
 
     else:
+        print(Style.RESET_ALL)
         raise e
     # TODO Faire un match avec une eventuelle erreur si l'erreur elle contient NETWORK_ERROR ou jsp quoi
     #  (En gros la page elle est introuvable) Il faut aller faire une requette au dns resolver de google et lui
@@ -451,7 +456,7 @@ while not choix_valide:
                         f"Entrez 2 pour résoudre le captcha depuis votre navigateur\n"
                         f"Entrez 3 pour résoudre le captcha de manière automatisée (expérimental)\n\n"
                         f"{Fore.LIGHTYELLOW_EX}Attention ! Les méthodes 2 et 3 ne fonctionnent que depuis "
-                        f"l'interface graphique (ne fonctionnent donc pas en ssh).\n").upper()
+                        f"l'interface graphique (ne fonctionnent donc pas en ssh).\n{Style.RESET_ALL}").upper()
     else:
         methode = config["METHOD"]
 
