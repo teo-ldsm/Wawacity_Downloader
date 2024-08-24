@@ -1,9 +1,8 @@
-import selenium
 from selenium.common import TimeoutException
 
 from driver_init import *
 from config_loader import *
-from flask import Flask, request
+import flask_app
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -38,43 +37,7 @@ class CaptchaSolver:
               f"Connecter l'application sur l'adresse IP {localIp} et le port 5000.\n"
               f"Attention, le smartphone doit être sur le même réseau Wifi que ce PC.\n\n\n")
 
-        app = Flask(__name__)
-
-        @app.route('/get_url')
-        def get_url():
-            print(f"\n{Fore.GREEN}Le lien a été transmis à l'application mobile{Style.RESET_ALL}\n")
-            return lien_page_captcha
-
-        @app.route('/upload_url', methods=['POST'])
-        def upload_url():
-            global lien_dl_site
-            lien_dl_site = request.form.get('url')
-
-            print(f"\n{Fore.GREEN}New URL received: {lien_dl_site}{Style.RESET_ALL}\n")
-
-            if lien_dl_site.startswith(f"https://{dl_site.lower()}"):
-                # Arrête le serveur Flask
-                shutdown_server()
-            else:
-                print(f"\n\n{Fore.RED}Le lien reçu n'est pas valide{Style.RESET_ALL}\n"
-                      f"Sur votre téléphone, vous devez cliquer sur \"Continuer\" dès que le bouton apparait\n"
-                      f"Ensuite, cliquez sur le lien qui commence par https://{dl_site}/...\n"
-                      f"Pour finir, cliquez sur \"Valider\" en haut a droite de l'écran")
-
-            return 'OK'
-
-        def shutdown_server():
-            print(Fore.BLACK)
-            func = request.environ.get('werkzeug.server.shutdown')
-            if func is None:
-                print(Style.RESET_ALL)
-                raise RuntimeError('Not running with the Werkzeug Server')
-            func()
-            print(Style.RESET_ALL)
-
-        app.run(host="0.0.0.0", port=5000)
-
-        return lien_dl_site
+        return flask_app.wait_for_link(lien_page_captcha, dl_site)
 
     @staticmethod
     def methode2(lien_page_captcha, dl_site):
