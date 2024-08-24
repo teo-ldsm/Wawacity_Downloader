@@ -76,9 +76,13 @@ def get_chrome_path():
 class DriverInit:
 
     lien_wawacity = "wawacity.ing"
+    # TODO remplacer par une liste. A ce jour (17/08/2024), wawacity.ing et wawacity.al fonctionnent sans DNS, 
+    # et wawacity.tokyo avec DNS. 
+    # Faire aussi un testeur d'URL qui essaie toute la liste, et si aucune URL ne répond, récupère la nouvelle URL sur 
+    # https://www.astuces-aide-informatique.info/17934/nouvelle-adresse-wawacity ou sur https://t.me/s/Wawacity_officiel?before=60
 
     @staticmethod
-    def chrome(headless=True, ip_wawacity=config["ADDRESS"]):
+    def chrome(headless=True):
 
         print(f"\n\nInitialising...\n{Fore.BLACK}")
 
@@ -102,8 +106,10 @@ class DriverInit:
         options.add_argument("--disable-search-engine-choice-screen")
         if not headless:
             options.add_argument("--blink-settings=imagesEnabled=false")
-        # options.add_argument(f"--user-data-dir={profile_path}")
-        options.add_argument(f"--host-resolver-rules=MAP {DriverInit.lien_wawacity} {ip_wawacity},EXCLUDE localhost")
+        
+        if "ADDRESS" in config:
+            ip_wawacity=config["ADDRESS"]
+            options.add_argument(f"--host-resolver-rules=MAP {DriverInit.lien_wawacity} {ip_wawacity},EXCLUDE localhost")
 
         # service = ChromeService(executable_path=chromedriver_path)
 
