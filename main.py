@@ -2,6 +2,7 @@ from colorama import Fore, Style
 from selenium.common import WebDriverException
 
 from captcha_solver import *
+from find_closest_title import find_closest_title
 from recup_page_captcha import recup_page_captcha
 from select_quality import select_quality
 from driver_init import *
@@ -247,41 +248,6 @@ def recup_results(num_page):
     titre_correct = True
 
     if mode_auto and ("TITLE" in config):
-        def find_closest_title(list, title):
-            closest_title = None
-            min_distance = float('inf')
-
-            for cle in list:
-                distance = levenshtein_distance(cle.lower(), title.lower())
-
-                if distance < min_distance:
-                    min_distance = distance
-                    closest_title = cle
-
-            return closest_title
-
-        def levenshtein_distance(s, t):
-            if s == t:
-                return 0
-
-            if len(s) == 0:
-                return len(t)
-
-            if len(t) == 0:
-                return len(s)
-
-            previous_row = range(len(t) + 1)
-            for i, c1 in enumerate(s):
-                current_row = [i + 1]
-                for j, c2 in enumerate(t):
-                    insertions = previous_row[j + 1] + 1
-                    deletions = current_row[j] + 1
-                    substitutions = previous_row[j] + (c1 != c2)
-                    current_row.append(min(insertions, deletions, substitutions))
-                previous_row = current_row
-
-            return previous_row[-1]
-
         titre = find_closest_title(movies.keys(), config["TITLE"])
         lien = movies[titre].link
 
