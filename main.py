@@ -11,7 +11,7 @@ from driver_init import *
 
 args = sys.argv
 
-exit = sys.exit
+# exit = sys.exit
 
 if __name__ == '__main__':
     # venv_init()
@@ -24,16 +24,14 @@ import time
 import wget
 from recup_lien_1fichier import *
 from updater import check_for_update
-import signal
-import threading
 
 
 version = "v1.1.4-beta"     # TODO Modifier le numéro de version
 
-if os.name == 'nt':  # Windows
-    os.system('cls')
-else:  # Linux, Mac OS X
-    os.system('clear')
+# if os.name == 'nt':  # Windows
+#     os.system('cls')
+# else:  # Linux, Mac OS X
+#     os.system('clear')
 
 # import obf_authenticator
 
@@ -69,39 +67,28 @@ check_for_update(version)
 # driver = DriverInit.firefox()
 driver = DriverInit.chrome()
 
-
-def signal_handler(sig, frame):
-    """Fermeture du webdriver quand on fait Ctrl+C, pour éviter de ralentir le PC avec des processus Chrome fantômes"""
-    def killDriver():
-        print(Style.RESET_ALL)
-        driver.quit()
-    print("Arrêt du programme en cours...")
-    kill_thread = threading.Thread(target=killDriver)
-    kill_thread.start()
-    print("Webdriver arrêté")
-    sys.exit(0)
-signal.signal(signal.SIGINT, signal_handler)
-
-
 # ----------Initialisation du driver---------- #
 
-prgm_dir = str(pathlib.Path(__file__).parent.absolute())
 
-if "DOWNLOAD_PATH" in config:
+# prgm_dir = str(pathlib.Path(__file__).parent.absolute())
+
+if no_download:
+    rep = "OUI"
+
+elif "DOWNLOAD_PATH" in config:
     dl_dir = config["DOWNLOAD_PATH"]
+    print(f"\nDossier de téléchargement récupéré dans config.txt : {dl_dir}\n")
+    rep = "OUI"
+
 else:
     if os.name == "nt":
         dl_dir = pathlib.Path().home() / "Downloads"
     else:
         dl_dir = "~/Downloads"
 
-if no_download:
-    rep = "OUI"
-
-else:
-    if "DOWNLOAD_PATH" in config:
-        print(f"\nDossier de téléchargement récupéré dans config.txt : {dl_dir}\n")
-        rep = None
+    if not os.path.exists(dl_dir.replace("\\", "/")):
+        rep = "NON"
+        dl_dir = None
 
     elif not mode_auto:
         rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "

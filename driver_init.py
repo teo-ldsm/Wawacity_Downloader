@@ -1,5 +1,6 @@
 import requests
-
+import signal
+import threading
 from config_loader import *
 import colorama
 from colorama import Fore, Style
@@ -25,6 +26,23 @@ def exit(n: int):
 args = sys.argv
 
 debug = False
+
+
+def signal_handler(sig, frame):
+    """Fermeture du webdriver quand on fait Ctrl+C, pour éviter de ralentir le PC avec des processus Chrome fantômes"""
+
+    def killDriver():
+        print(Style.RESET_ALL)
+        driver.quit()
+
+    print("Arrêt du programme en cours...")
+    kill_thread = threading.Thread(target=killDriver)
+    kill_thread.start()
+    print("Webdriver arrêté")
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, signal_handler)
 
 
 def debug_mode_check(arguments):
@@ -62,12 +80,15 @@ def get_chrome_path():
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
 
     def detect_scoop_chrome_app():
-        chrome_exe = shutil.which("chrome")
-        chrome_exe_dir = os.path.dirname(chrome_exe)
-        chrome_shim = os.path.join(chrome_exe_dir, "chrome.shim")
-        if os.path.isfile(chrome_shim):
-            with open(chrome_shim, 'r', encoding='utf8') as file:
-                return file.readline().strip().split(" = ")[1].replace('"', '')
+        try:
+            chrome_exe = shutil.which("chrome")
+            chrome_exe_dir = os.path.dirname(chrome_exe)
+            chrome_shim = os.path.join(chrome_exe_dir, "chrome.shim")
+            if os.path.isfile(chrome_shim):
+                with open(chrome_shim, 'r', encoding='utf8') as file:
+                    return file.readline().strip().split(" = ")[1].replace('"', '')
+        except:
+            pass
         return None
 
     portable_chrome_path = 'Chrome\\App\\Chrome-bin\\chrome.exe'
@@ -105,7 +126,8 @@ class DriverInit:
         # service = Service()
         # options = webdriver.ChromeOptions()
 
-        options.binary_location = chrome_path
+        if chrome_path is not None:
+            options.binary_location = chrome_path
 
         # options.add_argument(chrome_path)
         if headless and not debug:
