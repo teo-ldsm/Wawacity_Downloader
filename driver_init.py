@@ -14,7 +14,14 @@ from selenium.webdriver.support import expected_conditions as EC
 import sys
 import shutil
 
-exit = sys.exit
+
+def exit(n: int):
+    if "driver" in globals():
+        global driver
+        driver.quit()
+    sys.exit(n)
+
+
 args = sys.argv
 
 debug = False

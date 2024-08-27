@@ -19,6 +19,34 @@ lien_dl_site = ""
 class CaptchaSolver:
 
     @staticmethod
+    def select_methode(mode_auto: bool) -> str:
+        choix_valide = False
+        methode = None
+        while not choix_valide:
+            if not mode_auto or "METHOD" not in config:
+                methode = input(f"{Style.RESET_ALL}"
+                                f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
+                                f"Entrez 2 pour résoudre le captcha depuis votre navigateur\n"
+                                f"Entrez 3 pour résoudre le captcha de manière automatisée (expérimental, chrome doit installé sur votre PC)\n\n"
+                                f"{Fore.LIGHTYELLOW_EX}Attention ! Les méthodes 2 et 3 ne fonctionnent que depuis "
+                                f"l'interface graphique (ne fonctionnent donc pas en ssh).\n{Style.RESET_ALL}").upper()
+            else:
+                methode = config["METHOD"]
+
+            if methode in ("1", "2", "3"):
+                # if methode == "2" and os.name != 'nt':
+                #     print(f"{Fore.RED}Réponse invalide. Vous ne pouvez pas choisir la methode 2 si vous "
+                #           f"n'êtes pas sur Windows\n{Style.RESET_ALL}")
+                #     mode_auto = False
+                # else:
+                #     choix_valide = True
+                choix_valide = True
+            else:
+                print(f"{Fore.RED}Réponse invalide. Veuillez entrer 1, 2 ou 3\n{Style.RESET_ALL}")
+
+        return methode
+
+    @staticmethod
     def methode1(lien_page_captcha, dl_site):
         
         def findLocalIpAddress():
@@ -42,87 +70,97 @@ class CaptchaSolver:
     @staticmethod
     def methode2(lien_page_captcha, dl_site):
 
-        if os.name == "nt":
+        # if os.name == "nt":
+        #
+        #     firefox_driver = DriverInit.firefox()
+        #
+        #     try:
+        #         print(f"{Style.RESET_ALL}Tentative de résolution automatique du captcha{Fore.BLACK}")
+        #
+        #         firefox_driver.get(lien_page_captcha)
+        #
+        #         WebDriverWait(firefox_driver, 15).until(
+        #             EC.presence_of_element_located((By.XPATH, "//button[text()=\"Continuer\"]")))
+        #
+        #         form = firefox_driver.find_element(By.ID, "myForm")
+        #
+        #         form.submit()
+        #
+        #         lien_dl_site = WebDriverWait(firefox_driver, 10).until(
+        #             EC.presence_of_element_located((By.XPATH, f"//a[contains(@href,\'https://{dl_site}\')]")))
+        #
+        #         print(f"{Fore.GREEN}Captha résolu{Style.RESET_ALL}\n")
+        #
+        #         firefox_driver.quit()
+        #
+        #         return lien_dl_site.text
+        #
+        #     except TimeoutException:
+        #
+        #         print(f"{Fore.LIGHTYELLOW_EX}Impossible de résoudre le captcha automatiquement{Style.RESET_ALL}\n"
+        #               f"Une page de navigateur va s'ouvrir. Résolvez le captcha manuellement\n"
+        #               f"La page se fermera toute seule dès que le captcha est résolu\n"
+        #               f"Appuyez sur Enter pour continuer ...{Fore.BLACK}\n")
+        #
+        #         driver_maximized = DriverInit.firefox(headless=False)
+        #
+        #         driver_maximized.get(lien_page_captcha)
+        #         driver_maximized.maximize_window()
+        #
+        #         WebDriverWait(driver_maximized, 20).until(
+        #             EC.presence_of_element_located((By.XPATH, "//button[text()=\"Continuer\"]")))
+        #
+        #         form = driver_maximized.find_element(By.ID, "myForm")
+        #         form.submit()
+        #
+        #         lien_dl_site = WebDriverWait(driver_maximized, 10).until(
+        #             EC.presence_of_element_located((By.XPATH, "//a[contains(@href,\'https://1fichier.com\')]")))
+        #
+        #         lien_dl_site = lien_dl_site.text
+        #
+        #         driver_maximized.quit()
+        #
+        #         print(f"{Fore.GREEN}Captha résolu{Style.RESET_ALL}\n")
+        #
+        #         return lien_dl_site
+        #
+        # else:
 
-            firefox_driver = DriverInit.firefox()
+        # print(
+        #     f"\n\n{Fore.LIGHTCYAN_EX}############################################################################\n"
+        #     f"L\'accès au téléchargement nécessite la validation d'un captcha.\n"
+        #     "Vous devez valider ce captcha manuellement.\n"
+        #     f"############################################################################\n\n{Style.RESET_ALL}")
 
-            try:
-                print(f"{Style.RESET_ALL}Tentative de résolution automatique du captcha{Fore.BLACK}")
+        input(
+            f"{Style.RESET_ALL}\n\nUn navigateur va s'ouvrir. Elle contient le captcha qu'il faut résoudre.\n"
+            f"Une fois que le captcha est résolu, vous devez copier-coller ci-dessous le lien du film qui "
+            f"commence par \"https://{dl_site.lower()}...\n"
+            f"Le site fait apparaitre de nombreuses popups inutiles. Tout ce passe sur la première page ouverte.\n"
+            f"Appuyez sur Entrer pour continuer ...\n")
+        os.system(f"xdg-open {lien_page_captcha}")
 
-                firefox_driver.get(lien_page_captcha)
+        while True:
+            new_url = input(f"Copiez-collez le lien qui commence par \"https://{dl_site.lower()}...\n")
+            if new_url.startswith(f"https://{dl_site.lower()}"):
+                break
+            else:
+                print(f"\n\n{Fore.RED}Le lien que vous avez entré n'est pas valide{Style.RESET_ALL}\n\n")
 
-                WebDriverWait(firefox_driver, 15).until(
-                    EC.presence_of_element_located((By.XPATH, "//button[text()=\"Continuer\"]")))
-
-                form = firefox_driver.find_element(By.ID, "myForm")
-
-                form.submit()
-
-                lien_dl_site = WebDriverWait(firefox_driver, 10).until(
-                    EC.presence_of_element_located((By.XPATH, f"//a[contains(@href,\'https://{dl_site}\')]")))
-
-                print(f"{Fore.GREEN}Captha résolu{Style.RESET_ALL}\n")
-
-                firefox_driver.quit()
-
-                return lien_dl_site.text
-
-            except TimeoutException:
-
-                print(f"{Fore.LIGHTYELLOW_EX}Impossible de résoudre le captcha automatiquement{Style.RESET_ALL}\n"
-                      f"Une page de navigateur va s'ouvrir. Résolvez le captcha manuellement\n"
-                      f"La page se fermera toute seule dès que le captcha est résolu\n"
-                      f"Appuyez sur Enter pour continuer ...{Fore.BLACK}\n")
-
-                driver_maximized = DriverInit.firefox(headless=False)
-
-                driver_maximized.get(lien_page_captcha)
-                driver_maximized.maximize_window()
-
-                WebDriverWait(driver_maximized, 20).until(
-                    EC.presence_of_element_located((By.XPATH, "//button[text()=\"Continuer\"]")))
-
-                form = driver_maximized.find_element(By.ID, "myForm")
-                form.submit()
-
-                lien_dl_site = WebDriverWait(driver_maximized, 10).until(
-                    EC.presence_of_element_located((By.XPATH, "//a[contains(@href,\'https://1fichier.com\')]")))
-
-                lien_dl_site = lien_dl_site.text
-
-                driver_maximized.quit()
-
-                print(f"{Fore.GREEN}Captha résolu{Style.RESET_ALL}\n")
-
-                return lien_dl_site
-
-        else:
-
-            print(
-                f"\n\n{Fore.LIGHTCYAN_EX}############################################################################\n"
-                f"L\'accès au téléchargement nécessite la validation d'un captcha.\n"
-                "Vous devez valider ce captcha manuellement.\n"
-                f"############################################################################\n\n{Style.RESET_ALL}")
-
-            input(
-                f"{Style.RESET_ALL}\n\nUn navigateur va s'ouvrir. Elle contient le captcha qu'il faut résoudre.\n"
-                f"Une fois que le captcha est résolu, vous devez copier-coller ci-dessous le lien du film qui "
-                f"commence par \"https://{dl_site.lower()}...\n"
-                f"Le site fait apparaitre de nombreuses popups inutiles. Tout ce passe sur la première page ouverte.\n"
-                f"Une fois le lien copié, fermez l'onglet, puis revenez sur cette fenêtre\n"
-                f"Appuyez sur Entrer pour ouvrir chrome ...\n")
-            os.system(f"xdg-open {lien_page_captcha}")
-
-            while True:
-                new_url = input(f"Copiez-collez ici le lien qui commence par \"https://{dl_site.lower()}...\n")
-                if new_url.startswith(f"https://{dl_site.lower()}"):
-                    break
-                else:
-                    print(f"\n\n{Fore.RED}Le lien que vous avez entré n'est pas valide{Style.RESET_ALL}\n\n")
-
-            return new_url
+        return new_url
 
     @staticmethod
     def methode3(lien_page_captcha, dl_site):
-        resolved_links = LinkResolver().resolveLinks([lien_page_captcha])
-        return resolved_links[lien_page_captcha]
+        link_resolver = LinkResolver()
+        try:
+            resolved_links = link_resolver.resolveLinks([lien_page_captcha])
+
+        except:
+            link_resolver.driver.quit()
+            print(f"{Fore.RED}Échec de la résolution automatique\n{Style.RESET_ALL}"
+                  "Passage à la methode 2")
+            return CaptchaSolver.methode2(lien_page_captcha, dl_site)
+
+        else:
+            return resolved_links[lien_page_captcha]
+

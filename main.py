@@ -394,47 +394,26 @@ if "PLATFORMS" in config:
 
 driver.get(lien_page_film)
 
-# ----------SELECTION QUALITE---------- #
-
+# v v v v v v v v v v SÉLECTION QUALITÉ v v v v v v v v v v #
 
 lien_page_film = select_quality(driver, mode_auto, uploadDates, lien_page_film)
 
+# ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ SÉLECTION QUALITÉ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ #
 
-# ----------SELECTION QUALITE---------- #
 
 print(Fore.BLACK)
 
-# ----------SELECTION DL SITE---------- #
 
+# v v v v v v v v v v SÉLECTION DU SITE DE DL v v v v v v v v v v #
 
 lien_page_captcha, dl_site = recup_page_captcha(driver, lien_page_film, mode_auto)
 
+# ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ SÉLECTION DU SITE DE DL ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ #
 
-# ----------SELECTION DL SITE---------- #
 
+# v v v v v v v v v v RÉSOLUTION DU CAPTCHA v v v v v v v v v v #
 
-choix_valide = False
-methode = None
-while not choix_valide:
-    if not mode_auto or "METHOD" not in config:
-        methode = input(f"{Style.RESET_ALL}"
-                        f"Entrez 1 pour résoudre le captcha avec l'application android Captcha skipper\n"
-                        f"Entrez 2 pour résoudre le captcha depuis votre navigateur\n"
-                        f"Entrez 3 pour résoudre le captcha de manière automatisée (expérimental)\n\n"
-                        f"{Fore.LIGHTYELLOW_EX}Attention ! Les méthodes 2 et 3 ne fonctionnent que depuis "
-                        f"l'interface graphique (ne fonctionnent donc pas en ssh).\n{Style.RESET_ALL}").upper()
-    else:
-        methode = config["METHOD"]
-
-    if methode in ("1", "2", "3"):
-        if methode == "2" and os.name != 'nt':
-            print(f"{Fore.RED}Réponse invalide. Vous ne pouvez pas choisir la methode 2 si vous "
-                  f"n'êtes pas sur Windows\n{Style.RESET_ALL}")
-            mode_auto = False
-        else:
-            choix_valide = True
-    else:
-        print(f"{Fore.RED}Réponse invalide. Veuillez entrer 1, 2 ou 3\n{Style.RESET_ALL}")
+methode = CaptchaSolver.select_methode(mode_auto)
 
 new_url = ""
 
@@ -458,55 +437,19 @@ if new_url == "":
 
 print(f"{Fore.GREEN}Le captcha a été passé avec succès !{Style.RESET_ALL}\n\n")
 
+# ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ RÉSOLUTION DU CAPTCHA ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ #
+
+
 if no_download:
+    driver.quit()
     input(f"Voici le lien vers votre film : {new_url}\n"
           "Merci d'avoir utilisé Wawacity Downloader\n\n"
           "Appuyez sur Enter pour quiter\n\n")
     exit(0)
 
-# driver = DriverInit.firefox(headless=False)
 
-lien_valide = False
-while not lien_valide:
-    try:
-        print(f"Connecting to {new_url} ...{Fore.BLACK}\n")
-        driver.get(new_url)
-        lien_valide = True
-    except:
-
-        rep = demande(f"{Fore.RED}Connexion impossible.{Style.RESET_ALL}\n"
-                      f"Certains sites de téléchargements sont bloqués par certains opérateurs\n"            
-                      f"Cette restriction peut être contournée en modifiant les paramètres DNS du PC\n"
-                      f"Voulez vous changer ces paramètres automatiquement ?")
-
-        if rep in ("OUI", "O"):
-
-            if os.name == 'nt':  # Windows
-                os.system("netsh interface ipv4 show interfaces")
-            else:  # Linux, Mac OS X
-                os.system('ifconfig')
-
-            carte_res = input(f"Copier-Collez ici le nom de votre carte réseau connectée a internet\n")
-
-            input("\n\nLe programme va changer automatiquement les paramètres DNS en mettant le DNS gratuit de "
-                  "Google\n"
-                  "à la place de celui par défaut. Cela ne changera en rien votre navigation sur internet.\n"
-                  "Le programme va vous demander un accès administrateur\n"
-                  "Appuyez sur Entrer pour continuer...\n")
-
-            if os.name == 'nt':
-                os.system(f"powershell -Command \"Start-Process \'{prgm_dir}/change_dns.bat\' -Verb runAs "
-                          f"-ArgumentList \'{carte_res}\'\"")
-            else:
-                os.system(f"sudo nmcli dev modify {carte_res} ipv4.dns \"8.8.8.8 8.8.4.4\"")
-
-            time.sleep(3)
-
-        else:
-            input("Appuyez sur Entrer pour quitter...")
-            exit(0)
-
-
+print(f"Connecting to {new_url} ...{Fore.BLACK}\n")
+driver.get(new_url)
 print(f"{Fore.GREEN}Connected !{Fore.BLACK}\n")
 
 lien_film = ""
@@ -528,7 +471,7 @@ if dl_site == "1fichier":
         print(f"{Fore.RED}Une erreur est survenue.\n\n{Style.RESET_ALL}"
               f"Le site 1fichier a un compte à rebours qui empêche de télécharger plusieurs "
               f"films d'affilé.\n"
-              f"Ce compte à rebours peut être esquivé en désactivant et en réactivant la carte réseau\n")
+              f"Ce compte à rebours peut être esquivé en désactivant et en réactivant la carte réseau (Expérimental)\n")
 
         if mode_auto and ("SKIP_COUNTDOWN" in config):
 
