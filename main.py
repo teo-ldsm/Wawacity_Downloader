@@ -30,10 +30,10 @@ import threading
 
 version = "v1.1.4-beta"     # TODO Modifier le numéro de version
 
-if os.name == 'nt':  # Windows
-    os.system('cls')
-else:  # Linux, Mac OS X
-    os.system('clear')
+# if os.name == 'nt':  # Windows
+#     os.system('cls')
+# else:  # Linux, Mac OS X
+#     os.system('clear')
 
 # import obf_authenticator
 
@@ -89,21 +89,25 @@ prgm_dir = str(pathlib.Path(__file__).parent.absolute())
 
 if "DOWNLOAD_PATH" in config:
     dl_dir = config["DOWNLOAD_PATH"]
+    print(f"\nDossier de téléchargement récupéré dans config.txt : {dl_dir}\n")
+    rep = "OUI"
+
 else:
     if os.name == "nt":
         dl_dir = pathlib.Path().home() / "Downloads"
     else:
         dl_dir = "~/Downloads"
 
+    if not os.path.exists(dl_dir.replace("\\", "/")):
+        rep = "NON"
+        dl_dir = None
+
 if no_download:
     rep = "OUI"
 
 else:
-    if "DOWNLOAD_PATH" in config:
-        print(f"\nDossier de téléchargement récupéré dans config.txt : {dl_dir}\n")
-        rep = None
 
-    elif not mode_auto:
+    if not mode_auto and dl_dir is not None:
         rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
                       f"Ce chemin vous convient-t-il ?")
 

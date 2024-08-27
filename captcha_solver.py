@@ -138,7 +138,10 @@ class CaptchaSolver:
             f"commence par \"https://{dl_site.lower()}...\n"
             f"Le site fait apparaitre de nombreuses popups inutiles. Tout ce passe sur la première page ouverte.\n"
             f"Appuyez sur Entrer pour continuer ...\n")
-        os.system(f"xdg-open {lien_page_captcha}")
+        if os.name == "nt":
+            os.startfile(lien_page_captcha)
+        else:
+            os.system(f"xdg-open {lien_page_captcha}")
 
         while True:
             new_url = input(f"Copiez-collez le lien qui commence par \"https://{dl_site.lower()}...\n")
@@ -151,12 +154,14 @@ class CaptchaSolver:
 
     @staticmethod
     def methode3(lien_page_captcha, dl_site):
-        link_resolver = LinkResolver()
+        link_resolver = None
         try:
+            link_resolver = LinkResolver()
             resolved_links = link_resolver.resolveLinks([lien_page_captcha])
 
         except:
-            link_resolver.driver.quit()
+            if link_resolver:
+                link_resolver.driver.quit()
             print(f"{Fore.RED}Échec de la résolution automatique\n{Style.RESET_ALL}"
                   "Passage à la methode 2")
             return CaptchaSolver.methode2(lien_page_captcha, dl_site)
