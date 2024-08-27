@@ -30,29 +30,32 @@ def check_for_update(version):
             package_url = None
             for asset in latest_realease['assets']:
                 if asset["name"].startswith("wawacity_downloader_installer"):
-                    if os.name == "nt" and "windows" in asset["name"]:
-                        package_url = asset["browser_download_url"]
-                        break
-                    if os.name != "nt" and "linux" in asset["name"]:
+                    if os.name == "nt":
+                        if getattr(sys, 'frozen', False) and asset["name"].endswith(".exe"):
+                            package_url = asset["browser_download_url"]
+                            break
+                        elif asset["name"].endswith(".zip"):
+                            package_url = asset["browser_download_url"]
+                            break
+                    if os.name != "nt" and asset["name"].endswith(".zip"):
                         package_url = asset["browser_download_url"]
                         break
 
             if package_url is not None:
                 parent_dir = str(pathlib.Path(__file__).parent.parent.absolute())
                 package_name = wget.detect_filename(package_url)
-                package_name_no_suffix = package_name.removesuffix(".zip")
+                # package_name_no_suffix = package_name.removesuffix(".zip")
                 print(f"\nDébut du téléchargement depuis {package_url}\n")
 
                 wget.download(package_url, out=f"{parent_dir}\\{package_name}")
 
                 print(f"\n\nVotre fichier a été téléchargé ici : {parent_dir}\\{package_name}\n\n")
 
-                if os.name == "nt":
-                    input(f"{Fore.LIGHTYELLOW_EX}Attention ! Pensez à sauvegarder le contenu de config.txt !\n"
-                          f"{Style.RESET_ALL}\n"
-                          f"Appuyez sur Entrer pour quitter et lancer l'installateur...\n")
+                input(f"{Fore.LIGHTYELLOW_EX}Attention ! Pensez à sauvegarder le contenu de config.txt !\n"
+                      f"{Style.RESET_ALL}\n"
+                      f"Appuyez sur Entrer pour quitter ...\n")
 
-                    os.startfile(f"{parent_dir}\\{package_name}")
+                # os.startfile(f"{parent_dir}\\{package_name}")
 
                 exit(0)
 

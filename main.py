@@ -28,8 +28,7 @@ import signal
 import threading
 
 
-version = "v1.1.3-beta"     # TODO Modifier le numéro de version
-# TODO MODIFIER AUSSI LE NUM DE VERSION DANS LE NOM DE L'INSTALLATEUR
+version = "v1.1.4-beta"     # TODO Modifier le numéro de version
 
 if os.name == 'nt':  # Windows
     os.system('cls')
@@ -171,12 +170,6 @@ except WebDriverException as e:
     else:
         print(Style.RESET_ALL)
         raise e
-    # TODO Faire un match avec une eventuelle erreur si l'erreur elle contient NETWORK_ERROR ou jsp quoi
-    #  (En gros la page elle est introuvable) Il faut aller faire une requette au dns resolver de google et lui
-    #  demander la nouvelle IP du site au cas ou elle ait changé (peu probable). Remplacer le nom de domaine dans
-    #  config["ADRESS"] par l'IP actuel du site. Pour connecter avec un nouvel ip ajouter un argument dans
-    #  DriverInit.chrome() avec l'adresse ip. Sa valeur par défaut c'est la valeur dans config["ADRESS"]
-    #  Voila bg buena suerte
 
 except:
     print(f"{Style.RESET_ALL}\n\nLien invalide\n"
@@ -381,11 +374,6 @@ def recup_results(num_page):
 
     return lien, titre
 
-# TODO Transférer ce système dans just_watch.py pour utiliser le moteur de recherche de justwatch
-#  au lieu de celui de wawacity
-#  TODO Utiliser la distance de levenstein pour déterminer quel est le titre le plus proche renvoyé par
-#   wawacity en lui donnant le résultat de justwatch
-
 
 print()
 lien_page_film, titre = recup_results(1)
@@ -548,40 +536,40 @@ if dl_site == "1fichier":
                 exit(1)
 
 
-elif dl_site == "Uptobox":
-
-    btn = driver.find_element(By.XPATH, "//*[@id=\"dl\"]/form")
-    btn.submit()
-
-    print(f"{Fore.GREEN}Timer skipped !\n{Style.RESET_ALL}"
-          f"En attente du chargement de la page{Fore.BLACK}\n")
-
-    try:
-        # btn2 = WebDriverWait(driver, 10).until(
-        #     EC.presence_of_element_located((By.XPATH, "//thead/tr/td/a[contains(@href,\'.uptobox.com/dl/\')]")))  # TODO Tester ceci
-
-        btn2 = driver.find_element(By.XPATH, "//thead/tr/td/a[contains(@href,\'.uptobox.com/dl/\')]")
-
-        print(f"{Style.RESET_ALL}C'est OUI !!!!")
-        lien_film = btn2.get_attribute("href")
-    except:
-        try:
-            btn2 = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.LINK_TEXT, "Click here to start your download")))
-            lien_film = btn2.get_attribute("href")
-        except:
-
-            input(f"{Fore.RED}Une erreur est survenue.\n\n"
-                  f"{Fore.LIGHTYELLOW_EX}Pour fonctionner, chrome doit être en français ou en anglais\n"
-                  f"Le site Uptobox a un compte à rebours qui empêche de télécharger plusieurs "
-                  f"films d'affilé. \n"
-                  f"Essayez de relancer le programme en allant sur un autre site de "
-                  f"téléchargement ou en changeant votre localisation avec un VPN.\n{Style.RESET_ALL}"
-                  f"Vous pouvez aller vérifier manuellement sur cette page : {new_url}\n"
-                  f"Appuyez sur Entrer pour quitter...\n\n")
-            exit(1)
-
-    print(f"{Fore.GREEN}Page chargée !\n{Style.RESET_ALL}\n\n")
+# elif dl_site == "Uptobox":
+#
+#     btn = driver.find_element(By.XPATH, "//*[@id=\"dl\"]/form")
+#     btn.submit()
+#
+#     print(f"{Fore.GREEN}Timer skipped !\n{Style.RESET_ALL}"
+#           f"En attente du chargement de la page{Fore.BLACK}\n")
+#
+#     try:
+#         # btn2 = WebDriverWait(driver, 10).until(
+#         #     EC.presence_of_element_located((By.XPATH, "//thead/tr/td/a[contains(@href,\'.uptobox.com/dl/\')]")))
+#
+#         btn2 = driver.find_element(By.XPATH, "//thead/tr/td/a[contains(@href,\'.uptobox.com/dl/\')]")
+#
+#         print(f"{Style.RESET_ALL}C'est OUI !!!!")
+#         lien_film = btn2.get_attribute("href")
+#     except:
+#         try:
+#             btn2 = WebDriverWait(driver, 10).until(
+#                 EC.presence_of_element_located((By.LINK_TEXT, "Click here to start your download")))
+#             lien_film = btn2.get_attribute("href")
+#         except:
+#
+#             input(f"{Fore.RED}Une erreur est survenue.\n\n"
+#                   f"{Fore.LIGHTYELLOW_EX}Pour fonctionner, chrome doit être en français ou en anglais\n"
+#                   f"Le site Uptobox a un compte à rebours qui empêche de télécharger plusieurs "
+#                   f"films d'affilé. \n"
+#                   f"Essayez de relancer le programme en allant sur un autre site de "
+#                   f"téléchargement ou en changeant votre localisation avec un VPN.\n{Style.RESET_ALL}"
+#                   f"Vous pouvez aller vérifier manuellement sur cette page : {new_url}\n"
+#                   f"Appuyez sur Entrer pour quitter...\n\n")
+#             exit(1)
+#
+#     print(f"{Fore.GREEN}Page chargée !\n{Style.RESET_ALL}\n\n")
 
 
 # driver.quit()

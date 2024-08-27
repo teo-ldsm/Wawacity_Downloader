@@ -16,10 +16,6 @@ class ResultatJustWatch:
             self.resultat = self.resultats[0]
             self.titre = self.resultat.title
 
-        else:
-            # TODO implémenter ici le système de sélection des titres de main.py pour utiliser le moteur de recherche
-            #  de Justwatch à la place de celui de Wawacity qui est moins bon
-            pass
 
 
 class InfosFilm:

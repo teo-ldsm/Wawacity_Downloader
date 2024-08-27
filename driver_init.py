@@ -60,6 +60,7 @@ debug_mode_check(args)
 def get_chrome_path():
     def is_exe(fpath):
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
     def detect_scoop_chrome_app():
         chrome_exe = shutil.which("chrome")
         chrome_exe_dir = os.path.dirname(chrome_exe)
@@ -72,22 +73,25 @@ def get_chrome_path():
     portable_chrome_path = 'Chrome\\App\\Chrome-bin\\chrome.exe'
     if "CHROME_PATH" in config:
         chrome_path = config["CHROME_PATH"]
+
     elif is_exe(portable_chrome_path):
         chrome_path = portable_chrome_path
-    elif (scoop_chrome_app := detect_scoop_chrome_app()):
+
+    elif getattr(sys, 'frozen', False):  # Si le script est compilé avec PyInstaller
+        chrome_path = os.path.join(sys._MEIPASS, portable_chrome_path)  # PyInstaller extrait les fichiers ici
+
+    elif scoop_chrome_app := detect_scoop_chrome_app():
         chrome_path = scoop_chrome_app
+
     else:
         chrome_path = None
+
     return chrome_path
 
 
 class DriverInit:
 
     lien_wawacity = "wawacity.ing"
-    # TODO remplacer par une liste. A ce jour (17/08/2024), wawacity.ing et wawacity.al fonctionnent sans DNS, 
-    # et wawacity.tokyo avec DNS. 
-    # Faire aussi un testeur d'URL qui essaie toute la liste, et si aucune URL ne répond, récupère la nouvelle URL sur 
-    # https://www.astuces-aide-informatique.info/17934/nouvelle-adresse-wawacity ou sur https://t.me/s/Wawacity_officiel?before=60
 
     @staticmethod
     def chrome(headless=True, ip_wawacity: str = None):
