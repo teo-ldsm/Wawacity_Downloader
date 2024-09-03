@@ -3,6 +3,7 @@ from selenium.common import WebDriverException
 
 from captcha_solver import *
 from find_closest_title import find_closest_title
+from plex_page_parser import parse_plex_page
 from recup_page_captcha import recup_page_captcha
 from select_quality import select_quality
 from driver_init import *
@@ -45,6 +46,9 @@ if "-f" in args:
 elif "-s" in args:
     config["TITLE"] = args[args.index("-f") + 1]
     series, mode_auto = True, True
+elif "-p" in args:
+    config["TITLE"] = parse_plex_page(args[args.index("-p") + 1])
+    mode_auto = True
 
 no_download = True if "--no_download" in args else False
 

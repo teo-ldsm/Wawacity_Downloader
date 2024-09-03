@@ -97,6 +97,7 @@ def synthax_is_correct(file) -> bool:
         "main": {"-d": 0,
                  "-f": 1,
                  # "-s": 1,
+                 "-p": 1,
                  "--no_download": 0},
         "recup_lien_1fichier": "any",
         "config_loader": "no_argument",
