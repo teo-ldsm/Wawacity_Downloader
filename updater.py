@@ -41,15 +41,21 @@ def check_for_update(version):
                         package_url = asset["browser_download_url"]
                         break
 
+            else:
+                if os.name == "nt":
+                    package_url = latest_realease["zipball_url"]
+                else:
+                    package_url = latest_realease["tarball_url"]
+
             if package_url is not None:
                 parent_dir = str(pathlib.Path(__file__).parent.parent.absolute())
-                package_name = wget.detect_filename(package_url)
+                # package_name = wget.detect_filename(package_url)
                 # package_name_no_suffix = package_name.removesuffix(".zip")
                 print(f"\nDébut du téléchargement depuis {package_url}\n")
 
-                wget.download(package_url, out=f"{parent_dir}\\{package_name}")
+                package_name = wget.download(package_url, out=parent_dir)
 
-                print(f"\n\nVotre fichier a été téléchargé ici : {parent_dir}\\{package_name}\n\n")
+                print(f"\n\nVotre fichier a été téléchargé ici : {package_name}\n\n")
 
                 input(f"{Fore.LIGHTYELLOW_EX}Attention ! Pensez à sauvegarder le contenu de config.txt !\n"
                       f"{Style.RESET_ALL}\n"
@@ -69,3 +75,6 @@ def check_for_update(version):
     else:
         print(f"\n{Fore.GREEN}Le programme est a jour.{Style.RESET_ALL}\n\n")
 
+
+if __name__ == '__main__':
+    check_for_update("v1.1.4-beta")

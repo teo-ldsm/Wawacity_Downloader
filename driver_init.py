@@ -33,7 +33,11 @@ def signal_handler(sig, frame):
 
     def killDriver():
         print(Style.RESET_ALL)
-        driver.quit()
+        try:
+            driver.quit()
+        except:
+            pass
+
 
     print("Arrêt du programme en cours...")
     kill_thread = threading.Thread(target=killDriver)
