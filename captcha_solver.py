@@ -156,6 +156,7 @@ class CaptchaSolver:
     def methode3(lien_page_captcha, dl_site):
         link_resolver = None
         try:
+            print("Tentative de résolution automatique du captcha")
             link_resolver = LinkResolver()
             resolved_links = link_resolver.resolveLinks([lien_page_captcha])
 

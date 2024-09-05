@@ -30,9 +30,12 @@ def main_help():
           "respecter l'orthographe au maximum.\n\n\n"
           "\nListe des commandes:\n\n"
           "-h, --help \t\t|\tAffiche cette page d'aide\n"
+          "-m \t\t\t|\tFonctionnement classique (par défaut)\n"
           "-f <\"titre_du_film\">\t|\tLance le programme en mode auto\n"
-          "--no_download\t|\tAffiche seulement le lien vers le film sans le télécharger"
+          "-i \t\t\t|\tMode interface : Ouvre une fenêtre chrome où la séléction du film se fait graphiquement\n"
+          "--no-download\t\t|\tAffiche seulement le lien vers le film sans le télécharger\n"
           "-d \t\t\t|\tDebug mode : lance le programme en mode normal en affichant tous les messages d'erreurs\n\n"
+          "Vous pouvez sélectionner les arguments par défaut avec lesquels lancer le programme dans config.txt\n\n"
           "Exemples:\n\n"
           "python main.py \t\t\t\t (Mode normal)\n"
           "python main.py -f \"Titanic\" \t\t (Mode automatique, le programme va télécharger le film Titanic)\n\n\n")
@@ -98,6 +101,7 @@ def synthax_is_correct(file) -> bool:
                  "-f": 1,
                  # "-s": 1,
                  "-p": 1,
+                 "-i": 0,
                  "--no_download": 0},
         "recup_lien_1fichier": "any",
         "config_loader": "no_argument",

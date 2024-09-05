@@ -3,6 +3,7 @@ from selenium.common import WebDriverException
 
 from captcha_solver import *
 from find_closest_title import find_closest_title
+from justwatch_browser import Browser
 from plex_page_parser import parse_plex_page
 from recup_page_captcha import recup_page_captcha
 from select_quality import select_quality
@@ -28,17 +29,18 @@ from updater import check_for_update
 
 
 version = "v1.1.4-beta"     # TODO Modifier le numéro de version
-
-# if os.name == 'nt':  # Windows
-#     os.system('cls')
-# else:  # Linux, Mac OS X
-#     os.system('clear')
-
-# import obf_authenticator
-
-# config = load()
+check_for_update(version)
+debug_mode_check(args)
+Fore.BLACK = ""
 
 series, mode_auto = False, False
+
+if len(args) <= 1:
+    if "ARGUMENTS" in config:
+        for arg in config["ARGUMENTS"].split():
+            args.append(arg)
+    else:
+        args.append("-m")
 
 if "-f" in args:
     config["TITLE"] = args[args.index("-f") + 1]
@@ -49,22 +51,18 @@ elif "-s" in args:
 elif "-p" in args:
     config["TITLE"] = parse_plex_page(args[args.index("-p") + 1])
     mode_auto = True
+elif "-m" in args:
+    mode_auto = False
 
-no_download = True if "--no_download" in args else False
+elif "-i" in args:
+    br = Browser()
+    config["TITLE"] = br.run()
+    mode_auto = True
 
-debug_mode_check(args)
+no_download = True if "--no-download" in args else False
 
 
-# args = [arg.upper() for arg in args]
 
-
-# if len(args) > 1 and not args[1] == "DEBUG":
-#     config["TITLE"] = args[1]
-#     mode_auto = True
-# else:
-#     mode_auto = False
-
-check_for_update(version)
 
 # ----------Initialisation du driver---------- #
 
@@ -368,7 +366,7 @@ def recup_results(num_page):
 
 print()
 lien_page_film, titre = recup_results(1)
-if "PLATFORMS" in config:
+if "PLATFORMS" in config and not mode_auto:
     where_to_watch(titre)
 
 driver.get(lien_page_film)

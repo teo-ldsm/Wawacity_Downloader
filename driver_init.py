@@ -119,7 +119,7 @@ class DriverInit:
     lien_wawacity = "wawacity.ing"
 
     @staticmethod
-    def chrome(headless=True, ip_wawacity: str = None):
+    def chrome(headless=True, show_images: bool = False, ip_wawacity: str = None):
 
         print(f"\n\nInitialising...\n{Fore.BLACK}")
 
@@ -142,7 +142,8 @@ class DriverInit:
         options.add_argument('--lang=fr')
         options.add_argument('--disable-extensions')
         options.add_argument("--disable-search-engine-choice-screen")
-        if not headless:
+        options.add_experimental_option("excludeSwitches", ["enable-logging"])
+        if not headless and not show_images:
             options.add_argument("--blink-settings=imagesEnabled=false")
         
         if ip_wawacity is None:

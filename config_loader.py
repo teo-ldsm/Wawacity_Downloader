@@ -133,7 +133,6 @@ def verify_config(config: dict) -> dict:
                   f"n'existe pas{Style.RESET_ALL}\n")
             config.pop("CHROME_PATH")
 
-
     return config
     # TODO Verifier que les arguments de config sont bons (quality existe)
 
@@ -146,7 +145,8 @@ def build_config() -> None:
     file.write("# Les lignes qui commencent par \"#\" ne sont pas prises en compte \n"
                "# Veuillez ne pas laisser de champs vide sans un \"#\" en début de ligne \n"
                "# Les champs seront remplis automatiquement si non précisé ici \n"
-               "# - TOKEN : Votre jeton d'accès unique"
+               "# - ARGUMENTS : Ces arguments seront appliqués par défaut si le programme est lancé sans arguments"
+               "#   (par exemple: -m pour manuel (par défaut), -i pour interface... Lancer 'main -h' pour plus d'infos)"
                "# - ADDRESS : Adresse actuelle du site wawacity. Cette valeur est remplie automatiquement\n"
                "# - DOWNLOAD_PATH : Les medias seront téléchargés dans ce dossier \n"
                "# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme "
@@ -157,7 +157,7 @@ def build_config() -> None:
                "# ou \'Uptobox\'. Les autres sites ne sont pas encore pris en charges\n"
                "# - METHOD : Methode à utiliser pour valider le captcha. Doit être défini par \'1\' ou \'2\'\n"
                "#       + Methode 1 : Avec l'application mobile CaptchaSkipper (Android uniquement)\n"
-               "#       + Methode 2 : Résolution manuelle depuis le navigateur (beaucoup de popups et de pubs)\n"
+               "#       + Methode 2 : Résolution manuelle depuis un navigateur (Beaucoup de popups et de pubs)\n"
                "#       + Méthode 3 : Résolution automatique avec Chrome, uniquement en mode graphique (Chrome doit être installé)\n"
                "# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le "
                "# compte a rebours du site 1fichier. Doit être défini par \'OUI\' ou \'NON\'\n"
@@ -165,7 +165,7 @@ def build_config() -> None:
                "# Remplir uniquement si le programme Chrome n'est pas trouvé ou pour utiliser une version différente de celle du système \n"
                "# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le "
                "# programme normalement pour que la valeur soit remplie automatiquement\n"
-               "#TOKEN=\n"
+               "ARGUMENTS=-m"
                "#ADDRESS=\n"
                "#DOWNLOAD_PATH=\n"
                "#QUALITY=\n"
@@ -254,7 +254,7 @@ def demande(msg: str = ""):
     return rep
 
 
-config = load()
+config: dict[str:str] = load()
 
 
 if __name__ == '__main__':

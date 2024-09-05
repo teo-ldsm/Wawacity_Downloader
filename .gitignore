@@ -9,6 +9,7 @@ build/
 venv311/
 collections/
 /main.exe
+config.txt
 /Chrome/
 /Chrome/
 /config_default.txt

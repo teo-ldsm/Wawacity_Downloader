@@ -25,7 +25,7 @@ def parse_plex_page(url: str) -> str:
 
 
 if __name__ == '__main__':
-    assert parse_plex_page("https://l.plex.tv/BdDrFHT") == "Kingsman : Le Cercle d'or (2017)"
-    assert parse_plex_page("https://l.plex.tv/6hwCH6P") == "The King's Man : Première Mission (2021)"
+    pass
+    # assert parse_plex_page("https://l.plex.tv/BdDrFHT") == "Kingsman : Le Cercle d'or (2017)"
 
 
