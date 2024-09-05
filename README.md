@@ -6,7 +6,6 @@ Wawacity Downloader est un utilitaire pour télécharger des films depuis le sit
 ### Package pré-installé
 Vous pouvez trouver le package complet, contenant une version de Chrome portable et un driver Chrome pour Python
 [sur cette page](https://github.com/teo-ldsm/Wawacity_Downloader/releases/latest). 
-Il faut également installer [Python](https://www.python.org/downloads/).
 
 ### Construction manuelle
 Pour faire fonctionner l'application à partir des sources:
@@ -22,7 +21,9 @@ Pour lancer le programme en mode manuel, lancez dans un terminal:
 ```python main.py``` (Windows)  
 ```python3 main.py```(Linux).
 
-### Mode automatique
+Vous pouvez utiliser le mode manuel par défaut en mettant "-m" à la valeur "ARGUMENTS" de ```config.txt```
+
+### Mode automatique (Classique)
 Vous pouvez également lancer le programme en mode automatique. Le mode automatique consiste à limiter au maximum les interractions : vous devez seulement renseigner le titre de votre film et le programme fait le reste seul. Vous devrez néanmoins valider manuellement un CAPTCHA (sauf avec la méthode 3).
 
 Pour que le mode automatique soit efficace, il faut compléter correctement le fichier `config.txt`, ou faire un premier démarrage en mode manuel pour le laisser remplir ce fichier à votre place. Le fichier contient des explications sur comment compléter chaque valeur. (Les valeurs plex ne sont pas obligatoires.)
@@ -34,6 +35,16 @@ Pour lancer le programme en mode automatique, il faut entrer ceci dans un termin
 ```python3 main.py -f "Titre du film"``` (Linux).
 
 N'oubliez pas les guillements.
+
+### Mode automatique (Interface)
+Le mode interface fonctionne de la même manière que le mode automatique mais au lieu de spécifier le titre dans la ligne de commande, la séléction se fait via un navigateur.
+Au lancement, le site [JustWatch](https://www.justwatch.com/) va s'ouvrir. Ce site est un moteur de recherche pour les films. Quand vous vous rendez sur la page d'un film, un bouton télécharger apparait et lance le programme avec le film que vous avez sélectionné
+
+Pour lancer ce mode il faut entrer cette commande
+
+```python main.py -i```
+
+Vous pouvez utiliser le mode interface par défaut en mettant "-i" à la valeur "ARGUMENTS" de ```config.txt```
 
 ### Mode debug
 Si ```main.py``` ne fonctionne pas, lancez ```python main.py -d``` dans 
