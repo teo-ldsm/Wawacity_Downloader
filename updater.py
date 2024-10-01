@@ -16,6 +16,20 @@ args = sys.argv
 debug_mode_check(args)
 
 
+def is_newer(v1: str, v2: str) -> bool:
+    """v1 et v2 sont des numéros de version github. Renvoie True si v1 est plus récent que v2, False sinon"""
+    v1, v2 = v1.removesuffix("-beta").removeprefix("v"), v2.removesuffix("-beta").removeprefix("v")
+    v1, v2 = v1.split("."), v2.split(".")
+
+    for i in range(min(len(v1), len(v2))):
+        if v1[i].isdigit() and v2[i].isdigit():
+            if int(v1[i]) > int(v2[i]):
+                return True
+            if int(v1[i]) < int(v2[i]):
+                return False
+    return False
+
+
 def check_for_update(version):
     print("\n\n\nVérification des mises a jour ...\n\n")
     api_url = 'https://api.github.com/repos/teo-ldsm/Wawacity_Downloader/releases/latest'
@@ -23,7 +37,7 @@ def check_for_update(version):
     latest_realease = json.loads(response.text)
     latest_version = latest_realease["tag_name"]
 
-    if latest_version != version:
+    if latest_version != version and is_newer(latest_version, version):
         rep = demande(f'{Fore.GREEN}Une nouvelle version est disponible: {latest_version}. Voulez-vous mettre a jour ?{Style.RESET_ALL}')
 
         if rep in ("OUI", "O"):
@@ -63,6 +77,10 @@ def check_for_update(version):
 
                 # os.startfile(f"{parent_dir}\\{package_name}")
 
+                # TODO Se le programme téléchargé est un exécutable alors le lancer avec les mêmes arguments
+                #  et avec un arguments bonus qui racupère les infos de config.txt, qui reconstruit un config selon
+                #  la nouvelle version et qui remplit le ouveau av les valeurs de l'ancien.
+
                 exit(0)
 
             else:
@@ -76,5 +94,4 @@ def check_for_update(version):
         print(f"\n{Fore.GREEN}Le programme est a jour.{Style.RESET_ALL}\n\n")
 
 
-if __name__ == '__main__':
-    check_for_update("v1.1.4-beta")
+

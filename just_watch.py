@@ -36,7 +36,10 @@ class InfosFilm:
                 self.free[offer.name] = offer.url
 
 
-def where_to_watch(film, entree_media: MediaEntry = None):
+def where_to_watch(film, entree_media: MediaEntry = None) -> bool:
+    """Affiche si le film est proposé sur une des plateformes présentes dans config.txt ou sur une plateforme gratuite
+    Si des offres sont trouvées, demande à l'utilisateur s'il souhaite continuer le téléchargement
+    Renvoie True si le téléchargement doit continuer, False sinon"""
 
     if entree_media is not None:
         result = InfosFilm(entree_media)
@@ -75,7 +78,8 @@ def where_to_watch(film, entree_media: MediaEntry = None):
         if rep in ("NON", "N"):
             input("\n\nMerci d'avoir utilisé Wawacity Downloader\n\n"
                   "Appuyez sur Enter pour quitter ...\n\n")
-            exit(0)
+            return False
+    return True
 
 
 if __name__ == '__main__':

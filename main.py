@@ -1,4 +1,6 @@
 from colorama import Fore, Style
+import re
+from threading import Thread
 from selenium.common import WebDriverException
 
 from captcha_solver import *
@@ -8,6 +10,7 @@ from plex_page_parser import parse_plex_page
 from recup_page_captcha import recup_page_captcha
 from select_quality import select_quality
 from driver_init import *
+from skip_countdown import skip_countdown
 
 # from obf_authenticator import verify_access
 
@@ -15,7 +18,7 @@ args = sys.argv
 
 # exit = sys.exit
 
-if __name__ == '__main__':
+if __name__ == '__main__' and "-d" not in args:
     # venv_init()
 
     ask_help("main")
@@ -28,10 +31,12 @@ from recup_lien_1fichier import *
 from updater import check_for_update
 
 
-version = "v1.1.4-beta"     # TODO Modifier le numéro de version
+version = "v1.2.0-beta"     # TODO Modifier le numéro de version
 check_for_update(version)
 debug_mode_check(args)
 Fore.BLACK = ""
+
+driver = None
 
 series, mode_auto = False, False
 
@@ -45,32 +50,48 @@ if len(args) <= 1:
 if "-f" in args:
     config["TITLE"] = args[args.index("-f") + 1]
     mode_auto = True
+
 elif "-s" in args:
     config["TITLE"] = args[args.index("-f") + 1]
     series, mode_auto = True, True
+
 elif "-p" in args:
     config["TITLE"] = parse_plex_page(args[args.index("-p") + 1])
     mode_auto = True
+
 elif "-m" in args:
     mode_auto = False
 
 elif "-i" in args:
-    br = Browser()
-    config["TITLE"] = br.run()
-    mode_auto = True
+    try:
+        print("\n\nChoisissez votre film dans le navigateur ...\n")
+
+        # Initialisation du driver suivant en arrière-plan pour gagner du temps
+        def initer():
+            global driver
+            driver = DriverInit.firefox()
+
+        tr = Thread(target=initer)
+        tr.start()
+
+        br = Browser()
+        config["TITLE"] = br.run()
+    except:
+        print(f"{Fore.LIGHTYELLOW_EX}Échec de la recherche du titre, utilisation du mode manuel{Style.RESET_ALL}")
+        mode_auto = False
+    else:
+        mode_auto = True
 
 no_download = True if "--no-download" in args else False
 
 
-
-
 # ----------Initialisation du driver---------- #
 
-# driver = DriverInit.firefox()
-driver = DriverInit.chrome()
+if not driver:
+    driver = DriverInit.firefox()
+    # driver = DriverInit.chrome()
 
 # ----------Initialisation du driver---------- #
-
 
 # prgm_dir = str(pathlib.Path(__file__).parent.absolute())
 
@@ -84,7 +105,7 @@ elif "DOWNLOAD_PATH" in config:
 
 else:
     if os.name == "nt":
-        dl_dir = pathlib.Path().home() / "Downloads"
+        dl_dir = os.path.join(pathlib.Path().home(), "Downloads")
     else:
         dl_dir = "~/Downloads"
 
@@ -92,13 +113,10 @@ else:
         rep = "NON"
         dl_dir = None
 
-    elif not mode_auto:
+    else:
         rep = demande(f"Par défaut, les films seront téléchargés dans le dossier \"{dl_dir}\". "
                       f"Ce chemin vous convient-t-il ?")
 
-    else:
-        print("\nLa valeur \"DOWNLOAD_PATH\" est absente de config.txt\n\n")
-        rep = "NON"
 
 if rep in ("NON", "N"):
 
@@ -180,12 +198,27 @@ print(f"{Fore.GREEN}Connected !{Fore.BLACK}\n")
 
 search = driver.find_element(By.NAME, "search")
 if not mode_auto:
-    search.send_keys(input(f"{Style.RESET_ALL}\n\nQuel est le titre du film que vous recherchez ?\n"))
-else:
-    search.send_keys(config["TITLE"])
+    config["TITLE"] = input(f"{Style.RESET_ALL}\n\nQuel est le titre du film que vous recherchez ?\n")
 
-print(Fore.BLACK)
-search.submit()
+config["TITLE"] = config["TITLE"].strip()
+
+# print(Fore.BLACK)
+# search.submit()
+
+# match = re.search(r"\(\d{4}\)$", config["TITLE"])
+#
+# if match:
+#     date = config["TITLE"][match.start()+1:match.end()-1]
+#     title = config["TITLE"][:match.start()].replace(" ", "%20")
+#     search_querry = "?p=films&search=" + title + "&year=" + date
+#
+# else:
+#     title = config["TITLE"].replace(" ", "%20")
+#     search_querry = "?p=films&search=" + title
+
+search_querry = "?p=films&search=" + config["TITLE"].replace(" ", "%20")
+
+driver.get(driver.current_url + "/" + search_querry)
 
 
 class Movie:
@@ -200,7 +233,7 @@ uploadDates = dict()
 
 def parse_search_result_page():
     liste_resultats = driver.find_elements(By.XPATH, "//div[@class=\'wa-sub-block-title\']/a")
-    liste_dates = driver.find_elements(By.XPATH, "//a[contains(@href,\'?p=films&year=\')]")
+    liste_dates = driver.find_elements(By.XPATH, "//li[span[contains(text(),'Année')]]/b/a")
     liste_dates_upload = driver.find_elements(By.XPATH, "//span[@class=\'date-text text-muted\']")
     liens_titres = dict()
     dates_titres = dict()
@@ -221,7 +254,11 @@ def parse_search_result_page():
 
 
 def recup_results(num_page):
-    movies = parse_search_result_page()
+    movies = dict()
+    movies.update(parse_search_result_page())
+    driver.get(driver.current_url + f"&page=2")
+    movies.update(parse_search_result_page())
+
     if len(movies) == 0:
         input(f"\n{Fore.RED}Aucun résultat trouvé.\n"
               f"{Style.RESET_ALL}Appuyez sur Entrer pour quitter...")
@@ -269,9 +306,6 @@ def recup_results(num_page):
         #         time.sleep(0.1)
         #
         # titre_correct = validation()
-        #
-        # print("bite")
-        # input("Zgueg")
 
         # ^^^^ Fonctionne mais le thread reste actif pendant toute l'exécution du programme
 
@@ -310,6 +344,7 @@ def recup_results(num_page):
     if not mode_auto or not ("TITLE" in config) or not titre_correct:
         print(f"{Fore.GREEN}\nVoici les résultats\n{Style.RESET_ALL}")
         titles = []
+        movies = {m: movies[m] for m in sorted(movies.keys())}
         n = 1
         for i in movies:
             print(f"{n} : {i}")
@@ -365,9 +400,11 @@ def recup_results(num_page):
 
 
 print()
-lien_page_film, titre = recup_results(1)
+lien_page_film, titre = recup_results(2)
 if "PLATFORMS" in config and not mode_auto:
-    where_to_watch(titre)
+    if not where_to_watch(titre):
+        driver.quit()
+        sys.exit(0)
 
 driver.get(lien_page_film)
 
@@ -376,9 +413,6 @@ driver.get(lien_page_film)
 lien_page_film = select_quality(driver, mode_auto, uploadDates, lien_page_film)
 
 # ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ SÉLECTION QUALITÉ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ ˄ #
-
-
-print(Fore.BLACK)
 
 
 # v v v v v v v v v v SÉLECTION DU SITE DE DL v v v v v v v v v v #
@@ -392,22 +426,22 @@ lien_page_captcha, dl_site = recup_page_captcha(driver, lien_page_film, mode_aut
 
 methode = CaptchaSolver.select_methode(mode_auto)
 
-new_url = ""
+lien_dl_site = ""
 
 if methode == "1":
-    new_url = CaptchaSolver.methode1(lien_page_captcha, dl_site)
+    lien_dl_site = CaptchaSolver.methode1(lien_page_captcha, dl_site)
 
 elif methode == "2":
-    new_url = CaptchaSolver.methode2(lien_page_captcha, dl_site)
+    lien_dl_site = CaptchaSolver.methode2(lien_page_captcha, dl_site)
 
 elif methode == "3":
-    new_url = CaptchaSolver.methode3(lien_page_captcha, dl_site)
+    lien_dl_site = CaptchaSolver.methode3(lien_page_captcha, dl_site)
 
 else:
     print(f"{Fore.RED}La méthode '{methode}' n'est pas disponible.\n{Style.RESET_ALL}")
     exit(1)
 
-if new_url == "":
+if lien_dl_site == "":
     exit()
 
 # driver.quit()
@@ -419,14 +453,14 @@ print(f"{Fore.GREEN}Le captcha a été passé avec succès !{Style.RESET_ALL}\n\
 
 if no_download:
     driver.quit()
-    input(f"Voici le lien vers votre film : {new_url}\n"
+    input(f"Voici le lien vers votre film : {lien_dl_site}\n"
           "Merci d'avoir utilisé Wawacity Downloader\n\n"
           "Appuyez sur Enter pour quiter\n\n")
     exit(0)
 
 
-print(f"Connecting to {new_url} ...{Fore.BLACK}\n")
-driver.get(new_url)
+print(f"Connecting to {lien_dl_site} ...{Fore.BLACK}\n")
+driver.get(lien_dl_site)
 print(f"{Fore.GREEN}Connected !{Fore.BLACK}\n")
 
 lien_film = ""
@@ -437,92 +471,16 @@ if dl_site == "1fichier":
 
     try:
 
-        lien_film, file_name = recup_lien(new_url, driver)
+        lien_film, file_name = recup_lien(lien_dl_site, driver)
 
     except Exception as e:
-
         if e.args[0] != "countdown error":
             print(Style.RESET_ALL, e)
             exit(1)
 
-        print(f"{Fore.RED}Une erreur est survenue.\n\n{Style.RESET_ALL}"
-              f"Le site 1fichier a un compte à rebours qui empêche de télécharger plusieurs "
-              f"films d'affilé.\n"
-              f"Ce compte à rebours peut être esquivé en désactivant et en réactivant la carte réseau (Expérimental)\n")
-
-        if mode_auto and ("SKIP_COUNTDOWN" in config):
-
-            rep = config["SKIP_COUNTDOWN"].upper()
-
         else:
-            rep = demande("Voulez vous utiliser cette technique ? Cela coupera internet sur votre machine pendant "
-                          "quelques secondes.\n"
-                          "Si vous répondez \"Non\" le programme va s'arrêter")
-
-        if rep in ("OUI", "O"):
-
-            driver.quit()
-
-            if mode_auto and "CARTE_RES" in config:
-
-                carte_res = config["CARTE_RES"]
-
-            else:
-
-                if os.name == 'nt':  # Windows
-                    os.system("netsh interface ipv4 show interfaces")
-                else:  # Linux, Mac OS X
-                    os.system('ifconfig')
-
-                carte_res = input(f"Copier-Collez ici le nom de votre carte réseau connectée a internet\n")
-
-                if "CARTE_RES" in config and config["CARTE_RES"] != carte_res:
-                    rep = demande(f"Voulez vous faire de {carte_res} la valeur par défaut ?")
-
-                    if rep in ("OUI", "O"):
-                        fill_config(carte_res=carte_res, manual=False)
-
-                input("\n\nLe programme va vous demander 2 fois un accès administrateur\n"
-                      "Appuyez sur Entrer pour continuer...\n")
-
-            if os.name == 'nt':
-                os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
-                          f"\'Disable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
-            else:
-                os.system(f"sudo ifconfig {carte_res} down")
-
-            time.sleep(7)
-
-            if os.name == 'nt':
-                os.system("powershell -Command \"Start-Process powershell -Verb runAs -ArgumentList \'-Command\', "
-                          f"\'Enable-NetAdapter -Name \"{carte_res}\" -Confirm:$false\'\"")
-            else:
-                os.system(f"sudo ifconfig {carte_res} up")
-
-            time.sleep(7)
-
-            print("\nReconnexion ...\n")
-            while True:
-                try:
-                    driver_test = DriverInit.firefox()
-
-                    driver_test.get("https://google.com")
-
-                    break
-                except:
-                    time.sleep(1)
-
-            print(f"\n{Fore.GREEN}Connecté ! \n{Style.RESET_ALL}"
-                  f"\nNouvel essai de connexion a 1fichier\n")
-
-            try:
-                lien_film, file_name = recup_lien(new_url, driver)
-            except:
-                input(f"\n\n{Fore.RED}Une erreur est survenue durant la reconnexion au site 1fichier{Style.RESET_ALL}\n"
-                      f"Vous pouvez essayer de désactiver puis de réactiver internet sur votre PC.\n"
-                      f"Relancez ensuite le programme.\n"
-                      f"Appuyez sur Entrer pour quitter...\n")
-                exit(1)
+            Thread(target=driver.quit).start()
+            lien_film, file_name = skip_countdown(mode_auto, lien_dl_site)
 
 
 # elif dl_site == "Uptobox":
@@ -554,7 +512,7 @@ if dl_site == "1fichier":
 #                   f"films d'affilé. \n"
 #                   f"Essayez de relancer le programme en allant sur un autre site de "
 #                   f"téléchargement ou en changeant votre localisation avec un VPN.\n{Style.RESET_ALL}"
-#                   f"Vous pouvez aller vérifier manuellement sur cette page : {new_url}\n"
+#                   f"Vous pouvez aller vérifier manuellement sur cette page : {lien_dl_site}\n"
 #                   f"Appuyez sur Entrer pour quitter...\n\n")
 #             exit(1)
 #

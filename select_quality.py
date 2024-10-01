@@ -123,8 +123,8 @@ def select_quality(driver, mode_auto, uploadDates, lien_page_film) -> str:
             else:
                 if 1 <= index_qualite <= len(movieUploads):
                     choix_valide = True
-                    if "QUALITY" in config and len(config["QUALITY"]) == 1 and config["QUALITY"] != index_qualites[
-                        index_qualite - 1]:
+                    if ("QUALITY" in config and len(config["QUALITY"]) == 1 and
+                            config["QUALITY"] != index_qualites[index_qualite - 1]):
                         rep = demande(f"Voulez vous faire de {index_qualites[index_qualite - 1]} la valeur par défaut")
                         if rep in ("OUI", "O"):
                             fill_config(quality=str(index_qualites[index_qualite - 1]), manual=False)

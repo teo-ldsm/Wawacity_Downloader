@@ -1,14 +1,16 @@
+import subprocess
+
 import undetected_chromedriver as uc
 from undetected_chromedriver import Patcher
-from selenium.webdriver.common.by import By
-import threading
+# from selenium.webdriver.common.by import By
+# import threading
 import tempfile
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from config_loader import *
-from driver_init import get_chrome_path
+# from selenium.webdriver.support import expected_conditions as EC
+# from config_loader import *
+from driver_init import *
 
 
 class LinkResolver:
@@ -17,8 +19,13 @@ class LinkResolver:
         options.add_argument("--disable-search-engine-choice-screen")
         options.add_argument("--disable-images")
         # chrome_path = get_chrome_path()
-        p = Patcher()
-        self.driver = uc.Chrome(headless=False, options=options, version_main=p.fetch_release_number().version[0])
+        if os.name == 'nt':
+            version = subprocess.run(f"powershell -command \"&{{(Get-Item '{uc.find_chrome_executable()}').VersionInfo.ProductVersion}}\"", capture_output=True)
+            version = eval(version.stdout.decode("utf-8").split(".")[0])
+            self.driver = uc.Chrome(headless=False, options=options, version_main=version)
+        else:
+            p = Patcher()
+            self.driver = uc.Chrome(headless=False, options=options, version_main=p.fetch_release_number().version[0])
 
     def resolveLinks(self, urls):
 
@@ -72,8 +79,11 @@ class LinkResolver:
             # WebDriverWait(self.driver, 30).until(
             #     EC.presence_of_element_located((By.XPATH, "//button[@id='btn1' and text()='Continuer']"))
             # )
+            # WebDriverWait(self.driver, 15).until(
+            #     EC.presence_of_element_located((By.ID, "subButton"))
+            # )
             WebDriverWait(self.driver, 15).until(
-                EC.presence_of_element_located((By.ID, "subButton"))
+                EC.presence_of_element_located((By.XPATH, "//button[@id='subButton' and text()='Continuer']"))
             )
             self.driver.execute_script("document.getElementById('subButton').click()")
             link = WebDriverWait(self.driver, 15).until(
@@ -94,14 +104,14 @@ class LinkResolver:
 
 
 if __name__ == '__main__':
-    urls = [
-        "https://dl-protect.link/bb80536c?fn=RXF1YWxpemVyIDMgW0hEUklQXSAtIFRSVUVGUkVOQ0g%253D",  # Equilizer 3
-        "https://dl-protect.link/c2599b48?fn=RHVjb2J1IHBhc3NlIGF1IHZlcnQgW1dFQlJJUF0gLSBGUkVOQ0g%3D&rl=a2"  # Ducobu
-    ]
+    # urls = [
+    #     "https://dl-protect.link/bb80536c?fn=RXF1YWxpemVyIDMgW0hEUklQXSAtIFRSVUVGUkVOQ0g%253D",  # Equilizer 3
+    #     "https://dl-protect.link/c2599b48?fn=RHVjb2J1IHBhc3NlIGF1IHZlcnQgW1dFQlJJUF0gLSBGUkVOQ0g%3D&rl=a2"  # Ducobu
+    # ]
     linkResolver = LinkResolver()
-    linkResolver.driver.get(urls[0])
-    links = linkResolver.resolveLinks(urls)
-    print(links)
+    # linkResolver.driver.get(urls[0])
+    # links = linkResolver.resolveLinks(urls)
+    # print(links)
     urls = ["https://dl-protect.link/8b97b80d?fn=TGUgUGFyaXNpZW4gKyBMJ0VxdWlwZSBkdSAwNC4wOC4yMDI0IFtKb3VybmF1eF0%3D&rl=e2"]
     links = linkResolver.resolveLinks(urls)
     print(links)

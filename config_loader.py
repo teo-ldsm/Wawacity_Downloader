@@ -134,10 +134,11 @@ def verify_config(config: dict) -> dict:
             config.pop("CHROME_PATH")
 
     return config
-    # TODO Verifier que les arguments de config sont bons (quality existe)
 
 
 def build_config() -> None:
+    # TODO Si un ancien config.txt existe et qu'il est foireux, le renommer en config_old.txt et en refaire un.
+    # TODO Voir todo updater.py
     print(f"\n\n{Fore.LIGHTYELLOW_EX}!! ATTENTION !! \n"
           f"Toutes les données de \'config.txt\' vont être effacées. Veuillez les sauvegarder et appuyer sur Entrer{Style.RESET_ALL}")
     input()
@@ -145,34 +146,31 @@ def build_config() -> None:
     file.write("# Les lignes qui commencent par \"#\" ne sont pas prises en compte \n"
                "# Veuillez ne pas laisser de champs vide sans un \"#\" en début de ligne \n"
                "# Les champs seront remplis automatiquement si non précisé ici \n"
-               "# - ARGUMENTS : Ces arguments seront appliqués par défaut si le programme est lancé sans arguments"
-               "#   (par exemple: -m pour manuel (par défaut), -i pour interface... Lancer 'main -h' pour plus d'infos)"
+               "# - ARGUMENTS : Ces arguments seront appliqués par défaut si le programme est lancé sans arguments\n"
+               "#   (par exemple: -m pour manuel (par défaut), -i pour interface... Lancer 'main -h' pour plus d'infos)\n"
                "# - ADDRESS : Adresse actuelle du site wawacity. Cette valeur est remplie automatiquement\n"
                "# - DOWNLOAD_PATH : Les medias seront téléchargés dans ce dossier \n"
                "# - QUALITY : Qualité par défaut pour télécharger les médias. Lancez une première fois le programme "
                "# normalement pour que la valeur soit remplie automatiquement\n"
                "# Vous pouvez ajouter une seconde valeur de secours qui sera utilisée si la première n'es pas disponible\n"
                "# Les deux valeurs doivent être séparées avec une virgule\n"
-               "# - SITE : Site par défaut ou télécharger les médias. Doit être défini par \'1fichier\' "
-               "# ou \'Uptobox\'. Les autres sites ne sont pas encore pris en charges\n"
+               "# - SITE : Site par défaut ou télécharger les médias. Doit être défini par \'1fichier\'."
+               "# Les autres sites ne sont pas encore pris en charges\n"
                "# - METHOD : Methode à utiliser pour valider le captcha. Doit être défini par \'1\' ou \'2\'\n"
                "#       + Methode 1 : Avec l'application mobile CaptchaSkipper (Android uniquement)\n"
                "#       + Methode 2 : Résolution manuelle depuis un navigateur (Beaucoup de popups et de pubs)\n"
                "#       + Méthode 3 : Résolution automatique avec Chrome, uniquement en mode graphique (Chrome doit être installé)\n"
                "# - SKIP_COUNTDOWN : Est-ce que le programme doit déconnecter le PC d'internet pour contourner le "
-               "# compte a rebours du site 1fichier. Doit être défini par \'OUI\' ou \'NON\'\n"
+               "# compte a rebours du site 1fichier (Expérimental). Doit être défini par \'OUI\' ou \'NON\'\n"
                "# - CHROME_PATH : (Facultatif) Chemin vers l'exécutable Chrome. "
-               "# Remplir uniquement si le programme Chrome n'est pas trouvé ou pour utiliser une version différente de celle du système \n"
-               "# - CARTE_RES : Le nom de votre carte réseau connectée à internet. Lancez une première fois le "
-               "# programme normalement pour que la valeur soit remplie automatiquement\n"
-               "ARGUMENTS=-m"
+               "# Remplir uniquement si le programme Chrome n'est pas trouvé ou pour utiliser une version différente de celle du système \n\n"
+               "ARGUMENTS=-m\n"
                "#ADDRESS=\n"
                "#DOWNLOAD_PATH=\n"
                "#QUALITY=\n"
                "#METHOD=\n"
                "#SKIP_COUNTDOWN=\n"
-               "#CHROME_PATH=\n"
-               "#CARTE_RES=\n\n"
+               "#CHROME_PATH=\n\n"
                "# Vous pouvez ici retirer les \"#\" devant les plateformes que vous payez. \n"
                "# Le programme vous préviendra si vous essayez de télécharger un film déjà présent sur l'une de ces plateformes\n\n"
                "PLATFORMS=\n"
@@ -195,7 +193,7 @@ def build_config() -> None:
 
 
 def fill_config(tous: bool = False, address: str = False, download_path: str = False, quality: str = False, site: str = False,
-                method: str = False, skip_countdown: str = False, chrome_path: str = False, carte_res: str = False, plex: bool = False,
+                method: str = False, skip_countdown: str = False, chrome_path: str = False, carte_res: str = False,
                 manual: bool = True) -> None:
     
     if not isinstance(tous, bool):
@@ -209,9 +207,9 @@ def fill_config(tous: bool = False, address: str = False, download_path: str = F
     if manual:
         config = load()
     if tous:
-        address, download_path, quality, site, skip_countdown, chrome_path, carte_res, method, plex = True, True, True, True, True, True, True, True, True
+        address, download_path, quality, site, skip_countdown, chrome_path, carte_res, method = True, True, True, True, True, True, True, True
     args = {"ADDRESS": address, "DOWNLOAD_PATH": download_path, "QUALITY": quality, "SITE": site, "METHOD": method,
-            "SKIP_COUNTDOWN": skip_countdown, "CHROME_PATH": chrome_path, "CARTE_RES": carte_res, "SERVER_IP": plex, "PORT": plex, "TOKEN": plex}
+            "SKIP_COUNTDOWN": skip_countdown, "CHROME_PATH": chrome_path, "CARTE_RES": carte_res}
 
     for i in args:
         if args[i]:
@@ -254,7 +252,7 @@ def demande(msg: str = ""):
     return rep
 
 
-config: dict[str:str] = load()
+config: dict[str, str] = load()
 
 
 if __name__ == '__main__':

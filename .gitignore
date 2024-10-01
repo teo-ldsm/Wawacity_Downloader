@@ -21,3 +21,4 @@ config.txt
 /obf_authenticator.py
 /build_executable.ps1
 /installer/
+/icon.ico

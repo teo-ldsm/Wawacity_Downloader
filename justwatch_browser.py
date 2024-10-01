@@ -7,21 +7,16 @@ from driver_init import *
 
 class Browser:
     def __init__(self):
-        self.driver = DriverInit.chrome(headless=False, show_images=True)
+        # self.driver = DriverInit.chrome(headless=False, show_images=True)
+        self.driver = DriverInit.firefox(headless=False)
 
         self.driver.maximize_window()
         self.driver.get('https://www.justwatch.com/fr')
 
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.ID, "usercentrics-root"))
-        )
-        time.sleep(1)
+        # WebDriverWait(self.driver, 10).until(
+        #     EC.presence_of_element_located((By.ID, "usercentrics-root"))
+        # )
 
-        self.driver.execute_script("""
-                div = document.getElementById("usercentrics-root");
-                shd = div && div.shadowRoot;
-                shd.querySelector(".sc-dcJsrY.dQaUXI").click()
-        """)
         self.context = "searching"
 
         self.btn_clicked = False
@@ -105,6 +100,21 @@ class Browser:
     def run(self):
 
         try:
+            def cookie_popup_handler() -> None:
+                btn_clicked = False
+                while not btn_clicked:
+                    try:
+                        self.driver.execute_script("""div = document.getElementById("usercentrics-root");
+                                                      shd = div && div.shadowRoot;
+                                                      shd.querySelector(".sc-dcJsrY.dQaUXI").click()
+                                                   """)
+                    except:
+                        time.sleep(0.5)
+                    else:
+                        btn_clicked = True
+
+            cookie_thread = Thread(target=cookie_popup_handler)
+            cookie_thread.start()
             self.generate_searching_panel()
             self.wait_for_btn_clicked()
 

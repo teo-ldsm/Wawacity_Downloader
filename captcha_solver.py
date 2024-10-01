@@ -133,7 +133,7 @@ class CaptchaSolver:
         #     f"############################################################################\n\n{Style.RESET_ALL}")
 
         input(
-            f"{Style.RESET_ALL}\n\nUn navigateur va s'ouvrir. Elle contient le captcha qu'il faut résoudre.\n"
+            f"{Style.RESET_ALL}\n\nUne page web va s'ouvrir. Elle contient le captcha qu'il faut résoudre.\n"
             f"Une fois que le captcha est résolu, vous devez copier-coller ci-dessous le lien du film qui "
             f"commence par \"https://{dl_site.lower()}...\n"
             f"Le site fait apparaitre de nombreuses popups inutiles. Tout ce passe sur la première page ouverte.\n"
@@ -160,13 +160,17 @@ class CaptchaSolver:
             link_resolver = LinkResolver()
             resolved_links = link_resolver.resolveLinks([lien_page_captcha])
 
+        except KeyboardInterrupt:
+            sys.exit(1)
+
         except:
             if link_resolver:
                 link_resolver.driver.quit()
-            print(f"{Fore.RED}Échec de la résolution automatique\n{Style.RESET_ALL}"
+            print(f"{Fore.RED}\n\nÉchec de la résolution automatique\n{Style.RESET_ALL}"
                   "Passage à la methode 2")
             return CaptchaSolver.methode2(lien_page_captcha, dl_site)
 
         else:
+            link_resolver.driver.quit()
             return resolved_links[lien_page_captcha]
 

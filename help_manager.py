@@ -29,16 +29,17 @@ def main_help():
           "Exemple : Pour le film \"Creed III\", il faut éviter de mettre \"Creed 3\". Essayez de \n"
           "respecter l'orthographe au maximum.\n\n\n"
           "\nListe des commandes:\n\n"
-          "-h, --help \t\t|\tAffiche cette page d'aide\n"
-          "-m \t\t\t|\tFonctionnement classique (par défaut)\n"
-          "-f <\"titre_du_film\">\t|\tLance le programme en mode auto\n"
-          "-i \t\t\t|\tMode interface : Ouvre une fenêtre chrome où la séléction du film se fait graphiquement\n"
-          "--no-download\t\t|\tAffiche seulement le lien vers le film sans le télécharger\n"
-          "-d \t\t\t|\tDebug mode : lance le programme en mode normal en affichant tous les messages d'erreurs\n\n"
+          "-h, --help \t\t\t| Affiche cette page d'aide\n"
+          "-m \t\t\t\t| Fonctionnement classique (par défaut)\n"
+          "-f <\"titre_du_film (année)\">\t| Lance le programme en mode auto\n"
+          "\t\t\t\t| (Vous pouvez spécifier l'année entre parenthèses pour plus de précision)\n"
+          "-i\t\t\t\t| Mode interface : Ouvre chrome où la séléction du film se fait sur un site web\n"
+          "--no-download\t\t\t| Affiche seulement le lien vers le film sans le télécharger\n"
+          "-d \t\t\t\t| Debug mode : Mode normal, la fenêtre chrome s'affiche tout le temps\n\n"
           "Vous pouvez sélectionner les arguments par défaut avec lesquels lancer le programme dans config.txt\n\n"
           "Exemples:\n\n"
           "python main.py \t\t\t\t (Mode normal)\n"
-          "python main.py -f \"Titanic\" \t\t (Mode automatique, le programme va télécharger le film Titanic)\n\n\n")
+          "python main.py -f \"Titanic (1997)\" \t\t (Mode automatique, le programme va télécharger le film Titanic)\n\n\n")
 
 
 def recup_lien_1fichier_help():
@@ -98,11 +99,12 @@ def synthax_is_correct(file) -> bool:
     args = sys.argv[1:]
     args_patern = {
         "main": {"-d": 0,
+                 "-m": 0,
                  "-f": 1,
                  # "-s": 1,
                  "-p": 1,
                  "-i": 0,
-                 "--no_download": 0},
+                 "--no-download": 0},
         "recup_lien_1fichier": "any",
         "config_loader": "no_argument",
         "help_manager": "no_argument",
